@@ -1,12 +1,19 @@
 import React from 'react';
-import Navbar from './Components/Navbar/Navbar';
+import {BrowserRouter as Router, Routes, Route} from 'react-router-dom';
+import LandingPage from './routes/LandingPage/LandingPage';
+import LoginPage from './routes/LoginPage/LoginPage';
 
-function App() {
+const App: React.FC = () => {
   return (
     <>
-      <Navbar />
+      <Router>
+        <Routes>
+          <Route path='/' element={<LandingPage />} />
+          <Route path='/login' element={<LoginPage />} />
+        </Routes>
+      </Router>
     </>
   );
-}
+};
 
 export default App;

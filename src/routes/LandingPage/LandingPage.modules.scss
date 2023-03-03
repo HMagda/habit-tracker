@@ -1,0 +1,39 @@
+@import '../../styles/settings.scss';
+
+.landing-page {
+  height: 100vh;
+  font-family: $font-family-secondary;
+  text-align: center;
+  background-color: $color-light;
+  overflow: hidden;
+
+  .app-name {
+    font-family: $font-family-primary;
+    font-size: 3rem;
+    margin: 2rem 0;
+  }
+
+  .cta-button {
+    font-family: $font-family-secondary;
+    padding: 1rem 2rem;
+    font-size: 1.2rem;
+    border-radius: 2rem;
+    background-color: $color-primary;
+    color: $color-light;
+  }
+
+  .app-description {
+    margin: 2rem 0;
+    font-size: 1.2rem;
+  }
+}
+
+.img-container {
+  width: 38rem;
+  margin: 0 auto;
+
+  .winner {
+    width: 100%;
+    height: 100%;
+  }
+}
