@@ -1,13 +1,13 @@
 import React from 'react';
 import Heatmap from '../../Components/Heatmap/Heatmap';
-import './MainPage.modules.scss';
+import './HabitsPage.modules.scss';
 
-const MainPage = () => {
+const HabitsPage = () => {
   return (
-    <div className='main-page'>
+    <div className='habits-page'>
       <Heatmap />
     </div>
   );
 };
 
-export default MainPage;
+export default HabitsPage;
