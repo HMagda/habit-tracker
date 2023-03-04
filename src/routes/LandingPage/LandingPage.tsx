@@ -1,7 +1,7 @@
 import React from 'react';
 import './LandingPage.modules.scss';
 import Winner from '../../assets/winner.png';
-import Navbar from '../../Components/Logo/Navbar';
+import Navbar from '../../Components/Navbar/Navbar';
 
 const LandingPage: React.FC = () => {
   return (

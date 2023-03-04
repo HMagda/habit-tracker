@@ -1,0 +1,25 @@
+@import '../../styles/settings.scss';
+
+.heatmap {
+  width: 30rem;
+  font-family: $font-family-secondary;
+  text-align: center;
+
+  .color-scale-1 {
+    fill: #d6e685;
+  }
+  .color-scale-2 {
+    fill: #d6e685;
+  }
+  .color-scale-3 {
+    fill: #8cc665;
+  }
+  .color-scale-4 {
+    fill:  #44a340;
+  }
+  .color-scale-5 {
+    fill:  #1e6823;
+  }
+}
+
+

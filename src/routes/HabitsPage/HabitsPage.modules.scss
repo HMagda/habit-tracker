@@ -1,0 +1,9 @@
+@import '../../styles/settings.scss';
+
+.main-page {
+  padding: 2rem;
+  height: 100vh;
+  font-family: $font-family-secondary;
+  text-align: center;
+  background-color: $color-light;
+}
