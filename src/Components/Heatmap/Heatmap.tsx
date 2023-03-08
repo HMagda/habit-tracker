@@ -26,9 +26,7 @@ const Heatmap = () => {
         // horizontal={false}
         gutterSize={5}
         onClick={(value) => console.log('clicked date', value, value.count)}
-        weekdayLabels={['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']}
-        showWeekdayLabels={true}
-
+        showWeekdayLabels={false}
       />
     </div>
   );
