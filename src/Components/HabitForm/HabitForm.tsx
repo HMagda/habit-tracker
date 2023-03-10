@@ -1,19 +1,10 @@
 import React, {useEffect, useState} from 'react';
+import {daysOfWeek} from '../../utils';
 import './HabitForm.modules.scss';
 
 interface HabitFormProps {
-  onAddHabit: (name: string, frequency: string, days?: string[]) => void;
+  onAddHabit: (name: string, frequency: string, days: string[]) => void;
 }
-
-const daysOfWeek = [
-  'Monday',
-  'Tuesday',
-  'Wednesday',
-  'Thursday',
-  'Friday',
-  'Saturday',
-  'Sunday',
-];
 
 const HabitForm: React.FC<HabitFormProps> = ({onAddHabit}) => {
   const [habitName, setHabitName] = useState('');
@@ -88,7 +79,7 @@ const HabitForm: React.FC<HabitFormProps> = ({onAddHabit}) => {
                 checked={days.includes(day)}
                 onChange={handleDayChange}
               />
-                <span className='days-checkbox'></span>
+              <span className='days-checkbox'></span>
               {day}
             </label>
           ))}
