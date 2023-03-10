@@ -1,0 +1,74 @@
+@import '../../styles/settings.scss';
+
+.habit-form {
+  display: flex;
+  flex-direction: column;
+  width: 20rem;
+  margin: 2rem 0;
+  font-family: $font-family-secondary;
+
+  label {
+    margin: 0.5rem 0;
+  }
+
+  input {
+    padding: 0.5rem;
+  }
+
+  select {
+    padding: 0.5rem;
+  }
+  p {
+    margin-top: 0.5rem;
+  }
+
+  .days-label {
+    display: flex;
+    position: relative;
+    margin-bottom: 1rem;
+    cursor: pointer;
+
+    input[type='checkbox'] {
+      visibility: hidden;
+    }
+
+    .days-checkbox {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 1rem;
+      width: 1rem;
+      border: 0.1rem solid rgba($color-important-primary, 0.5);
+
+      &::after {
+        content: '';
+        position: absolute;
+        display: none;
+      }
+    }
+
+    &:hover input ~ .days-checkbox {
+      background-color: rgba($color-important-primary, 0.5);
+    }
+
+    input:checked ~ .days-checkbox {
+      background-color: $color-important-primary;
+    }
+
+    input:checked ~ .days-checkbox::after {
+      display: block;
+    }
+  }
+
+  button {
+    align-self: center;
+    margin: 1rem;
+    width: max-content;
+    font-family: $font-family-secondary;
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    border-radius: 2rem;
+    background-color: $color-primary;
+    color: $color-light;
+  }
+}

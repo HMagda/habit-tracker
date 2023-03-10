@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import './DatePicker.modules.scss';
@@ -7,11 +7,6 @@ import enGB from 'date-fns/locale/en-GB';
 const DatePickerDesktop = () => {
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(null);
-
-  useEffect(() => {
-    console.log('startDate', startDate);
-    console.log('endDate', endDate);
-  });
 
   function handleDateSelect() {
     console.log('handleDateSelect');

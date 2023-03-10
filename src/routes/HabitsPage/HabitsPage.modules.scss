@@ -1,8 +1,11 @@
 @import '../../styles/settings.scss';
 
 .habits-page {
-  padding: 2rem;
-  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
   font-family: $font-family-secondary;
   text-align: center;
   background-color: $color-light;
