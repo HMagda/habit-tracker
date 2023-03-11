@@ -1,8 +1,8 @@
 import React, {useState} from 'react';
 import DatePicker from 'react-datepicker';
+import enGB from 'date-fns/locale/en-GB';
 import 'react-datepicker/dist/react-datepicker.css';
 import './DatePicker.modules.scss';
-import enGB from 'date-fns/locale/en-GB';
 
 const DatePickerDesktop = () => {
   const [startDate, setStartDate] = useState(new Date());

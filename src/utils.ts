@@ -5,5 +5,5 @@ export const daysOfWeek: string[] = [
     'Thursday',
     'Friday',
     'Saturday',
-    'Sunday',
+    'Sunday'
   ];

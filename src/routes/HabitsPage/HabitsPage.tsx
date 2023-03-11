@@ -12,8 +12,20 @@ interface Habit {
 }
 
 const HabitsArr = [
-  {name: 'run', days: ['Wednesday', 'Saturday', 'Sunday']},
-  {name: 'learn to code', days: ['Monday', 'Friday']},
+  {id: 1, name: 'run', days: ['Wednesday', 'Saturday', 'Sunday']},
+  {id: 2, name: 'learn to code', days: ['Monday', 'Friday']},
+  {id: 3,
+    name: 'reading',
+    days: [
+      'Monday',
+      'Tuesday',
+      'Wednesday',
+      'Thursday',
+      'Friday',
+      'Saturday',
+      'Sunday',
+    ],
+  },
 ];
 
 const HabitsPage = () => {

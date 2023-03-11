@@ -1,48 +1,66 @@
 @import '../../styles/settings.scss';
 
-.habits {
-  font-size: 1.2rem;
-  margin: 1rem 0;
-  padding: 1rem;
-  background-color: $color-light;
-  border-radius: 0.5rem;
-  box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.2);
+.habits-wrapper {
+  display: flex;
 
-  h3 {
-    margin-bottom: 0.5rem;
-    font-weight: bold;
-  }
-
-  p {
-    margin: 0.5rem 0;
-    color: $color-primary;
-  }
-
-  button {
-    margin-right: 1rem;
-    margin-bottom: 1rem;
-    padding: 0.5rem;
-    font-size: 1rem;
-    font-weight: bold;
-    border: none;
+  .habit {
+    font-size: 1.2rem;
+    margin: 1rem;
+    padding: 1rem;
+    background-color: $color-light;
     border-radius: 0.5rem;
-    color: $color-light;
-    background-color: $color-warning;
     box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.2);
-    transition: all 0.5s;
 
-    &:hover {
-      cursor: pointer;
+    h3 {
+      margin-bottom: 0.5rem;
+      font-weight: bold;
     }
-  }
 
-  .completed {
-    background-color: $color-primary;
-    box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.2);
-  }
+    .btns-container {
+      display: flex;
+      flex-direction: column;
 
-  .uncompleted {
-    background-color: $color-warning;
-    box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.2);
+      .single-btn-container {
+        display: flex;
+        align-items: center;
+
+        button {
+          margin-bottom: 1rem;
+          padding: 0.5rem 1rem;
+          font-size: 1rem;
+          font-weight: bold;
+          border: none;
+          border-radius: 0.5rem;
+          color: $color-light;
+          background-color: $color-warning;
+          box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.2);
+          transition: all 0.5s;
+
+          &:hover {
+            cursor: pointer;
+          }
+        }
+
+        .completed {
+          background-color: $color-primary;
+          box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.2);
+        }
+
+        .uncompleted {
+          background-color: $color-warning;
+          box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.2);
+        }
+
+        .check-icon {
+          margin-bottom: 1rem;
+          color: $color-primary;
+        }
+        
+        .x-icon {
+          margin-bottom: 1rem;
+          color: $color-warning;
+        }
+      }
+    }
   }
 }
