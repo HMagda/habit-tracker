@@ -1,23 +1,22 @@
 import React, {useEffect, useState} from 'react';
 import {HiX, HiCheck} from 'react-icons/hi';
 import './HabitsCompletion.modules.scss';
-
-interface Habit {
-  id: number;
-  name: string;
-  days: string[];
-}
+import {Habit} from '../../utils';
 
 interface HabitsArray {
   habits: Habit[];
 }
 
-const HabitsCompletion: React.FC<HabitsArray> = ({habits}) => {
-  const [completedDays, setCompletedDays] = useState<{
-    [id: string]: {[day: string]: boolean};
-  }>({});
+interface CompletedDays {
+  [id: string]: {
+    [day: string]: boolean;
+  };
+}
 
-  const handleMarkCompleted = (id: number, day: string) => {
+const HabitsCompletion: React.FC<HabitsArray> = ({habits}) => {
+  const [completedDays, setCompletedDays] = useState<CompletedDays>({});
+
+  const handleMarkCompleted = (id: string, day: string) => {
     setCompletedDays((prev) => {
       const prevHabit = prev[id] || {};
       return {
@@ -34,17 +33,23 @@ const HabitsCompletion: React.FC<HabitsArray> = ({habits}) => {
   return (
     <div className='habits-wrapper'>
       {habits.map(
-        (habit: {id: number; name: string; days: string[]}, index: number) => (
+        (
+          habit: {
+            habitName: string;
+            days: string[];
+          },
+          index: number
+        ) => (
           <div key={index} className='habit'>
-            <h3>{habit.name}</h3>
+            <h3>{habit.habitName}</h3>
             <div className='btns-container'>
               {habit.days.map((day: string) => (
                 <div className='single-btn-container' key={day}>
                   <button
                     key={day}
-                    onClick={() => handleMarkCompleted(habit.id, day)}
+                    onClick={() => handleMarkCompleted(habit.habitName, day)}
                     className={
-                      completedDays[habit.id]?.[day]
+                      completedDays[habit.habitName]?.[day]
                         ? 'completed'
                         : 'uncompleted'
                     }
@@ -56,7 +61,7 @@ const HabitsCompletion: React.FC<HabitsArray> = ({habits}) => {
                   >
                     {day}
                   </button>
-                  {completedDays[habit.id]?.[day] ? (
+                  {completedDays[habit.habitName]?.[day] ? (
                     <HiCheck className='check-icon' />
                   ) : (
                     <HiX className='x-icon' />

@@ -1,0 +1,42 @@
+{
+  "habits": [
+    {
+      "habitName": "run",
+      "days": [
+        "Wednesday",
+        "Saturday",
+        "Sunday"
+      ],
+      "id": 1
+    },
+    {
+      "habitName": "learn to code",
+      "days": [
+        "Monday",
+        "Friday"
+      ],
+      "id": 2
+    },
+    {
+      "habitName": "reading",
+      "days": [
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Friday",
+        "Saturday",
+        "Sunday"
+      ],
+      "id": 3
+    },
+    {
+      "habitName": "yoga",
+      "days": [
+        "Monday",
+        "Friday"
+      ],
+      "id": 4
+    }
+  ]
+}

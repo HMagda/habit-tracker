@@ -10,6 +10,7 @@ const DatePickerDesktop = () => {
 
   function handleDateSelect() {
     console.log('handleDateSelect');
+    //to be changed
   }
 
   const onChange = (dates: [any, any]) => {

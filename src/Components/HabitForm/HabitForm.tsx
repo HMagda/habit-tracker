@@ -1,12 +1,10 @@
 import React, {useEffect, useState} from 'react';
-import {daysOfWeek} from '../../utils';
+import {daysOfWeek, Habit} from '../../utils';
 import './HabitForm.modules.scss';
 
-interface HabitFormProps {
-  onAddHabit: (name: string, frequency: string, days: string[]) => void;
-}
-
-const HabitForm: React.FC<HabitFormProps> = ({onAddHabit}) => {
+const HabitForm: React.FC<{addNewHabit: (habit: Habit) => void}> = ({
+  addNewHabit,
+}) => {
   const [habitName, setHabitName] = useState('');
   const [frequency, setFrequency] = useState('daily');
   const [days, setDays] = useState<string[]>([]);
@@ -27,7 +25,6 @@ const HabitForm: React.FC<HabitFormProps> = ({onAddHabit}) => {
     event: React.ChangeEvent<HTMLSelectElement>
   ) => {
     setFrequency(event.target.value);
-    console.log('event.target.value', event.target.value);
   };
 
   const handleDayChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -43,7 +40,20 @@ const HabitForm: React.FC<HabitFormProps> = ({onAddHabit}) => {
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    onAddHabit(habitName, frequency, days);
+    const habit = {habitName, days};
+
+    fetch('http://localhost:8000/habits', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(habit),
+    })
+      .then(() => {
+        console.log('new habit added');
+        addNewHabit(habit);
+      })
+      .catch((error) => {
+        console.error('Error adding new habit: ', error);
+      });
 
     setHabitName('');
     setFrequency('daily');
