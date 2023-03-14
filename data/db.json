@@ -37,6 +37,19 @@
         "Friday"
       ],
       "id": 4
+    },
+    {
+      "habitName": "take pills",
+      "days": [
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Friday",
+        "Saturday",
+        "Sunday"
+      ],
+      "id": 5
     }
   ]
 }
