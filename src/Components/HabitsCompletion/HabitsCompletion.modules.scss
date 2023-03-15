@@ -13,9 +13,41 @@
     border-radius: 0.5rem;
     box-shadow: $box-shadow;
 
-    h3 {
+    .habit-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
       margin-bottom: 1rem;
-      font-weight: bold;
+
+      h3 {
+        font-weight: bold;
+      }
+
+      .option-icons {
+        display: flex;
+        align-items: center;
+        margin-left: 1rem;
+
+        .edit-icon {
+          margin-left: .8rem;
+          transition: $transition;
+
+          &:hover {
+            cursor: pointer;
+            color: $color-warning;
+          }
+        }
+
+        .delete-icon {
+          margin-left: 0.8rem;
+          transition: $transition;
+
+          &:hover {
+            cursor: pointer;
+            color: $color-error;
+          }
+        }
+      }
     }
 
     .btns-container {
@@ -38,7 +70,7 @@
           color: $color-light;
           background-color: $color-error;
           box-shadow: $box-shadow;
-          transition: all 0.5s;
+          transition: $transition;
 
           &:hover {
             cursor: pointer;
@@ -63,7 +95,7 @@
         .check-icon {
           color: $color-primary;
         }
-        
+
         .x-icon {
           color: $color-error;
         }

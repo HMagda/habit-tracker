@@ -19,24 +19,26 @@ const HabitForm: React.FC<{
     }
   }, [frequency, habitName]);
 
-  const handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const habitExists = habitsArr.map((habit, i) => habitsArr[i].habitName.toLowerCase());
+  const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const habitExists = habitsArr.map((habit, i) =>
+      habitsArr[i].habitName.toLowerCase()
+    );
 
-    habitExists.includes(event.target.value.toLowerCase())
+    habitExists.includes(e.target.value.toLowerCase())
       ? setWarning(true)
       : setWarning(false);
 
-    setHabitName(event.target.value);
+    setHabitName(e.target.value);
   };
 
   const handleFrequencyChange = (
-    event: React.ChangeEvent<HTMLSelectElement>
+    e: React.ChangeEvent<HTMLSelectElement>
   ) => {
-    setFrequency(event.target.value);
+    setFrequency(e.target.value);
   };
 
-  const handleDayChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const day = event.target.value;
+  const handleDayChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const day = e.target.value;
     setDays((days) => {
       if (days.includes(day)) {
         return days.filter((d) => d !== day);
@@ -46,8 +48,8 @@ const HabitForm: React.FC<{
     });
   };
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     const habit = {habitName, days};
 
     fetch('http://localhost:8000/habits', {
@@ -78,14 +80,14 @@ const HabitForm: React.FC<{
         onChange={handleNameChange}
         required
       />
-      {warning && <p className='warning-text'>This habit name already exists</p>}
-
+      {warning && (
+        <p className='warning-text'>This habit name already exists</p>
+      )}
       <label htmlFor='frequency'>Frequency:</label>
       <select id='frequency' value={frequency} onChange={handleFrequencyChange}>
         <option value='daily'>Daily</option>
         <option value='weekly'>Weekly</option>
       </select>
-
       {frequency === 'weekly' && (
         <>
           <p>Choose the days:</p>
@@ -104,7 +106,6 @@ const HabitForm: React.FC<{
           ))}
         </>
       )}
-
       <button type='submit' disabled={warning}>
         Add Habit
       </button>

@@ -9,6 +9,7 @@ export const daysOfWeek: string[] = [
 ];
 
 export interface Habit {
+  id?: number;
   habitName: string;
   days: string[];
 }
