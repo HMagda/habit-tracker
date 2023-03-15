@@ -25,7 +25,7 @@ const HabitsPage = () => {
 
   return (
     <div className='habits-page'>
-      <HabitForm addNewHabit={handleHabitAdded} />
+      {habitsArr && <HabitForm addNewHabit={handleHabitAdded} habitsArr={habitsArr}/>}
       {habitsArr && <HabitsCompletion habits={habitsArr} />}
       <Heatmap />
       <DatePicker />

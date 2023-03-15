@@ -2,12 +2,14 @@ import React, {useEffect, useState} from 'react';
 import {daysOfWeek, Habit} from '../../utils';
 import './HabitForm.modules.scss';
 
-const HabitForm: React.FC<{addNewHabit: (habit: Habit) => void}> = ({
-  addNewHabit,
-}) => {
+const HabitForm: React.FC<{
+  addNewHabit: (habit: Habit) => void;
+  habitsArr: Habit[];
+}> = ({addNewHabit, habitsArr}) => {
   const [habitName, setHabitName] = useState('');
   const [frequency, setFrequency] = useState('daily');
   const [days, setDays] = useState<string[]>([]);
+  const [warning, setWarning] = useState<boolean>(false);
 
   useEffect(() => {
     if (frequency === 'daily') {
@@ -18,6 +20,12 @@ const HabitForm: React.FC<{addNewHabit: (habit: Habit) => void}> = ({
   }, [frequency, habitName]);
 
   const handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const habitExists = habitsArr.map((habit, i) => habitsArr[i].habitName.toLowerCase());
+
+    habitExists.includes(event.target.value.toLowerCase())
+      ? setWarning(true)
+      : setWarning(false);
+
     setHabitName(event.target.value);
   };
 
@@ -70,6 +78,7 @@ const HabitForm: React.FC<{addNewHabit: (habit: Habit) => void}> = ({
         onChange={handleNameChange}
         required
       />
+      {warning && <p className='warning-text'>This habit name already exists</p>}
 
       <label htmlFor='frequency'>Frequency:</label>
       <select id='frequency' value={frequency} onChange={handleFrequencyChange}>
@@ -96,7 +105,9 @@ const HabitForm: React.FC<{addNewHabit: (habit: Habit) => void}> = ({
         </>
       )}
 
-      <button type='submit'>Add Habit</button>
+      <button type='submit' disabled={warning}>
+        Add Habit
+      </button>
     </form>
   );
 };

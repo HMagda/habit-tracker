@@ -15,6 +15,11 @@
     padding: 0.5rem;
   }
 
+  .warning-text {
+    font-weight: bold;
+    color: $color-error;
+  }
+
   select {
     padding: 0.5rem;
   }
