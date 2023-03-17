@@ -3,6 +3,7 @@ import {HiX, HiCheck} from 'react-icons/hi';
 import {FiCircle, FiEdit3, FiTrash} from 'react-icons/fi';
 import './HabitsCompletion.modules.scss';
 import {Habit, daysOfWeek} from '../../utils';
+import HabitEditForm from '../HabitEditForm/HabitEditForm';
 
 interface CompletedDays {
   [id: string]: {
@@ -15,6 +16,8 @@ const HabitsCompletion: React.FC<{
   deleteHabit: (habitId: number) => void;
 }> = ({habitsArr, deleteHabit}) => {
   const [completedDays, setCompletedDays] = useState<CompletedDays>({});
+
+  const [editHabitId, setEditHabitId] = useState<number | null>(null);
 
   const today = new Date().toLocaleString('en-GB', {
     weekday: 'long',
@@ -71,47 +74,67 @@ const HabitsCompletion: React.FC<{
     <div className='habits-wrapper'>
       {habitsArr.map((habit: Habit, index: number) => (
         <div key={index} className='habit'>
-          <div className='habit-header'>
-            <h3>{habit.habitName}</h3>
-            <div className='option-icons'>
-              <FiEdit3 className='edit-icon' />
-              <FiTrash
-                onClick={() => handleDeleteHabit(habit.habitName)}
-                className='delete-icon'
-              />
+          <div
+            className={`habit-header ${
+              editHabitId === habit.id ? 'justify-end' : 'justify-space-between'
+            }`}
+          >
+            {editHabitId !== habit.id ? (
+              <h3>{habit.habitName}</h3>
+            ) : (
+              <HabitEditForm habitsArr={habitsArr} editHabitId={editHabitId} editHabitName={habit.habitName} editHabitDays={habit.days}/>
+            )}
+
+            {editHabitId !== habit.id && (
+              <div className='option-icons'>
+                <FiEdit3
+                  className='edit-icon'
+                  onClick={() => {
+                    setEditHabitId(habit.id ?? null);
+                  }}
+                />
+                <FiTrash
+                  onClick={() => handleDeleteHabit(habit.habitName)}
+                  className='delete-icon'
+                />
+              </div>
+            )}
+          </div>
+
+          {editHabitId !== habit.id && (
+            <div className='btns-container'>
+              {habit.days.map((day: string) => {
+                const dayIndex = daysOfWeek.indexOf(day);
+                const isUpcoming = dayIndex > todayIndex;
+                const completed = completedDays[habit.habitName]?.[day];
+                return (
+                  <div className='single-btn-container' key={day}>
+                    <button
+                      key={day}
+                      onClick={() => handleMarkCompleted(habit.habitName, day)}
+                      className={
+                        completed
+                          ? 'completed'
+                          : isUpcoming
+                          ? 'upcoming'
+                          : 'uncompleted'
+                      }
+                    >
+                      {day}
+                    </button>
+
+                    {completed ? (
+                      <HiCheck className='check-icon' />
+                    ) : isUpcoming ? (
+                      <FiCircle className='circle-icon' />
+                    ) : (
+                      <HiX className='x-icon' />
+                    )}
+                  </div>
+                );
+              })}
             </div>
-          </div>
-          <div className='btns-container'>
-            {habit.days.map((day: string) => {
-              const dayIndex = daysOfWeek.indexOf(day);
-              const isUpcoming = dayIndex > todayIndex;
-              const completed = completedDays[habit.habitName]?.[day];
-              return (
-                <div className='single-btn-container' key={day}>
-                  <button
-                    key={day}
-                    onClick={() => handleMarkCompleted(habit.habitName, day)}
-                    className={
-                      completed
-                        ? 'completed'
-                        : isUpcoming
-                        ? 'upcoming'
-                        : 'uncompleted'
-                    }
-                  >
-                    {day}
-                  </button>
-                  {completed ? (
-                    <HiCheck className='check-icon' />
-                  ) : isUpcoming ? (
-                    <FiCircle className='circle-icon' />
-                  ) : (
-                    <HiX className='x-icon' />
-                  )}
-                </div>
-              );
-            })}
-          </div>
+          )}
         </div>
       ))}
     </div>

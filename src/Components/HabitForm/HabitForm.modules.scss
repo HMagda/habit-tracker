@@ -23,24 +23,26 @@
   select {
     padding: 0.5rem;
   }
+  
   p {
     margin-top: 0.5rem;
   }
 
   .days-label {
     display: flex;
-    position: relative;
+    align-items: center;
+
     margin-bottom: 1rem;
     cursor: pointer;
 
     input[type='checkbox'] {
       visibility: hidden;
-    }
-
-    .days-checkbox {
       position: absolute;
       top: 0;
       left: 0;
+    }
+
+    .days-checkbox {
       height: 1rem;
       width: 1rem;
       border: 0.1rem solid rgba($color-important-primary, 0.5);
@@ -62,6 +64,10 @@
 
     input:checked ~ .days-checkbox::after {
       display: block;
+    }
+
+    .day {
+      margin-left: 0.5rem;
     }
   }
 

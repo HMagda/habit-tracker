@@ -6,6 +6,7 @@
   justify-content: center;
 
   .habit {
+    width: 15rem;
     font-size: 1.2rem;
     margin: 1rem;
     padding: 1.2rem;
@@ -13,20 +14,33 @@
     border-radius: 0.5rem;
     box-shadow: $box-shadow;
 
+    .justify-end {
+      justify-content: flex-end;
+    }
+
+    .justify-space-between {
+      justify-content: space-between;
+    }
+
     .habit-header {
       display: flex;
-      justify-content: space-between;
       align-items: center;
       margin-bottom: 1rem;
 
+
       h3 {
+        overflow-wrap: break-word;
+        hyphens: auto;
         font-weight: bold;
+        width: 8rem;
+        text-align: left;
+        margin-left: .3rem;
       }
 
       .option-icons {
         display: flex;
         align-items: center;
-        margin-left: 1rem;
+        // margin-left: 1rem;
 
         .edit-icon {
           margin-left: .8rem;
@@ -107,3 +121,4 @@
     }
   }
 }
+

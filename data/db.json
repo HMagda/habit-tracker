@@ -1,19 +1,26 @@
 {
   "habits": [
     {
-      "habitName": "run",
+      "habitName": "running",
       "days": [
-        "Wednesday",
         "Saturday",
-        "Sunday"
+        "Sunday",
+        "Monday",
+        "Thursday",
+        "Friday"
       ],
       "id": 1
     },
     {
-      "habitName": "learn to code",
+      "habitName": "learn to codeghhg",
       "days": [
+        "Friday",
+        "Wednesday",
+        "Sunday",
+        "Thursday",
+        "Saturday",
         "Monday",
-        "Friday"
+        "Tuesday"
       ],
       "id": 2
     },
@@ -24,7 +31,6 @@
         "Tuesday",
         "Wednesday",
         "Thursday",
-        "Friday",
         "Saturday",
         "Sunday"
       ],
@@ -37,6 +43,64 @@
         "Friday"
       ],
       "id": 4
+    },
+    {
+      "habitName": "jjUSTYNKA",
+      "days": [
+        "Monday",
+        "Wednesday",
+        "Sunday"
+      ],
+      "id": 5
+    },
+    {
+      "habitName": "loooooooooooooooooooooooooooong",
+      "days": [
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Friday",
+        "Saturday",
+        "Sunday"
+      ],
+      "id": 777
+    },
+    {
+      "habitName": "gg",
+      "days": [
+        "Tuesday",
+        "Thursday"
+      ],
+      "id": 10
+    },
+    {
+      "habitName": "maciek",
+      "days": [
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Friday",
+        "Saturday",
+        "Sunday"
+      ],
+      "id": 778,
+      "completedDays": {
+        "Friday": true
+      }
+    },
+    {
+      "habitName": "fff",
+      "days": [
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Saturday",
+        "Sunday"
+      ],
+      "id": 779
     }
   ]
 }

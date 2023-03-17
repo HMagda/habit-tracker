@@ -6,8 +6,8 @@ const HabitForm: React.FC<{
   addNewHabit: (habit: Habit) => void;
   habitsArr: Habit[];
 }> = ({addNewHabit, habitsArr}) => {
-  const [habitName, setHabitName] = useState('');
-  const [frequency, setFrequency] = useState('daily');
+  const [habitName, setHabitName] = useState<string>('');
+  const [frequency, setFrequency] = useState<string>('daily');
   const [days, setDays] = useState<string[]>([]);
   const [warning, setWarning] = useState<boolean>(false);
 
@@ -100,8 +100,8 @@ const HabitForm: React.FC<{
                 checked={days.includes(day)}
                 onChange={handleDayChange}
               />
-              <span className='days-checkbox'></span>
-              {day}
+              <div className='days-checkbox'></div>
+              <div className='day'> {day}</div> 
             </label>
           ))}
         </>
