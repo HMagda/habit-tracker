@@ -4,14 +4,18 @@ import './HabitEditForm.modules.scss';
 
 const HabitEditForm: React.FC<{
   habitsArr: Habit[];
-  editHabitId: number;
+  setHabitsArr: React.Dispatch<React.SetStateAction<Habit[]>>;
+  editHabitId: number | null;
+  setEditHabitId: React.Dispatch<React.SetStateAction<number | null>>;
   editHabitName: string;
   editHabitDays: string[];
 }> = ({
   habitsArr,
+  setHabitsArr,
   editHabitId,
+  setEditHabitId,
   editHabitName,
-  editHabitDays
+  editHabitDays,
 }) => {
   const [habitName, setHabitName] = useState<string>(editHabitName);
   const [days, setDays] = useState<string[]>(editHabitDays);
@@ -26,7 +30,6 @@ const HabitEditForm: React.FC<{
       }
     });
   };
-
 
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setHabitName(e.target.value);
@@ -43,12 +46,17 @@ const HabitEditForm: React.FC<{
       body: JSON.stringify(habit),
     })
       .then(() => {
-        console.log(' habit edited');
-      
+        console.log('habit edited');
+        const updatedHabitsArr = habitsArr.map((habit) =>
+          habit.id === editHabitId ? {...habit, habitName, days} : habit
+        );
+        setHabitsArr(updatedHabitsArr);
       })
       .catch((error) => {
         console.error('Error adding new habit: ', error);
       });
+
+    setEditHabitId(null);
   };
 
   return (
@@ -62,7 +70,6 @@ const HabitEditForm: React.FC<{
         required
       />
       <label htmlFor='frequency'>Frequency:</label>
-
       <div className='days-label-container'>
         {daysOfWeek.map((day) => (
           <label key={day} htmlFor={day} className='days-label'>
@@ -74,16 +81,11 @@ const HabitEditForm: React.FC<{
               onChange={handleDayChange}
             />
             <div className='days-checkbox'></div>
-          <div className='day'> {day}</div> 
+            <div className='day'> {day}</div>
           </label>
         ))}
       </div>
-
-      <button
-        type='submit'
-      >
-        Edit Habit
-      </button>
+      <button type='submit'>Edit Habit</button>
     </form>
   );
 };

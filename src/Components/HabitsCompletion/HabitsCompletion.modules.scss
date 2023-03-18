@@ -1,124 +1,99 @@
 @import '../../styles/settings.scss';
 
-.habits-wrapper {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
+.habit-completion-wrapper {
+  .habit-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1rem;
 
-  .habit {
-    width: 15rem;
-    font-size: 1.2rem;
-    margin: 1rem;
-    padding: 1.2rem;
-    background-color: $color-light;
-    border-radius: 0.5rem;
-    box-shadow: $box-shadow;
-
-    .justify-end {
-      justify-content: flex-end;
+    h3 {
+      overflow-wrap: break-word;
+      hyphens: auto;
+      font-weight: bold;
+      width: 8rem;
+      text-align: left;
+      margin-left: 0.3rem;
     }
 
-    .justify-space-between {
-      justify-content: space-between;
-    }
-
-    .habit-header {
+    .option-icons {
       display: flex;
       align-items: center;
-      margin-bottom: 1rem;
 
+      .edit-icon {
+        margin-left: 0.8rem;
+        transition: $transition;
 
-      h3 {
-        overflow-wrap: break-word;
-        hyphens: auto;
-        font-weight: bold;
-        width: 8rem;
-        text-align: left;
-        margin-left: .3rem;
-      }
-
-      .option-icons {
-        display: flex;
-        align-items: center;
-        // margin-left: 1rem;
-
-        .edit-icon {
-          margin-left: .8rem;
-          transition: $transition;
-
-          &:hover {
-            cursor: pointer;
-            color: $color-warning;
-          }
-        }
-
-        .delete-icon {
-          margin-left: 0.8rem;
-          transition: $transition;
-
-          &:hover {
-            cursor: pointer;
-            color: $color-error;
-          }
-        }
-      }
-    }
-
-    .btns-container {
-      display: flex;
-      flex-direction: column;
-
-      .single-btn-container {
-        display: flex;
-        align-items: center;
-        margin-bottom: 1rem;
-
-        button {
-          width: 100%;
-          margin-right: 1rem;
-          padding: 0.5rem 1rem;
-          font-size: 1rem;
-          font-weight: bold;
-          border: none;
-          border-radius: 0.5rem;
-          color: $color-light;
-          background-color: $color-error;
-          box-shadow: $box-shadow;
-          transition: $transition;
-
-          &:hover {
-            cursor: pointer;
-          }
-        }
-
-        .completed {
-          background-color: $color-primary;
-          box-shadow: $box-shadow;
-        }
-
-        .uncompleted {
-          background-color: $color-error;
-          box-shadow: $box-shadow;
-        }
-
-        .upcoming {
-          background-color: $color-warning;
-          box-shadow: $box-shadow;
-        }
-
-        .check-icon {
-          color: $color-primary;
-        }
-
-        .x-icon {
-          color: $color-error;
-        }
-
-        .circle-icon {
+        &:hover {
+          cursor: pointer;
           color: $color-warning;
+        }
+      }
+
+      .delete-icon {
+        margin-left: 0.8rem;
+        transition: $transition;
+
+        &:hover {
+          cursor: pointer;
+          color: $color-error;
         }
       }
     }
   }
-}
 
+  .btns-container {
+    display: flex;
+    flex-direction: column;
+
+    .single-btn-container {
+      display: flex;
+      align-items: center;
+      margin-bottom: 1rem;
+
+      button {
+        width: 100%;
+        margin-right: 1rem;
+        padding: 0.5rem 1rem;
+        font-size: 1rem;
+        font-weight: bold;
+        border: none;
+        border-radius: 0.5rem;
+        color: $color-light;
+        background-color: $color-error;
+        box-shadow: $box-shadow;
+        transition: $transition;
+
+        &:hover {
+          cursor: pointer;
+        }
+      }
+
+      .completed {
+        background-color: $color-primary;
+        box-shadow: $box-shadow;
+      }
+
+      .uncompleted {
+        background-color: $color-error;
+        box-shadow: $box-shadow;
+      }
+
+      .upcoming {
+        background-color: $color-warning;
+        box-shadow: $box-shadow;
+      }
+
+      .check-icon {
+        color: $color-primary;
+      }
+
+      .x-icon {
+        color: $color-error;
+      }
+
+      .circle-icon {
+        color: $color-warning;
+      }
+    }
+  }
+}

@@ -1,8 +1,6 @@
 @import '../../styles/settings.scss';
 
 .habit-edit-form {
-  width: 15rem;
-
   label {
     font-weight: bold;
     margin: 0.5rem;
@@ -31,7 +29,7 @@
         top: 0;
         left: 0;
       }
-      
+
       .days-checkbox {
         height: 1rem;
         width: 1rem;

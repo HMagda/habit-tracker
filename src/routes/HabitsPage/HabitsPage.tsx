@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import HabitForm from '../../Components/HabitForm/HabitForm';
 import DatePicker from '../../Components/DatePicker/DatePicker';
 import Heatmap from '../../Components/Heatmap/Heatmap';
-import HabitsCompletion from '../../Components/HabitsCompletion/HabitsCompletion';
+import HabitInfo from '../../Components/HabitInfo/HabitInfo';
 import './HabitsPage.modules.scss';
 import {Habit} from '../../utils';
 
@@ -38,8 +38,9 @@ const HabitsPage = () => {
         <HabitForm habitsArr={habitsArr} addNewHabit={handleHabitAdded} />
       )}
       {habitsArr && (
-        <HabitsCompletion
+        <HabitInfo
           habitsArr={habitsArr}
+          setHabitsArr={setHabitsArr}
           deleteHabit={handleHabitDeleted}
         />
       )}

@@ -1,9 +1,8 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {HiX, HiCheck} from 'react-icons/hi';
 import {FiCircle, FiEdit3, FiTrash} from 'react-icons/fi';
 import './HabitsCompletion.modules.scss';
 import {Habit, daysOfWeek} from '../../utils';
-import HabitEditForm from '../HabitEditForm/HabitEditForm';
 
 interface CompletedDays {
   [id: string]: {
@@ -12,36 +11,26 @@ interface CompletedDays {
 }
 
 const HabitsCompletion: React.FC<{
+  habit: Habit;
+  index: number;
   habitsArr: Habit[];
   deleteHabit: (habitId: number) => void;
-}> = ({habitsArr, deleteHabit}) => {
-  const [completedDays, setCompletedDays] = useState<CompletedDays>({});
-
-  const [editHabitId, setEditHabitId] = useState<number | null>(null);
-
+  setEditHabitId: React.Dispatch<React.SetStateAction<number | null>>;
+  handleMarkCompleted: (id: string, day: string) => void;
+  completedDays: CompletedDays;
+}> = ({
+  habit,
+  index,
+  habitsArr,
+  deleteHabit,
+  setEditHabitId,
+  handleMarkCompleted,
+  completedDays,
+}) => {
   const today = new Date().toLocaleString('en-GB', {
     weekday: 'long',
   });
   const todayIndex = daysOfWeek.indexOf(today);
-
-  const handleMarkCompleted = (id: string, day: string) => {
-    if (
-      new Date().toLocaleString('en-GB', {weekday: 'long'}) !== day &&
-      !window.confirm(
-        'The chosen day is not today, are you sure you want to change the habit status?'
-      )
-    ) {
-      return;
-    }
-
-    setCompletedDays((prev) => ({
-      ...prev,
-      [id]: {
-        ...(prev[id] || {}),
-        [day]: !(prev[id] && prev[id][day]),
-      },
-    }));
-  };
 
   const handleDeleteHabit = (habitName: string) => {
     const habitToDelete = habitsArr.find(
@@ -71,72 +60,53 @@ const HabitsCompletion: React.FC<{
   };
 
   return (
-    <div className='habits-wrapper'>
-      {habitsArr.map((habit: Habit, index: number) => (
-        <div key={index} className='habit'>
-          <div
-            className={`habit-header ${
-              editHabitId === habit.id ? 'justify-end' : 'justify-space-between'
-            }`}
-          >
-            {editHabitId !== habit.id ? (
-              <h3>{habit.habitName}</h3>
-            ) : (
-              <HabitEditForm habitsArr={habitsArr} editHabitId={editHabitId} editHabitName={habit.habitName} editHabitDays={habit.days}/>
-            )}
-
-            {editHabitId !== habit.id && (
-              <div className='option-icons'>
-                <FiEdit3
-                  className='edit-icon'
-                  onClick={() => {
-                    setEditHabitId(habit.id ?? null);
-                  }}
-                />
-                <FiTrash
-                  onClick={() => handleDeleteHabit(habit.habitName)}
-                  className='delete-icon'
-                />
-              </div>
-            )}
-          </div>
-
-          {editHabitId !== habit.id && (
-            <div className='btns-container'>
-              {habit.days.map((day: string) => {
-                const dayIndex = daysOfWeek.indexOf(day);
-                const isUpcoming = dayIndex > todayIndex;
-                const completed = completedDays[habit.habitName]?.[day];
-                return (
-                  <div className='single-btn-container' key={day}>
-                    <button
-                      key={day}
-                      onClick={() => handleMarkCompleted(habit.habitName, day)}
-                      className={
-                        completed
-                          ? 'completed'
-                          : isUpcoming
-                          ? 'upcoming'
-                          : 'uncompleted'
-                      }
-                    >
-                      {day}
-                    </button>
-
-                    {completed ? (
-                      <HiCheck className='check-icon' />
-                    ) : isUpcoming ? (
-                      <FiCircle className='circle-icon' />
-                    ) : (
-                      <HiX className='x-icon' />
-                    )}
-                  </div>
-                );
-              })}
-            </div>
-          )}
+    <div className='habit-completion-wrapper' key={index}>
+      <div className='habit-header'>
+        <h3>{habit.habitName}</h3>
+        <div className='option-icons'>
+          <FiEdit3
+            className='edit-icon'
+            onClick={() => {
+              setEditHabitId(habit.id ?? null);
+            }}
+          />
+          <FiTrash
+            onClick={() => handleDeleteHabit(habit.habitName)}
+            className='delete-icon'
+          />
         </div>
-      ))}
+      </div>
+      <div className='btns-container'>
+        {habit.days.map((day: string) => {
+          const dayIndex = daysOfWeek.indexOf(day);
+          const isUpcoming = dayIndex > todayIndex;
+          const completed = completedDays[habit.habitName]?.[day];
+          return (
+            <div className='single-btn-container' key={day}>
+              <button
+                key={day}
+                onClick={() => handleMarkCompleted(habit.habitName, day)}
+                className={
+                  completed
+                    ? 'completed'
+                    : isUpcoming
+                    ? 'upcoming'
+                    : 'uncompleted'
+                }
+              >
+                {day}
+              </button>
+              {completed ? (
+                <HiCheck className='check-icon' />
+              ) : isUpcoming ? (
+                <FiCircle className='circle-icon' />
+              ) : (
+                <HiX className='x-icon' />
+              )}
+            </div>
+          );
+        })}
+      </div>
     </div>
   );
 };

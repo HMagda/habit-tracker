@@ -14,7 +14,6 @@ const LandingPage: React.FC = () => {
         <Link to='/habits'>
           <button
             className='cta-button'
-            onClick={() => console.log('clicked get started btn')}
           >
             Get Started
           </button>
