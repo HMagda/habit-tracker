@@ -19,6 +19,7 @@ const HabitEditForm: React.FC<{
 }) => {
   const [habitName, setHabitName] = useState<string>(editHabitName);
   const [days, setDays] = useState<string[]>(editHabitDays);
+  const [warning, setWarning] = useState<boolean>(false);
 
   const handleDayChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const day = e.target.value;
@@ -32,7 +33,20 @@ const HabitEditForm: React.FC<{
   };
 
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setHabitName(e.target.value);
+   let newHabitName =  e.target.value;
+   
+   if (newHabitName !== editHabitName) {
+    const habitExists = habitsArr
+      .filter((habit) => habit.id !== editHabitId)
+      .map((habit) => habit.habitName.toLowerCase());
+
+    setWarning(habitExists.includes(newHabitName.toLowerCase()));
+  } else {
+    setWarning(false);
+  }
+
+  setHabitName(newHabitName);
+
   };
 
   const handleEdit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -69,6 +83,9 @@ const HabitEditForm: React.FC<{
         onChange={handleNameChange}
         required
       />
+      {warning && (
+        <p className='warning-text'>This habit name already exists</p>
+      )}
       <label htmlFor='frequency'>Frequency:</label>
       <div className='days-label-container'>
         {daysOfWeek.map((day) => (
@@ -85,7 +102,9 @@ const HabitEditForm: React.FC<{
           </label>
         ))}
       </div>
-      <button type='submit'>Edit Habit</button>
+      <button type='submit' disabled={warning}>
+        Edit Habit
+      </button>
     </form>
   );
 };
