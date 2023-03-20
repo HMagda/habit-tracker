@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import './HabitInfo.modules.scss';
-import {Habit} from '../../utils';
+import {Habit, normalizeDayIndex} from '../../utils';
 import HabitEditForm from '../HabitEditForm/HabitEditForm';
 import HabitsCompletion from '../HabitsCompletion/HabitsCompletion';
 
@@ -18,9 +18,10 @@ const HabitInfo: React.FC<{
   const [completedDays, setCompletedDays] = useState<CompletedDays>({});
   const [editHabitId, setEditHabitId] = useState<number | null>(null);
 
-  const handleMarkCompleted = (id: string, day: string) => {
+  const handleMarkCompleted = (id: string, day: number) => {
+    const localDayIndex = normalizeDayIndex(new Date().getDay());
     if (
-      new Date().toLocaleString('en-GB', {weekday: 'long'}) !== day &&
+      localDayIndex !== day &&
       !window.confirm(
         'The chosen day is not today, are you sure you want to change the habit status?'
       )

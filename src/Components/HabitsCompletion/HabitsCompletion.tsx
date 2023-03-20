@@ -2,7 +2,7 @@ import React from 'react';
 import {HiX, HiCheck} from 'react-icons/hi';
 import {FiCircle, FiEdit3, FiTrash} from 'react-icons/fi';
 import './HabitsCompletion.modules.scss';
-import {Habit, daysOfWeek} from '../../utils';
+import {Habit, daysOfWeek, normalizeDayIndex} from '../../utils';
 
 interface CompletedDays {
   [id: string]: {
@@ -16,7 +16,7 @@ const HabitsCompletion: React.FC<{
   habitsArr: Habit[];
   deleteHabit: (habitId: number) => void;
   setEditHabitId: React.Dispatch<React.SetStateAction<number | null>>;
-  handleMarkCompleted: (id: string, day: string) => void;
+  handleMarkCompleted: (id: string, day: number) => void;
   completedDays: CompletedDays;
 }> = ({
   habit,
@@ -27,10 +27,7 @@ const HabitsCompletion: React.FC<{
   handleMarkCompleted,
   completedDays,
 }) => {
-  const today = new Date().toLocaleString('en-GB', {
-    weekday: 'long',
-  });
-  const todayIndex = daysOfWeek.indexOf(today);
+  const todayIndex = normalizeDayIndex(new Date().getDay());
 
   const handleDeleteHabit = (habitName: string) => {
     const habitToDelete = habitsArr.find(
@@ -77,9 +74,9 @@ const HabitsCompletion: React.FC<{
         </div>
       </div>
       <div className='btns-container'>
-        {habit.days.map((day: string) => {
-          const dayIndex = daysOfWeek.indexOf(day);
-          const isUpcoming = dayIndex > todayIndex;
+        {habit.days.sort()
+        .map((day: number) => {
+          const isUpcoming = day >= todayIndex;
           const completed = completedDays[habit.habitName]?.[day];
           return (
             <div className='single-btn-container' key={day}>
@@ -94,7 +91,7 @@ const HabitsCompletion: React.FC<{
                     : 'uncompleted'
                 }
               >
-                {day}
+                {daysOfWeek[day]}
               </button>
               {completed ? (
                 <HiCheck className='check-icon' />

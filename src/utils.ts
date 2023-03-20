@@ -11,5 +11,9 @@ export const daysOfWeek: string[] = [
 export interface Habit {
   id?: number;
   habitName: string;
-  days: string[];
+  days: number[];
+}
+
+export function normalizeDayIndex(usDayIndex: number) {
+  return usDayIndex === 0 ? 6 : usDayIndex - 1;
 }

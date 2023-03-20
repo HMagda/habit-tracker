@@ -8,12 +8,12 @@ const HabitForm: React.FC<{
 }> = ({addNewHabit, habitsArr}) => {
   const [habitName, setHabitName] = useState<string>('');
   const [frequency, setFrequency] = useState<string>('daily');
-  const [days, setDays] = useState<string[]>([]);
+  const [days, setDays] = useState<number[]>([]);
   const [warning, setWarning] = useState<boolean>(false);
 
   useEffect(() => {
     if (frequency === 'daily') {
-      setDays(daysOfWeek);
+      setDays([0, 1, 2, 3, 4, 5, 6]);
     } else {
       setDays([]);
     }
@@ -31,15 +31,17 @@ const HabitForm: React.FC<{
     setHabitName(e.target.value);
   };
 
-  const handleFrequencyChange = (
-    e: React.ChangeEvent<HTMLSelectElement>
-  ) => {
+  const handleFrequencyChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setFrequency(e.target.value);
   };
 
   const handleDayChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const day = e.target.value;
+    const day: number = Number(e.target.id);
+    console.log(e.target.id);
+    console.log('day: ' + day);
+
     setDays((days) => {
+      console.log('setDays' + days);
       if (days.includes(day)) {
         return days.filter((d) => d !== day);
       } else {
@@ -91,17 +93,17 @@ const HabitForm: React.FC<{
       {frequency === 'weekly' && (
         <>
           <p>Choose the days:</p>
-          {daysOfWeek.map((day) => (
-            <label key={day} htmlFor={day} className='days-label'>
+          {daysOfWeek.map((day, i) => (
+            <label key={day} htmlFor={i.toString()} className='days-label'>
               <input
                 type='checkbox'
-                id={day}
+                id={i.toString()}
                 value={day}
-                checked={days.includes(day)}
+                checked={days.includes(i)}
                 onChange={handleDayChange}
               />
               <div className='days-checkbox'></div>
-              <div className='day'> {day}</div> 
+              <div className='day'>{day}</div>
             </label>
           ))}
         </>

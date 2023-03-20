@@ -8,7 +8,7 @@ const HabitEditForm: React.FC<{
   editHabitId: number | null;
   setEditHabitId: React.Dispatch<React.SetStateAction<number | null>>;
   editHabitName: string;
-  editHabitDays: string[];
+  editHabitDays: number[];
 }> = ({
   habitsArr,
   setHabitsArr,
@@ -18,11 +18,12 @@ const HabitEditForm: React.FC<{
   editHabitDays,
 }) => {
   const [habitName, setHabitName] = useState<string>(editHabitName);
-  const [days, setDays] = useState<string[]>(editHabitDays);
+  const [days, setDays] = useState<number[]>(editHabitDays);
   const [warning, setWarning] = useState<boolean>(false);
 
   const handleDayChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const day = e.target.value;
+    const day = Number(e.target.id);
+    console.log(day);
     setDays((days) => {
       if (days.includes(day)) {
         return days.filter((d) => d !== day);
@@ -33,20 +34,19 @@ const HabitEditForm: React.FC<{
   };
 
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-   let newHabitName =  e.target.value;
-   
-   if (newHabitName !== editHabitName) {
-    const habitExists = habitsArr
-      .filter((habit) => habit.id !== editHabitId)
-      .map((habit) => habit.habitName.toLowerCase());
+    let newHabitName = e.target.value;
 
-    setWarning(habitExists.includes(newHabitName.toLowerCase()));
-  } else {
-    setWarning(false);
-  }
+    if (newHabitName !== editHabitName) {
+      const habitExists = habitsArr
+        .filter((habit) => habit.id !== editHabitId)
+        .map((habit) => habit.habitName.toLowerCase());
 
-  setHabitName(newHabitName);
+      setWarning(habitExists.includes(newHabitName.toLowerCase()));
+    } else {
+      setWarning(false);
+    }
 
+    setHabitName(newHabitName);
   };
 
   const handleEdit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -88,13 +88,13 @@ const HabitEditForm: React.FC<{
       )}
       <label htmlFor='frequency'>Frequency:</label>
       <div className='days-label-container'>
-        {daysOfWeek.map((day) => (
-          <label key={day} htmlFor={day} className='days-label'>
+        {daysOfWeek.map((day, i) => (
+          <label key={day} htmlFor={i.toString()} className='days-label'>
             <input
               type='checkbox'
-              id={day}
+              id={i.toString()}
               value={day}
-              checked={days.includes(day)}
+              checked={days.includes(i)}
               onChange={handleDayChange}
             />
             <div className='days-checkbox'></div>
