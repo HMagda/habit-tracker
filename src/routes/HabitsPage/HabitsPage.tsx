@@ -12,7 +12,7 @@ const HabitsPage = () => {
   useEffect(() => {
     let fetchedHabitsArr = [];
 
-    fetch('http://localhost:8000/habits')
+    fetch('https://shrouded-plains-88631.herokuapp.com/habits')
       .then((res) => {
         return res.json();
       })
