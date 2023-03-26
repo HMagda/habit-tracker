@@ -12,9 +12,7 @@ const HabitsPage = () => {
   useEffect(() => {
     let fetchedHabitsArr = [];
 
-    fetch('https://shrouded-plains-88631.herokuapp.com/habits', {
-      mode: 'no-cors'
-    })
+    fetch('https://shrouded-plains-88631.herokuapp.com/habits')
       .then((res) => {
         return res.json();
       })
