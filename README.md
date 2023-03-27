@@ -3,7 +3,6 @@
 Habit Tracker is a React application to track daily habits and monitor progress.
 
 # Getting Started
-To get started with the game, follow these steps:
 
 1. Clone or download the repository
 2. Open your terminal and navigate to the project directory
