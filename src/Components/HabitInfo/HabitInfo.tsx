@@ -1,22 +1,15 @@
 import React, {useState} from 'react';
 import './HabitInfo.modules.scss';
-import {Habit, normalizeDayIndex} from '../../utils';
+import {baseUrl, Habit, normalizeDayIndex} from '../../utils';
 import HabitEditForm from '../HabitEditForm/HabitEditForm';
 import HabitsCompletion from '../HabitsCompletion/HabitsCompletion';
-
-interface CompletedDays {
-  [id: string]: {
-    [day: string]: boolean;
-  };
-}
 
 const HabitInfo: React.FC<{
   habitsArr: Habit[];
   setHabitsArr: React.Dispatch<React.SetStateAction<Habit[]>>;
-  deleteHabit: (habitId: number) => void;
+  deleteHabit: (habitId: string) => void;
 }> = ({habitsArr, setHabitsArr, deleteHabit}) => {
-  const [completedDays, setCompletedDays] = useState<CompletedDays>({});
-  const [editHabitId, setEditHabitId] = useState<number | null>(null);
+  const [editHabitId, setEditHabitId] = useState<string>("");
 
   const handleMarkCompleted = (id: string, day: number) => {
     const localDayIndex = normalizeDayIndex(new Date().getDay());
@@ -29,13 +22,32 @@ const HabitInfo: React.FC<{
       return;
     }
 
-    setCompletedDays((prev) => ({
-      ...prev,
-      [id]: {
-        ...(prev[id] || {}),
-        [day]: !(prev[id] && prev[id][day]),
-      },
-    }));
+    const habitToEdit = habitsArr.find((habit) => habit.id === id)!!;
+    const editedHabit = {...habitToEdit, days: habitToEdit.days.map((habitDay) =>
+        habitDay.dayOfWeek === day ? {...habitDay, completed: !habitDay.completed} : habitDay
+    )};
+    fetch(baseUrl + `/habits/${id}`, {
+      method: 'PUT',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(editedHabit),
+    })
+        .then((res) => {
+          if (!res.ok) {
+            throw new Error('Network response was not ok');
+          }
+          return res.json(); // Read the response as JSON directly
+        })
+        .then((receivedHabit) => {
+          const updatedHabitsArr = habitsArr.map((habit) =>
+              habit.id === receivedHabit.id ? {...habit, days: receivedHabit.days} : habit
+          );
+          setHabitsArr(updatedHabitsArr);
+        })
+        .catch((error) => {
+          console.error('Error adding new habit: ', error);
+        });
+
+    setEditHabitId("");
   };
 
   return (
@@ -55,7 +67,6 @@ const HabitInfo: React.FC<{
                 deleteHabit={deleteHabit}
                 setEditHabitId={setEditHabitId}
                 handleMarkCompleted={handleMarkCompleted}
-                completedDays={completedDays}
               />
             ) : (
               <HabitEditForm

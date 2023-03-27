@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {daysOfWeek, Habit} from '../../utils';
+import {baseUrl, daysOfWeek, Habit} from '../../utils';
 import './HabitForm.modules.scss';
 
 const HabitForm: React.FC<{
@@ -54,18 +54,23 @@ const HabitForm: React.FC<{
     e.preventDefault();
     const habit = {habitName, days};
 
-    fetch('http://localhost:8000/habits', {
+    fetch(baseUrl + '/habits', {
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify(habit),
     })
-      .then(() => {
-        console.log('new habit added');
-        addNewHabit(habit);
-      })
-      .catch((error) => {
-        console.error('Error adding new habit: ', error);
-      });
+    .then((res) => {
+      if (!res.ok) {
+        throw new Error('Network response was not ok');
+      }
+      return res.json(); // Read the response as JSON directly
+    })
+    .then((createdHabit) => {
+      addNewHabit(createdHabit);
+    })
+    .catch((error) => {
+      console.error('There was a problem with the fetch operation:', error);
+    });
 
     setHabitName('');
     setFrequency('daily');
