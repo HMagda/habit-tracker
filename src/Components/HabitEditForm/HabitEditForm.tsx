@@ -1,14 +1,14 @@
 import React, {useState} from 'react';
-import {daysOfWeek, Habit} from '../../utils';
+import {baseUrl, daysOfWeek, Habit, HabitDay} from '../../utils';
 import './HabitEditForm.modules.scss';
 
 const HabitEditForm: React.FC<{
   habitsArr: Habit[];
   setHabitsArr: React.Dispatch<React.SetStateAction<Habit[]>>;
-  editHabitId: number | null;
-  setEditHabitId: React.Dispatch<React.SetStateAction<number | null>>;
+  editHabitId: string;
+  setEditHabitId: React.Dispatch<React.SetStateAction<string>>;
   editHabitName: string;
-  editHabitDays: number[];
+  editHabitDays: HabitDay[];
 }> = ({
   habitsArr,
   setHabitsArr,
@@ -18,17 +18,17 @@ const HabitEditForm: React.FC<{
   editHabitDays,
 }) => {
   const [habitName, setHabitName] = useState<string>(editHabitName);
-  const [days, setDays] = useState<number[]>(editHabitDays);
+  const [days, setDays] = useState<HabitDay[]>(editHabitDays);
   const [warning, setWarning] = useState<boolean>(false);
 
   const handleDayChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const day = Number(e.target.id);
     console.log(day);
     setDays((days) => {
-      if (days.includes(day)) {
-        return days.filter((d) => d !== day);
+      if (days.map((day) => day.dayOfWeek).includes(day)) {
+        return days.filter((d) => d.dayOfWeek !== day);
       } else {
-        return [...days, day];
+        return [...days, {dayOfWeek: day, completed: false}];
       }
     });
   };
@@ -54,7 +54,7 @@ const HabitEditForm: React.FC<{
 
     const habit = {habitName, days};
 
-    fetch(`http://localhost:8000/habits/${editHabitId}`, {
+    fetch(baseUrl + `/habits/${editHabitId}`, {
       method: 'PUT',
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify(habit),
@@ -70,7 +70,7 @@ const HabitEditForm: React.FC<{
         console.error('Error adding new habit: ', error);
       });
 
-    setEditHabitId(null);
+    setEditHabitId("");
   };
 
   return (
@@ -89,17 +89,17 @@ const HabitEditForm: React.FC<{
       <label htmlFor='frequency'>Frequency:</label>
       <div className='days-label-container'>
         {daysOfWeek.map((day, i) => (
-          <label key={day} htmlFor={i.toString()} className='days-label'>
-            <input
-              type='checkbox'
-              id={i.toString()}
-              value={day}
-              checked={days.includes(i)}
-              onChange={handleDayChange}
-            />
-            <div className='days-checkbox'></div>
-            <div className='day'> {day}</div>
-          </label>
+            <label key={day} htmlFor={i.toString()} className='days-label'>
+              <input
+                  type='checkbox'
+                  id={i.toString()}
+                  value={day}
+                  checked={days.some((d) => d.dayOfWeek === i)}
+                  onChange={handleDayChange}
+              />
+              <div className='days-checkbox'></div>
+              <div className='day'> {day}</div>
+            </label>
         ))}
       </div>
       <button type='submit' disabled={warning}>

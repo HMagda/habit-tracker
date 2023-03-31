@@ -2,22 +2,15 @@ import React from 'react';
 import {HiX, HiCheck} from 'react-icons/hi';
 import {FiCircle, FiEdit3, FiTrash} from 'react-icons/fi';
 import './HabitsCompletion.modules.scss';
-import {Habit, daysOfWeek, normalizeDayIndex} from '../../utils';
-
-interface CompletedDays {
-  [id: string]: {
-    [day: string]: boolean;
-  };
-}
+import {Habit, daysOfWeek, normalizeDayIndex, baseUrl, HabitDay} from '../../utils';
 
 const HabitsCompletion: React.FC<{
   habit: Habit;
   index: number;
   habitsArr: Habit[];
-  deleteHabit: (habitId: number) => void;
-  setEditHabitId: React.Dispatch<React.SetStateAction<number | null>>;
+  deleteHabit: (habitId: string) => void;
+  setEditHabitId: React.Dispatch<React.SetStateAction<string>>;
   handleMarkCompleted: (id: string, day: number) => void;
-  completedDays: CompletedDays;
 }> = ({
   habit,
   index,
@@ -25,26 +18,24 @@ const HabitsCompletion: React.FC<{
   deleteHabit,
   setEditHabitId,
   handleMarkCompleted,
-  completedDays,
 }) => {
   const todayIndex = normalizeDayIndex(new Date().getDay());
 
-  const handleDeleteHabit = (habitName: string) => {
+  const handleDeleteHabit = (habitId: string) => {
     const habitToDelete = habitsArr.find(
-      (habit) => habit.habitName === habitName
+      (habit) => habit.id === habitId
     );
 
     if (!habitToDelete) {
-      console.log(`Habit with name ${habitName} not found!`);
+      console.log(`Habit with id ${habitId} not found!`);
       return;
     }
-    const habitId = habitToDelete.id;
 
     if (!window.confirm('Are you sure you want to delete this habit?')) {
       return;
     }
 
-    fetch(`http://localhost:8000/habits/${habitId}`, {
+    fetch(baseUrl + `/habits/${habitId}`, {
       method: 'DELETE',
     })
       .then(() => {
@@ -68,23 +59,23 @@ const HabitsCompletion: React.FC<{
             }}
           />
           <FiTrash
-            onClick={() => handleDeleteHabit(habit.habitName)}
+            onClick={() => handleDeleteHabit(habit.id)}
             className='delete-icon'
           />
         </div>
       </div>
       <div className='btns-container'>
-        {habit.days.sort()
-        .map((day: number) => {
+        {sortArrayByProperty(habit.days, 'dayOfWeek')
+        .map((habitDay: HabitDay) => {
+          const day = habitDay.dayOfWeek;
           const isUpcoming = day >= todayIndex;
-          const completed = completedDays[habit.habitName]?.[day];
           return (
             <div className='single-btn-container' key={day}>
               <button
                 key={day}
-                onClick={() => handleMarkCompleted(habit.habitName, day)}
+                onClick={() => handleMarkCompleted(habit.id, day)}
                 className={
-                  completed
+                  habitDay.completed
                     ? 'completed'
                     : isUpcoming
                     ? 'upcoming'
@@ -93,7 +84,7 @@ const HabitsCompletion: React.FC<{
               >
                 {daysOfWeek[day]}
               </button>
-              {completed ? (
+              {habitDay.completed ? (
                 <HiCheck className='check-icon' />
               ) : isUpcoming ? (
                 <FiCircle className='circle-icon' />
@@ -107,5 +98,19 @@ const HabitsCompletion: React.FC<{
     </div>
   );
 };
+
+function sortArrayByProperty<T>(array: T[], property: keyof T): T[] {
+  return array.sort((a, b) => {
+    if (a[property] < b[property]) {
+      return -1;
+    }
+    if (a[property] > b[property]) {
+      return 1;
+    }
+    return 0;
+  });
+}
+
+
 
 export default HabitsCompletion;
