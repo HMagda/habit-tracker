@@ -20,7 +20,7 @@ const HabitsPage = () => {
                 if (!res.ok) {
                     throw new Error('Network response was not ok');
                 }
-                return res.json(); // Read the response as JSON directly
+                return res.json();
             })
             .then((data) => {
                 console.log('data', data);
@@ -34,19 +34,12 @@ const HabitsPage = () => {
             });
     });
 
-  const handleHabitAdded = (habit: Habit) => {
-    setHabitsArr([...habitsArr, habit]);
-  };
-
   const handleHabitDeleted = (habitId: string) => {
     setHabitsArr(habitsArr.filter((habit) => habit.id !== habitId));
   };
 
   return (
     <div className='habits-page'>
-      {habitsArr && (
-        <HabitForm habitsArr={habitsArr} addNewHabit={handleHabitAdded} />
-      )}
       {habitsArr && (
         <HabitInfo
           habitsArr={habitsArr}
