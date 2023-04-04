@@ -4,19 +4,15 @@ import {baseUrl, Habit, normalizeDayIndex} from '../../utils';
 import HabitEditForm from '../HabitEditForm/HabitEditForm';
 import HabitsCompletion from '../HabitsCompletion/HabitsCompletion';
 import HabitForm from '../HabitForm/HabitForm';
-import {FiPlus} from 'react-icons/fi';
+import {FiPlus, FiToggleLeft, FiToggleRight} from 'react-icons/fi';
 
 const HabitInfo: React.FC<{
   habitsArr: Habit[];
   setHabitsArr: React.Dispatch<React.SetStateAction<Habit[]>>;
   deleteHabit: (habitId: string) => void;
-
 }> = ({habitsArr, setHabitsArr, deleteHabit}) => {
   const [editHabitId, setEditHabitId] = useState<string>('');
   const [showHabitForm, setShowHabitForm] = useState<boolean>(false);
-
-  const today = new Date();
-  const formattedDate = today.toLocaleDateString('en-GB');
 
   const toggleHabitForm = () => {
     setShowHabitForm(!showHabitForm);
@@ -71,9 +67,19 @@ const HabitInfo: React.FC<{
   return (
     <div className='habit-info-wrapper'>
       <div className='headline'>
-        <h1>habits for today {formattedDate}</h1>
+        <h1>My week plan</h1>
         <button className='habit-form-toggle-btn' onClick={toggleHabitForm}>
           <FiPlus />
+        </button>
+      </div>
+
+      <div className='formatting-option'>
+        <h3>Show dates</h3>
+        <button className='formatting-option-toggle-btn'>
+          <FiToggleLeft />
+        </button>
+        <button>
+          <FiToggleRight />
         </button>
       </div>
 
@@ -86,7 +92,6 @@ const HabitInfo: React.FC<{
                 setHabitsArr([...habitsArr, habit]);
                 toggleHabitForm();
               }}
-           
               habitsArr={habitsArr}
               setShowHabitForm={setShowHabitForm}
             />

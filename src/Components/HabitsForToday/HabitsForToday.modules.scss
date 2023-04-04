@@ -1,0 +1,30 @@
+.habits-today-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-content: center;
+
+  .habit {
+    &.habit-today {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 80%;
+
+      h3 {
+        overflow-wrap: anywhere;
+        text-align: left;
+      }
+
+      .habit-completed-btn {
+        display: flex;
+        align-items: center;
+        margin: 1rem;
+        font-size: 1.5rem;
+      }
+    }
+  }
+}
+
+.strikethrough {
+  text-decoration: line-through;
+}

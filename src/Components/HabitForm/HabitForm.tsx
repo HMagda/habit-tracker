@@ -12,6 +12,7 @@ const HabitForm: React.FC<{
   const [frequency, setFrequency] = useState<string>('daily');
   const [days, setDays] = useState<number[]>([]);
   const [warning, setWarning] = useState<boolean>(false);
+  const [warningChooseDay, setWarningChooseDay] = useState<boolean>(false);
 
   useEffect(() => {
     if (frequency === 'daily') {
@@ -20,6 +21,14 @@ const HabitForm: React.FC<{
       setDays([]);
     }
   }, [frequency, habitName]);
+
+  useEffect(() => {
+    if (frequency === 'weekly' && days.length === 0) {
+      setWarningChooseDay(true);
+    } else {
+      setWarningChooseDay(false);
+    }
+  }, [frequency, days]);
 
   const toggleHabitForm = () => {
     setShowHabitForm(false);
@@ -46,10 +55,6 @@ const HabitForm: React.FC<{
     console.log(e.target.id);
     console.log('day: ' + day);
 
-    if (frequency === 'weekly' && days.length === 0) {
-      setWarning(true);
-    } // to be changed
-
     setDays((days) => {
       console.log('setDays' + days);
       if (days.includes(day)) {
@@ -62,6 +67,7 @@ const HabitForm: React.FC<{
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
     const habit = {habitName, days};
 
     fetch(baseUrl + '/habits', {
@@ -127,14 +133,16 @@ const HabitForm: React.FC<{
                 />
                 <div className='days-checkbox'></div>
                 <div className='day'>{day}</div>
-                {warning && (
-                  <p className='warning-text'>You haven't chosen any day yet</p> // to be changed
-                )}
               </label>
             ))}
           </>
         )}
-        <button type='submit' disabled={warning}>
+
+        {warningChooseDay && (
+          <p className='warning-text'>You haven't chosen any day yet</p>
+        )}
+
+        <button type='submit' disabled={warning || warningChooseDay}>
           Add Habit
         </button>
       </form>

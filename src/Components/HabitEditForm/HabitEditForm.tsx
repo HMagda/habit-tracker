@@ -70,7 +70,7 @@ const HabitEditForm: React.FC<{
         console.error('Error adding new habit: ', error);
       });
 
-    setEditHabitId("");
+    setEditHabitId('');
   };
 
   return (
@@ -89,17 +89,17 @@ const HabitEditForm: React.FC<{
       <label htmlFor='frequency'>Frequency:</label>
       <div className='days-label-container'>
         {daysOfWeek.map((day, i) => (
-            <label key={day} htmlFor={i.toString()} className='days-label'>
-              <input
-                  type='checkbox'
-                  id={i.toString()}
-                  value={day}
-                  checked={days.some((d) => d.dayOfWeek === i)}
-                  onChange={handleDayChange}
-              />
-              <div className='days-checkbox'></div>
-              <div className='day'> {day}</div>
-            </label>
+          <label key={day} htmlFor={i.toString()} className='days-label'>
+            <input
+              type='checkbox'
+              id={i.toString()}
+              value={day}
+              checked={days.some((d) => d.dayOfWeek === i)}
+              onChange={handleDayChange}
+            />
+            <div className='days-checkbox'></div>
+            <div className='day'>{day}</div>
+          </label>
         ))}
       </div>
       <button type='submit' disabled={warning}>
