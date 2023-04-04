@@ -1,5 +1,4 @@
 import React, {useEffect, useState} from 'react';
-import HabitForm from '../../Components/HabitForm/HabitForm';
 import DatePicker from '../../Components/DatePicker/DatePicker';
 import Heatmap from '../../Components/Heatmap/Heatmap';
 import HabitInfo from '../../Components/HabitInfo/HabitInfo';
@@ -9,9 +8,7 @@ import HabitsForToday from '../../Components/HabitsForToday/HabitsForToday';
 
 const HabitsPage = () => {
   const [habitsArr, setHabitsArr] = useState<Habit[]>([]);
-  const [habitsForTodayArr, setHabitsForTodayArr] = useState<HabitForToday[]>(
-    []
-  );
+  const [habitsForTodayArr, setHabitsForTodayArr] = useState<HabitForToday[]>([]);
 
   useEffect(() => {
     fetch(baseUrl + '/habits', {
@@ -27,7 +24,7 @@ const HabitsPage = () => {
       })
       .then((data) => {
         console.log('data', data);
-        const fetchedHabitsArr = data.habits; // Get the habits array from the response
+        const fetchedHabitsArr = data.habits;
         if (JSON.stringify(fetchedHabitsArr) !== JSON.stringify(habitsArr)) {
           setHabitsArr(fetchedHabitsArr);
         }
@@ -35,7 +32,7 @@ const HabitsPage = () => {
       .catch((error) => {
         console.error('There was a problem with the fetch operation:', error);
       });
-  }, []);
+  }, [habitsForTodayArr]);
 
   useEffect(() => {
     fetch(baseUrl + '/habits/today', {
@@ -51,7 +48,7 @@ const HabitsPage = () => {
       })
       .then((data) => {
         console.log('data for today', data);
-        const fetchedHabitsForTodayArr = data.habits; // Get the habits array from the response
+        const fetchedHabitsForTodayArr = data.habits;
         if (
           JSON.stringify(fetchedHabitsForTodayArr) !==
           JSON.stringify(habitsForTodayArr)
@@ -62,7 +59,7 @@ const HabitsPage = () => {
       .catch((error) => {
         console.error('There was a problem with the fetch operation:', error);
       });
-  }, [habitsForTodayArr]);
+  }, []);
 
   const handleHabitDeleted = (habitId: string) => {
     setHabitsArr(habitsArr.filter((habit) => habit.id !== habitId));
@@ -70,16 +67,18 @@ const HabitsPage = () => {
 
   return (
     <div className='habits-page'>
-      {habitsForTodayArr && (
+      {habitsForTodayArr.length > 0 && (
         <HabitsForToday
           habitsForTodayArr={habitsForTodayArr}
           setHabitsForTodayArr={setHabitsForTodayArr}
         />
       )}
-      {habitsArr && (
+      {habitsArr.length > 0 && (
         <HabitInfo
           habitsArr={habitsArr}
           setHabitsArr={setHabitsArr}
+          habitsForTodayArr={habitsForTodayArr}
+          setHabitsForTodayArr={setHabitsForTodayArr}
           deleteHabit={handleHabitDeleted}
         />
       )}

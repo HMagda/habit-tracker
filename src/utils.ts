@@ -21,6 +21,7 @@ export interface Habit {
 
 export interface HabitForToday {
   id: string;
+  day: number;
   habitName: string;
   completed: boolean
 }

@@ -1,3 +1,5 @@
+@import '../../styles/settings.scss';
+
 .habits-today-wrapper {
   display: flex;
   flex-direction: column;
@@ -11,15 +13,27 @@
       width: 80%;
 
       h3 {
+        font-weight: bold;
+        color: $color-dark;
         overflow-wrap: anywhere;
         text-align: left;
       }
 
       .habit-completed-btn {
+        color: $color-dark;
         display: flex;
         align-items: center;
-        margin: 1rem;
+        padding: 0.5rem;
         font-size: 1.5rem;
+      }
+
+      &.habit-completed {
+        background-color: rgba($color-dark, 0.1);
+
+        h3 {
+          font-weight: normal;
+          color: rgba($color-dark, 0.5);
+        }
       }
     }
   }

@@ -1,6 +1,12 @@
 import React, {useState} from 'react';
 import './HabitInfo.modules.scss';
-import {baseUrl, Habit, normalizeDayIndex} from '../../utils';
+import {
+  baseUrl,
+  Habit,
+  HabitDay,
+  HabitForToday,
+  normalizeDayIndex,
+} from '../../utils';
 import HabitEditForm from '../HabitEditForm/HabitEditForm';
 import HabitsCompletion from '../HabitsCompletion/HabitsCompletion';
 import HabitForm from '../HabitForm/HabitForm';
@@ -9,12 +15,21 @@ import {FiPlus, FiToggleLeft, FiToggleRight} from 'react-icons/fi';
 const HabitInfo: React.FC<{
   habitsArr: Habit[];
   setHabitsArr: React.Dispatch<React.SetStateAction<Habit[]>>;
+  habitsForTodayArr: HabitForToday[];
+  setHabitsForTodayArr: React.Dispatch<React.SetStateAction<HabitForToday[]>>;
   deleteHabit: (habitId: string) => void;
-}> = ({habitsArr, setHabitsArr, deleteHabit}) => {
+}> = ({
+  habitsArr,
+  setHabitsArr,
+  deleteHabit,
+  habitsForTodayArr,
+  setHabitsForTodayArr,
+}) => {
   const [editHabitId, setEditHabitId] = useState<string>('');
   const [showHabitForm, setShowHabitForm] = useState<boolean>(false);
 
   const toggleHabitForm = () => {
+    console.log(habitsArr.length);
     setShowHabitForm(!showHabitForm);
   };
 
@@ -56,6 +71,22 @@ const HabitInfo: React.FC<{
             : habit
         );
         setHabitsArr(updatedHabitsArr);
+
+        //making sure to update only today-habit task
+        if (habitsForTodayArr.length > 0) {
+          const today = habitsForTodayArr[0].day;
+          if (today === day) {
+            const isTodaysHabitCompleted = receivedHabit.days.filter(
+              (habitDay: HabitDay) => habitDay.dayOfWeek === day
+            )[0].completed;
+            const updatedHabitsForTodayArr = habitsForTodayArr.map((habit) =>
+              habit.id === receivedHabit.id
+                ? {...habit, completed: isTodaysHabitCompleted}
+                : habit
+            );
+            setHabitsForTodayArr(updatedHabitsForTodayArr);
+          }
+        }
       })
       .catch((error) => {
         console.error('Error adding new habit: ', error);
