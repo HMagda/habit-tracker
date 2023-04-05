@@ -1,14 +1,26 @@
 import React, {useEffect, useState} from 'react';
+import { useLocation } from 'react-router-dom';
+
 import DatePicker from '../../Components/DatePicker/DatePicker';
 import Heatmap from '../../Components/Heatmap/Heatmap';
 import HabitInfo from '../../Components/HabitInfo/HabitInfo';
 import './HabitsPage.modules.scss';
 import {baseUrl, Habit, HabitForToday} from '../../utils';
 import HabitsForToday from '../../Components/HabitsForToday/HabitsForToday';
+import { FiPlus } from 'react-icons/fi';
 
 const HabitsPage = () => {
-  const [habitsArr, setHabitsArr] = useState<Habit[]>([]);
-  const [habitsForTodayArr, setHabitsForTodayArr] = useState<HabitForToday[]>([]);
+  // const [habitsArr, setHabitsArr] = useState<Habit[]>([]);
+  // const [habitsForTodayArr, setHabitsForTodayArr] = useState<HabitForToday[]>([]);
+
+  const location = useLocation();
+  const { habits, habitsForToday, today } = location.state || {};
+
+  const [habitsArr, setHabitsArr] = useState<Habit[]>(habits || []);
+  const [habitsForTodayArr, setHabitsForTodayArr] = useState<HabitForToday[]>(habitsForToday || []);
+  const [todayIndex, setTodayIndex] = useState<number>(today || 0);
+
+  const [showHabitForm, setShowHabitForm] = useState<boolean>(false);
 
   useEffect(() => {
     fetch(baseUrl + '/habits', {
@@ -63,6 +75,12 @@ const HabitsPage = () => {
 
   const handleHabitDeleted = (habitId: string) => {
     setHabitsArr(habitsArr.filter((habit) => habit.id !== habitId));
+    setHabitsForTodayArr(habitsForTodayArr.filter((habit) => habit.id !== habitId));
+  };
+
+  const toggleHabitForm = () => {
+    console.log(habitsArr.length);
+    setShowHabitForm(!showHabitForm);
   };
 
   return (
@@ -73,6 +91,16 @@ const HabitsPage = () => {
           setHabitsForTodayArr={setHabitsForTodayArr}
         />
       )}
+
+<div className='headline'>
+        <h1>My week plan</h1>
+        <button className='habit-form-toggle-btn' 
+        onClick={toggleHabitForm}
+        >
+          <FiPlus />
+        </button>
+      </div>
+
       {habitsArr.length > 0 && (
         <HabitInfo
           habitsArr={habitsArr}
@@ -80,6 +108,13 @@ const HabitsPage = () => {
           habitsForTodayArr={habitsForTodayArr}
           setHabitsForTodayArr={setHabitsForTodayArr}
           deleteHabit={handleHabitDeleted}
+
+          setShowHabitForm={setShowHabitForm}
+          showHabitForm={showHabitForm}
+          toggleHabitForm={toggleHabitForm}
+
+          todayIndex={todayIndex}
+          setTodayIndex={setTodayIndex}
         />
       )}
       <Heatmap />

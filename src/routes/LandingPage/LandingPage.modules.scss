@@ -30,6 +30,11 @@
       font-weight: bold;
     }
 
+    &:focus {
+      color: $color-primary;
+      font-weight: bold;
+    }
+
     &::before {
       content: '';
       position: absolute;
@@ -48,6 +53,20 @@
     }
 
     &:hover::after {
+      content: 'GET STARTED';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 100%;
+    }
+
+    &:focus::before {
+      left: 0;
+      width: 100%;
+    }
+
+    &:focus::after {
       content: 'GET STARTED';
       position: absolute;
       top: 50%;

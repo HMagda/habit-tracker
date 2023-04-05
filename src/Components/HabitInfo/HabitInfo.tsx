@@ -18,20 +18,36 @@ const HabitInfo: React.FC<{
   habitsForTodayArr: HabitForToday[];
   setHabitsForTodayArr: React.Dispatch<React.SetStateAction<HabitForToday[]>>;
   deleteHabit: (habitId: string) => void;
+
+  showHabitForm: boolean;
+  setShowHabitForm: React.Dispatch<React.SetStateAction<boolean>>;
+
+  toggleHabitForm: () => void;
+
+  todayIndex: number;
+  setTodayIndex: React.Dispatch<React.SetStateAction<number>>;
 }> = ({
   habitsArr,
   setHabitsArr,
   deleteHabit,
   habitsForTodayArr,
   setHabitsForTodayArr,
+
+  showHabitForm,
+  setShowHabitForm,
+
+  toggleHabitForm,
+
+  todayIndex,
+  setTodayIndex,
 }) => {
   const [editHabitId, setEditHabitId] = useState<string>('');
-  const [showHabitForm, setShowHabitForm] = useState<boolean>(false);
+  // const [showHabitForm, setShowHabitForm] = useState<boolean>(false);
 
-  const toggleHabitForm = () => {
-    console.log(habitsArr.length);
-    setShowHabitForm(!showHabitForm);
-  };
+  // const toggleHabitForm = () => {
+  //   console.log(habitsArr.length);
+  //   setShowHabitForm(!showHabitForm);
+  // };
 
   const handleMarkCompleted = (id: string, day: number) => {
     const localDayIndex = normalizeDayIndex(new Date().getDay());
@@ -72,21 +88,25 @@ const HabitInfo: React.FC<{
         );
         setHabitsArr(updatedHabitsArr);
 
-        //making sure to update only today-habit task
-        if (habitsForTodayArr.length > 0) {
-          const today = habitsForTodayArr[0].day;
-          if (today === day) {
-            const isTodaysHabitCompleted = receivedHabit.days.filter(
-              (habitDay: HabitDay) => habitDay.dayOfWeek === day
-            )[0].completed;
-            const updatedHabitsForTodayArr = habitsForTodayArr.map((habit) =>
-              habit.id === receivedHabit.id
-                ? {...habit, completed: isTodaysHabitCompleted}
-                : habit
-            );
-            setHabitsForTodayArr(updatedHabitsForTodayArr);
-          }
+        if (todayIndex === day) {
+          const isTodaysHabitCompleted = receivedHabit.days.filter(
+            (habitDay: HabitDay) => habitDay.dayOfWeek === day
+          )[0].completed;
+          const updatedHabitsForTodayArr = habitsForTodayArr.map((habit) =>
+            habit.id === receivedHabit.id
+              ? {...habit, completed: isTodaysHabitCompleted}
+              : habit
+          );
+          setHabitsForTodayArr(updatedHabitsForTodayArr);
         }
+
+        // //making sure to update only today-habit task
+        // if (habitsForTodayArr.length > 0) {
+        //   const today = habitsForTodayArr[0].day;
+        //   if (today === day) {
+
+        //   }
+        // }
       })
       .catch((error) => {
         console.error('Error adding new habit: ', error);
@@ -97,12 +117,12 @@ const HabitInfo: React.FC<{
 
   return (
     <div className='habit-info-wrapper'>
-      <div className='headline'>
+      {/* <div className='headline'>
         <h1>My week plan</h1>
         <button className='habit-form-toggle-btn' onClick={toggleHabitForm}>
           <FiPlus />
         </button>
-      </div>
+      </div> */}
 
       <div className='formatting-option'>
         <h3>Show dates</h3>
@@ -121,6 +141,19 @@ const HabitInfo: React.FC<{
             <HabitForm
               addNewHabit={(habit: Habit) => {
                 setHabitsArr([...habitsArr, habit]);
+                const today: HabitDay = habit.days.find((day: HabitDay) => day.dayOfWeek === todayIndex)!!
+                const newHabitForToday: HabitForToday = {
+                  id: habit.id,
+                  day: todayIndex,
+                  habitName: habit.habitName,
+                  completed: today.completed,
+                };
+
+                setHabitsForTodayArr((prevHabitsForTodayArr) => [
+                  ...prevHabitsForTodayArr,
+                  newHabitForToday,
+                ]);
+        
                 toggleHabitForm();
               }}
               habitsArr={habitsArr}
@@ -153,6 +186,9 @@ const HabitInfo: React.FC<{
                 <HabitEditForm
                   habitsArr={habitsArr}
                   setHabitsArr={setHabitsArr}
+                  habitsForTodayArr={habitsForTodayArr}
+                  setHabitsForTodayArr={setHabitsForTodayArr}
+                  todayIndex={todayIndex}
                   editHabitId={editHabitId}
                   setEditHabitId={setEditHabitId}
                   editHabitName={habit.habitName}

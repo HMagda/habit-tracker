@@ -28,6 +28,7 @@ export interface HabitForToday {
 
 export interface HabitDay {
   dayOfWeek: number,
+  dateOfWeek: string,
   completed: boolean
 }
 

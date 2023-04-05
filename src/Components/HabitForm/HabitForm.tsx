@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {baseUrl, daysOfWeek, Habit} from '../../utils';
+import {baseUrl, daysOfWeek, Habit, HabitDay} from '../../utils';
 import './HabitForm.modules.scss';
 import {FiX} from 'react-icons/fi';
 
@@ -81,8 +81,8 @@ const HabitForm: React.FC<{
         }
         return res.json();
       })
-      .then((createdHabit) => {
-        addNewHabit(createdHabit);
+      .then((createdHabit: Habit) => {
+        addNewHabit(createdHabit);        
       })
       .catch((error) => {
         console.error('There was a problem with the fetch operation:', error);
