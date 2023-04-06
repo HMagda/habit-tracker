@@ -42,6 +42,13 @@ const HabitInfo: React.FC<{
   setTodayIndex,
 }) => {
   const [editHabitId, setEditHabitId] = useState<string>('');
+
+  const [showLeftButton, setShowLeftButton] = useState(true);
+
+  const toggleButtons = () => {
+    setShowLeftButton(!showLeftButton);
+  };
+
   // const [showHabitForm, setShowHabitForm] = useState<boolean>(false);
 
   // const toggleHabitForm = () => {
@@ -126,12 +133,15 @@ const HabitInfo: React.FC<{
 
       <div className='formatting-option'>
         <h3>Show dates</h3>
-        <button className='formatting-option-toggle-btn'>
-          <FiToggleLeft />
-        </button>
-        <button>
-          <FiToggleRight />
-        </button>
+        {showLeftButton ? (
+          <button className='btn-left' onClick={toggleButtons}>
+            <FiToggleLeft />
+          </button>
+        ) : (
+          <button className='btn-right' onClick={toggleButtons}>
+            <FiToggleRight />
+          </button>
+        )}
       </div>
 
       {showHabitForm && (
@@ -141,7 +151,9 @@ const HabitInfo: React.FC<{
             <HabitForm
               addNewHabit={(habit: Habit) => {
                 setHabitsArr([...habitsArr, habit]);
-                const today: HabitDay = habit.days.find((day: HabitDay) => day.dayOfWeek === todayIndex)!!
+                const today: HabitDay = habit.days.find(
+                  (day: HabitDay) => day.dayOfWeek === todayIndex
+                )!!;
                 const newHabitForToday: HabitForToday = {
                   id: habit.id,
                   day: todayIndex,
@@ -153,7 +165,7 @@ const HabitInfo: React.FC<{
                   ...prevHabitsForTodayArr,
                   newHabitForToday,
                 ]);
-        
+
                 toggleHabitForm();
               }}
               habitsArr={habitsArr}

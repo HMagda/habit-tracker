@@ -9,4 +9,33 @@
   font-family: $font-family-secondary;
   text-align: center;
   background-color: $color-light;
+
+  .headline {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 2rem;
+
+    h1 {
+      color: $color-important-primary;
+      text-transform: uppercase;
+      font-weight: bold;
+      font-size: 2rem;
+    }
+
+    .habit-form-toggle-btn {
+      background-color: $color-important-secondary;
+      color: $color-light;
+      border: none;
+      font-size: 1.5rem;
+      padding: 0.5rem;
+      margin: 1rem;
+      border-radius: 50%;
+      cursor: pointer;
+      box-shadow: $box-shadow;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+  }
 }
