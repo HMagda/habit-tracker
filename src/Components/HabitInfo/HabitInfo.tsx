@@ -10,7 +10,7 @@ import {
 import HabitEditForm from '../HabitEditForm/HabitEditForm';
 import HabitsCompletion from '../HabitsCompletion/HabitsCompletion';
 import HabitForm from '../HabitForm/HabitForm';
-import {FiPlus, FiToggleLeft, FiToggleRight} from 'react-icons/fi';
+import {FiToggleLeft, FiToggleRight} from 'react-icons/fi';
 
 const HabitInfo: React.FC<{
   habitsArr: Habit[];
@@ -18,43 +18,27 @@ const HabitInfo: React.FC<{
   habitsForTodayArr: HabitForToday[];
   setHabitsForTodayArr: React.Dispatch<React.SetStateAction<HabitForToday[]>>;
   deleteHabit: (habitId: string) => void;
-
   showHabitForm: boolean;
   setShowHabitForm: React.Dispatch<React.SetStateAction<boolean>>;
-
   toggleHabitForm: () => void;
-
   todayIndex: number;
-  setTodayIndex: React.Dispatch<React.SetStateAction<number>>;
 }> = ({
   habitsArr,
   setHabitsArr,
   deleteHabit,
   habitsForTodayArr,
   setHabitsForTodayArr,
-
   showHabitForm,
   setShowHabitForm,
-
   toggleHabitForm,
-
   todayIndex,
-  setTodayIndex,
 }) => {
   const [editHabitId, setEditHabitId] = useState<string>('');
-
-  const [showLeftButton, setShowLeftButton] = useState(true);
+  const [showLeftButton, setShowLeftButton] = useState<boolean>(true);
 
   const toggleButtons = () => {
     setShowLeftButton(!showLeftButton);
   };
-
-  // const [showHabitForm, setShowHabitForm] = useState<boolean>(false);
-
-  // const toggleHabitForm = () => {
-  //   console.log(habitsArr.length);
-  //   setShowHabitForm(!showHabitForm);
-  // };
 
   const handleMarkCompleted = (id: string, day: number) => {
     const localDayIndex = normalizeDayIndex(new Date().getDay());
@@ -106,14 +90,6 @@ const HabitInfo: React.FC<{
           );
           setHabitsForTodayArr(updatedHabitsForTodayArr);
         }
-
-        // //making sure to update only today-habit task
-        // if (habitsForTodayArr.length > 0) {
-        //   const today = habitsForTodayArr[0].day;
-        //   if (today === day) {
-
-        //   }
-        // }
       })
       .catch((error) => {
         console.error('Error adding new habit: ', error);
@@ -124,15 +100,8 @@ const HabitInfo: React.FC<{
 
   return (
     <div className='habit-info-wrapper'>
-      {/* <div className='headline'>
-        <h1>My week plan</h1>
-        <button className='habit-form-toggle-btn' onClick={toggleHabitForm}>
-          <FiPlus />
-        </button>
-      </div> */}
-
       <div className='formatting-option'>
-        <h3>Show dates</h3>
+        <h3 className={`${showLeftButton ? '' : 'show'}`}>Show dates</h3>
         {showLeftButton ? (
           <button className='btn-left' onClick={toggleButtons}>
             <FiToggleLeft />
@@ -193,6 +162,7 @@ const HabitInfo: React.FC<{
                   deleteHabit={deleteHabit}
                   setEditHabitId={setEditHabitId}
                   handleMarkCompleted={handleMarkCompleted}
+                  showLeftButton={showLeftButton}
                 />
               ) : (
                 <HabitEditForm

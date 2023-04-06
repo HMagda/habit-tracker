@@ -1,6 +1,5 @@
 import React, {useEffect, useState} from 'react';
 import {useLocation} from 'react-router-dom';
-
 import DatePicker from '../../Components/DatePicker/DatePicker';
 import Heatmap from '../../Components/Heatmap/Heatmap';
 import HabitInfo from '../../Components/HabitInfo/HabitInfo';
@@ -10,9 +9,6 @@ import HabitsForToday from '../../Components/HabitsForToday/HabitsForToday';
 import {FiPlus} from 'react-icons/fi';
 
 const HabitsPage = () => {
-  // const [habitsArr, setHabitsArr] = useState<Habit[]>([]);
-  // const [habitsForTodayArr, setHabitsForTodayArr] = useState<HabitForToday[]>([]);
-
   const location = useLocation();
   const {habits, habitsForToday, today} = location.state || {};
 
@@ -114,7 +110,6 @@ const HabitsPage = () => {
           showHabitForm={showHabitForm}
           toggleHabitForm={toggleHabitForm}
           todayIndex={todayIndex}
-          setTodayIndex={setTodayIndex}
         />
       )}
       <Heatmap />

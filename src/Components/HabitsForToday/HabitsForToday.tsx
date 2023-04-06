@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import './HabitsForToday.modules.scss';
 import {baseUrl, HabitForToday} from '../../utils';
 import {FiCircle, FiCheckCircle} from 'react-icons/fi';

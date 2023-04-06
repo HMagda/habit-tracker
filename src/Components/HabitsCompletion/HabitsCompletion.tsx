@@ -17,6 +17,7 @@ const HabitsCompletion: React.FC<{
   deleteHabit: (habitId: string) => void;
   setEditHabitId: React.Dispatch<React.SetStateAction<string>>;
   handleMarkCompleted: (id: string, day: number) => void;
+  showLeftButton: boolean;
 }> = ({
   habit,
   index,
@@ -24,6 +25,7 @@ const HabitsCompletion: React.FC<{
   deleteHabit,
   setEditHabitId,
   handleMarkCompleted,
+  showLeftButton,
 }) => {
   const todayIndex = normalizeDayIndex(new Date().getDay());
 
@@ -51,6 +53,30 @@ const HabitsCompletion: React.FC<{
       });
   };
 
+  function sortArrayByProperty<T>(array: T[], property: keyof T): T[] {
+    return array.sort((a, b) => {
+      if (a[property] < b[property]) {
+        return -1;
+      }
+      if (a[property] > b[property]) {
+        return 1;
+      }
+      return 0;
+    });
+  }
+
+  function formatDate(dateString: string) {
+    const dateParts = dateString.split('/');
+    const date = new Date(
+      parseInt(dateParts[2], 10),
+      parseInt(dateParts[1], 10) - 1,
+      parseInt(dateParts[0], 10)
+    );
+    const dayOfWeek = date.toLocaleString('en-GB', {weekday: 'short'});
+
+    return `${dayOfWeek} ${dateParts[0]}/${dateParts[1]}/${dateParts[2]}`;
+  }
+
   return (
     <div className='habit-completion-wrapper' key={index}>
       <div className='habit-header'>
@@ -73,21 +99,27 @@ const HabitsCompletion: React.FC<{
           (habitDay: HabitDay) => {
             const day = habitDay.dayOfWeek;
             const isUpcoming = day >= todayIndex;
+
             return (
               <div className='single-btn-container' key={day}>
                 <button
                   key={day}
                   onClick={() => handleMarkCompleted(habit.id, day)}
-                  className={
-                    habitDay.completed
-                      ? 'completed'
-                      : isUpcoming
-                      ? 'upcoming'
-                      : 'uncompleted'
-                  }
+                  className={`
+                    day-btn
+                    ${
+                      habitDay.completed
+                        ? 'completed'
+                        : isUpcoming
+                        ? 'upcoming'
+                        : 'uncompleted'
+                    }`}
                 >
-                  {daysOfWeek[day]}
+                  {showLeftButton
+                    ? daysOfWeek[day]
+                    : formatDate(habitDay.dateOfWeek)}
                 </button>
+
                 {habitDay.completed ? (
                   <HiCheck className='check-icon' />
                 ) : isUpcoming ? (
@@ -103,17 +135,5 @@ const HabitsCompletion: React.FC<{
     </div>
   );
 };
-
-function sortArrayByProperty<T>(array: T[], property: keyof T): T[] {
-  return array.sort((a, b) => {
-    if (a[property] < b[property]) {
-      return -1;
-    }
-    if (a[property] > b[property]) {
-      return 1;
-    }
-    return 0;
-  });
-}
 
 export default HabitsCompletion;

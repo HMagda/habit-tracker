@@ -1,19 +1,14 @@
-import React, {useState} from 'react';
-import {Link} from 'react-router-dom';
+import React from 'react';
 import {useNavigate} from 'react-router-dom';
 import './LandingPage.modules.scss';
 import Winner from '../../assets/winner.png';
 import Navbar from '../../Components/Navbar/Navbar';
-import {Habit, HabitForToday, baseUrl} from '../../utils';
+import {baseUrl} from '../../utils';
 
 const LandingPage: React.FC = () => {
   const navigate = useNavigate();
 
   const handleClick = () => {
-    // setTimeout(() => {
-    //   navigate('/habits');
-    // }, 300);
-
     fetch(baseUrl + '/habits/today', {
       headers: {
         'Content-Type': 'application/json',
@@ -26,7 +21,6 @@ const LandingPage: React.FC = () => {
         setTimeout(() => {
           navigate('/habits', {
             state: {habitsForToday, today},
-           
           });
         }, 300);
       })
@@ -40,13 +34,9 @@ const LandingPage: React.FC = () => {
       <div className='landing-page'>
         <Navbar />
         <h1 className='app-name'>Habit Tracker</h1>
-
-        {/* <Link to='/habits'> */}
         <button className='cta-button' onClick={handleClick}>
           Get Started
         </button>
-        {/* </Link> */}
-
         <p className='app-description'>
           Develop new habits by tracking your progress and staying cosistent.
         </p>
