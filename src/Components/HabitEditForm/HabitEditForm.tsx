@@ -35,8 +35,20 @@ const HabitEditForm: React.FC<{
       const dayIndex = days.findIndex((d) => d.dayOfWeek === day);
 
       if (dayIndex !== -1) {
+        // If the day exists in the array, remove it.
+      const dayIndex = days.findIndex((d) => d.dayOfWeek === day);
+
+      if (dayIndex !== -1) {
         return days.filter((d) => d.dayOfWeek !== day);
       } else {
+        // If the day doesn't exist in the array, add it.
+        const newDay: HabitDay = {
+          dayOfWeek: day,
+          dateOfWeek: editHabitDays.find((it) => it.dayOfWeek === day)!.dateOfWeek,
+          completed: false,
+        };
+
+        return [...days, newDay];
         const newDay: HabitDay = {
           dayOfWeek: day,
           dateOfWeek: '',

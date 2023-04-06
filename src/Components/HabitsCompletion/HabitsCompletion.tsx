@@ -2,7 +2,13 @@ import React from 'react';
 import {HiX, HiCheck} from 'react-icons/hi';
 import {FiCircle, FiEdit3, FiTrash} from 'react-icons/fi';
 import './HabitsCompletion.modules.scss';
-import {Habit, daysOfWeek, normalizeDayIndex, baseUrl, HabitDay} from '../../utils';
+import {
+  Habit,
+  daysOfWeek,
+  normalizeDayIndex,
+  baseUrl,
+  HabitDay,
+} from '../../utils';
 
 const HabitsCompletion: React.FC<{
   habit: Habit;
@@ -22,9 +28,7 @@ const HabitsCompletion: React.FC<{
   const todayIndex = normalizeDayIndex(new Date().getDay());
 
   const handleDeleteHabit = (habitId: string) => {
-    const habitToDelete = habitsArr.find(
-      (habit) => habit.id === habitId
-    );
+    const habitToDelete = habitsArr.find((habit) => habit.id === habitId);
 
     if (!habitToDelete) {
       console.log(`Habit with id ${habitId} not found!`);
@@ -65,35 +69,36 @@ const HabitsCompletion: React.FC<{
         </div>
       </div>
       <div className='btns-container'>
-        {sortArrayByProperty(habit.days, 'dayOfWeek')
-        .map((habitDay: HabitDay) => {
-          const day = habitDay.dayOfWeek;
-          const isUpcoming = day >= todayIndex;
-          return (
-            <div className='single-btn-container' key={day}>
-              <button
-                key={day}
-                onClick={() => handleMarkCompleted(habit.id, day)}
-                className={
-                  habitDay.completed
-                    ? 'completed'
-                    : isUpcoming
-                    ? 'upcoming'
-                    : 'uncompleted'
-                }
-              >
-                {daysOfWeek[day]}
-              </button>
-              {habitDay.completed ? (
-                <HiCheck className='check-icon' />
-              ) : isUpcoming ? (
-                <FiCircle className='circle-icon' />
-              ) : (
-                <HiX className='x-icon' />
-              )}
-            </div>
-          );
-        })}
+        {sortArrayByProperty(habit.days, 'dayOfWeek').map(
+          (habitDay: HabitDay) => {
+            const day = habitDay.dayOfWeek;
+            const isUpcoming = day >= todayIndex;
+            return (
+              <div className='single-btn-container' key={day}>
+                <button
+                  key={day}
+                  onClick={() => handleMarkCompleted(habit.id, day)}
+                  className={
+                    habitDay.completed
+                      ? 'completed'
+                      : isUpcoming
+                      ? 'upcoming'
+                      : 'uncompleted'
+                  }
+                >
+                  {daysOfWeek[day]}
+                </button>
+                {habitDay.completed ? (
+                  <HiCheck className='check-icon' />
+                ) : isUpcoming ? (
+                  <FiCircle className='circle-icon' />
+                ) : (
+                  <HiX className='x-icon' />
+                )}
+              </div>
+            );
+          }
+        )}
       </div>
     </div>
   );
@@ -110,7 +115,5 @@ function sortArrayByProperty<T>(array: T[], property: keyof T): T[] {
     return 0;
   });
 }
-
-
 
 export default HabitsCompletion;
