@@ -3,12 +3,25 @@ import CalendarHeatmap from 'react-calendar-heatmap';
 import './Heatmap.modules.scss';
 import 'react-calendar-heatmap/dist/styles.css';
 
+function getThreeMonthsAgo() {
+  const currentDate = new Date();
+  const threeMonthsAgo = new Date(currentDate);
+  threeMonthsAgo.setMonth(currentDate.getMonth() - 3);
+
+  return {
+    currentDate,
+    threeMonthsAgo
+  };
+}
+
 const Heatmap = () => {
+  const { currentDate, threeMonthsAgo } = getThreeMonthsAgo();
+
   return (
     <div className='heatmap'>
       <CalendarHeatmap
-        startDate={new Date('2023-02-20')}
-        endDate={new Date('2023-06-06')}
+          startDate={threeMonthsAgo}
+          endDate={currentDate}
         values={[
           {date: '2023-02-21', count: 4},
           {date: '2023-02-24', count: 5},

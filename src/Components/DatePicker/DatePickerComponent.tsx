@@ -2,9 +2,9 @@ import React, {useState} from 'react';
 import DatePicker from 'react-datepicker';
 import enGB from 'date-fns/locale/en-GB';
 import 'react-datepicker/dist/react-datepicker.css';
-import './DatePicker.modules.scss';
+import './DatePickerComponent.modules.scss';
 
-const DatePickerDesktop = () => {
+const DatePickerComponent = () => {
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(null);
 
@@ -37,4 +37,4 @@ const DatePickerDesktop = () => {
   );
 };
 
-export default DatePickerDesktop;
+export default DatePickerComponent;

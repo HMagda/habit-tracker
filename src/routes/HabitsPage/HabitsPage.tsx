@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {useLocation} from 'react-router-dom';
-import DatePicker from '../../Components/DatePicker/DatePicker';
+import DatePicker from '../../Components/DatePicker/DatePickerComponent';
 import Heatmap from '../../Components/Heatmap/Heatmap';
 import HabitInfo from '../../Components/HabitInfo/HabitInfo';
 import './HabitsPage.modules.scss';
