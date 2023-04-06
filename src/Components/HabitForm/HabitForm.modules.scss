@@ -1,5 +1,29 @@
 @import '../../styles/settings.scss';
 
+.habit-form-close-btn {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background-color: $color-important-secondary;
+  color: $color-light;
+  border: none;
+  font-size: 1rem;
+  padding: 0.5rem;
+  margin: 1rem;
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: $box-shadow;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: 0.5s cubic-bezier(0, 0, 0, 1);
+
+  &:hover {
+    background-color: $color-error;
+    transform: rotate(180deg);
+  }
+}
+
 .habit-form {
   display: flex;
   flex-direction: column;
@@ -8,10 +32,12 @@
   font-family: $font-family-secondary;
 
   label {
+    color: $color-important-secondary;
     margin: 0.5rem 0;
   }
 
   input {
+    border: 1px solid $color-important-secondary;
     padding: 0.5rem;
   }
 
@@ -21,9 +47,10 @@
   }
 
   select {
+    border: 1px solid $color-important-secondary;
     padding: 0.5rem;
   }
-  
+
   p {
     margin-top: 0.5rem;
   }

@@ -1,0 +1,78 @@
+import React, {useEffect, useState} from 'react';
+import './HabitsForToday.modules.scss';
+import {baseUrl, HabitForToday} from '../../utils';
+import {FiCircle, FiCheckCircle} from 'react-icons/fi';
+
+const HabitsForToday: React.FC<{
+  habitsForTodayArr: HabitForToday[];
+  setHabitsForTodayArr: React.Dispatch<React.SetStateAction<HabitForToday[]>>;
+}> = ({habitsForTodayArr, setHabitsForTodayArr}) => {
+  const today = new Date();
+  const formattedDate = today.toLocaleDateString('en-GB');
+
+  const handleMarkCompleted = (id: string) => {
+    const habitToEdit = habitsForTodayArr.find((habit) => habit.id === id)!!;
+
+    console.log('habitToEdit', habitToEdit, habitToEdit.completed);
+    const isDone: boolean = !habitToEdit.completed;
+
+    fetch(baseUrl + `/habits/today/${id}/complete/${isDone}`, {
+      method: 'PUT',
+      headers: {'Content-Type': 'application/json'},
+    })
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return res.json();
+      })
+      .then((data) => {
+        console.log('data for today', data);
+        const fetchedHabitsForTodayArr = data.habits;
+        if (
+          JSON.stringify(fetchedHabitsForTodayArr) !==
+          JSON.stringify(habitsForTodayArr)
+        ) {
+          setHabitsForTodayArr(fetchedHabitsForTodayArr);
+        }
+      })
+      .catch((error) => {
+        console.error('There was a problem with the fetch operation:', error);
+      });
+  };
+
+  const sortedHabitsForTodayArr = habitsForTodayArr.sort((a, b) =>
+    a.completed === b.completed ? 0 : a.completed ? 1 : -1
+  );
+
+  return (
+    <div className='habit-info-wrapper'>
+      <div className='headline'>
+        <h1>habits for today {formattedDate}</h1>
+      </div>
+      <div className='habits-wrapper habits-today-wrapper'>
+        {sortedHabitsForTodayArr.map((habit: HabitForToday, index: number) => (
+          <div
+            key={index}
+            className={`habit habit-today ${
+              habit.completed ? 'habit-completed' : ''
+            }`}
+          >
+            <h3 className={habit.completed ? 'strikethrough' : ''}>
+              {habit.habitName}
+            </h3>
+
+            <button
+              className='habit-completed-btn'
+              onClick={() => handleMarkCompleted(habit.id)}
+            >
+              {habit.completed ? <FiCheckCircle /> : <FiCircle />}
+            </button>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+export default HabitsForToday;

@@ -1,25 +1,82 @@
 @import '../../styles/settings.scss';
 
-.habits-wrapper {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
+.habit-info-wrapper {
+  .headline {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 2rem;
 
-  .habit {
-    width: 15rem;
-    font-size: 1.2rem;
-    margin: 1rem;
-    padding: 1.2rem;
+    h1 {
+      color: $color-important-primary;
+      text-transform: uppercase;
+      font-weight: bold;
+      font-size: 2rem;
+    }
+
+    .habit-form-toggle-btn {
+      background-color: $color-important-secondary;
+      color: $color-light;
+      border: none;
+      font-size: 1.5rem;
+      padding: 0.5rem;
+      margin: 1rem;
+      border-radius: 50%;
+      cursor: pointer;
+      box-shadow: $box-shadow;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+  }
+
+  .overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 9;
+  }
+
+  .habit-form-popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 10;
     background-color: $color-light;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
     border-radius: 0.5rem;
-    box-shadow: $box-shadow;
+  }
 
-    .justify-end {
-      justify-content: flex-end;
-    }
+  .habits-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
 
-    .justify-space-between {
-      justify-content: space-between;
+    .habit {
+      width: 15rem;
+      font-size: 1.2rem;
+      margin: 1rem;
+      padding: 1.2rem;
+      background-color: $color-light;
+      border-radius: 0.5rem;
+      box-shadow: $box-shadow;
+
+      .justify-end {
+        justify-content: flex-end;
+      }
+
+      .justify-space-between {
+        justify-content: space-between;
+      }
     }
+  }
+
+  .show-form {
+    filter: blur(4px);
   }
 }

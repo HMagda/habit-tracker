@@ -19,8 +19,16 @@ export interface Habit {
   days: HabitDay[];
 }
 
+export interface HabitForToday {
+  id: string;
+  day: number;
+  habitName: string;
+  completed: boolean
+}
+
 export interface HabitDay {
   dayOfWeek: number,
+  dateOfWeek: string,
   completed: boolean
 }
 
