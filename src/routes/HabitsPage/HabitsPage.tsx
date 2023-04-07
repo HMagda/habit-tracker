@@ -33,7 +33,6 @@ const HabitsPage = () => {
         return res.json();
       })
       .then((data) => {
-        console.log('data', data);
         const fetchedHabitsArr = data.habits;
         if (JSON.stringify(fetchedHabitsArr) !== JSON.stringify(habitsArr)) {
           setHabitsArr(fetchedHabitsArr);
@@ -57,7 +56,6 @@ const HabitsPage = () => {
         return res.json();
       })
       .then((data) => {
-        console.log('data for today', data);
         const fetchedHabitsForTodayArr = data.habits;
         if (
           JSON.stringify(fetchedHabitsForTodayArr) !==
@@ -79,7 +77,6 @@ const HabitsPage = () => {
   };
 
   const toggleHabitForm = () => {
-    console.log(habitsArr.length);
     setShowHabitForm(!showHabitForm);
   };
 

@@ -1,7 +1,9 @@
-@import '../../styles/settings.scss';
+@import '../../styles/global.scss';
 
 .habit-completion-wrapper {
   
+  @include popup-styles;
+
   .habit-header {
     display: flex;
     align-items: center;

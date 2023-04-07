@@ -6,10 +6,10 @@ import 'react-calendar-heatmap/dist/styles.css';
 function getColor(score: number, maxScore: number): string {
   const percentage = (score / maxScore) * 100;
 
-  return percentage >= 80 ? 'color-scale-5' :
-         percentage >= 60 ? 'color-scale-4' :
-         percentage >= 40 ? 'color-scale-3' :
-         percentage >= 20 ? 'color-scale-2' :
+  return percentage > 80 ? 'color-scale-5' :
+         percentage > 60 ? 'color-scale-4' :
+         percentage > 40 ? 'color-scale-3' :
+         percentage > 20 ? 'color-scale-2' :
                             'color-scale-1';
 }
 
@@ -41,7 +41,6 @@ const Heatmap = () => {
         return res.json();
       })
       .then((data) => {
-        console.log('data for heatmap:', data);
         setData(data);
       })
       .catch((error) => {

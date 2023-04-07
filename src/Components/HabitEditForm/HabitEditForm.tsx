@@ -29,7 +29,6 @@ const HabitEditForm: React.FC<{
 
   const handleDayChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const day = Number(e.target.id);
-    console.log(day);
 
     setDays((days) => {
       const dayIndex = days.findIndex((d) => d.dayOfWeek === day);

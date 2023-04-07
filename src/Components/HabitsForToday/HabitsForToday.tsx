@@ -12,8 +12,6 @@ const HabitsForToday: React.FC<{
 
   const handleMarkCompleted = (id: string) => {
     const habitToEdit = habitsForTodayArr.find((habit) => habit.id === id)!!;
-
-    console.log('habitToEdit', habitToEdit, habitToEdit.completed);
     const isDone: boolean = !habitToEdit.completed;
 
     fetch(baseUrl + `/habits/today/${id}/complete/${isDone}`, {
@@ -27,7 +25,6 @@ const HabitsForToday: React.FC<{
         return res.json();
       })
       .then((data) => {
-        console.log('data for today', data);
         const fetchedHabitsForTodayArr = data.habits;
         if (
           JSON.stringify(fetchedHabitsForTodayArr) !==

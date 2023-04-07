@@ -1,6 +1,7 @@
-@import '../../styles/settings.scss';
+@import '../../styles/global.scss';
 
 .habit-info-wrapper {
+  @include popup-styles;
 
   .formatting-option {
     display: flex;
@@ -20,7 +21,7 @@
 
     button {
       display: flex;
-    align-items: center;
+      align-items: center;
       margin-left: 1rem;
       font-size: 1.5rem;
     }

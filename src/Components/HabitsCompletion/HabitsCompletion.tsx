@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {HiX, HiCheck} from 'react-icons/hi';
 import {FiCircle, FiEdit3, FiTrash} from 'react-icons/fi';
 import './HabitsCompletion.modules.scss';
@@ -27,6 +27,8 @@ const HabitsCompletion: React.FC<{
   handleMarkCompleted,
   showLeftButton,
 }) => {
+  const [showConfirmPopup, setShowConfirmPopup] = useState(false);
+
   const todayIndex = normalizeDayIndex(new Date().getDay());
 
   const handleDeleteHabit = (habitId: string) => {
@@ -37,20 +39,24 @@ const HabitsCompletion: React.FC<{
       return;
     }
 
-    if (!window.confirm('Are you sure you want to delete this habit?')) {
-      return;
+    setShowConfirmPopup(true);
+  };
+
+  const handleConfirm = (confirmed: boolean) => {
+    if (confirmed) {
+      fetch(baseUrl + `/habits/${habit.id}`, {
+        method: 'DELETE',
+      })
+        .then(() => {
+          console.log(`Habit with id ${habit.id} deleted successfully!`);
+          habit.id && deleteHabit(habit.id);
+        })
+        .catch((error) => {
+          console.log(`Failed to delete habit with id ${habit.id}: `, error);
+        });
     }
 
-    fetch(baseUrl + `/habits/${habitId}`, {
-      method: 'DELETE',
-    })
-      .then(() => {
-        console.log(`Habit with id ${habitId} deleted successfully!`);
-        habitId && deleteHabit(habitId);
-      })
-      .catch((error) => {
-        console.log(`Failed to delete habit with id ${habitId}: `, error);
-      });
+    setShowConfirmPopup(false);
   };
 
   function sortArrayByProperty<T>(array: T[], property: keyof T): T[] {
@@ -79,6 +85,24 @@ const HabitsCompletion: React.FC<{
 
   return (
     <div className='habit-completion-wrapper' key={index}>
+      {showConfirmPopup && (
+        <>
+          <div className='overlay' onClick={() => handleConfirm(false)}></div>
+          <div className='confirm-popup'>
+            <p>Are you sure you want to delete this habit?</p>
+            <button className='btn-confirm' onClick={() => handleConfirm(true)}>
+              Yes
+            </button>
+            <button
+              className='btn-confirm'
+              onClick={() => handleConfirm(false)}
+            >
+              No
+            </button>
+          </div>
+        </>
+      )}
+
       <div className='habit-header'>
         <h3>{habit.habitName}</h3>
         <div className='option-icons'>

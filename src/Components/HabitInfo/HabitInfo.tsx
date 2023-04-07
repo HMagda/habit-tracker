@@ -36,70 +36,107 @@ const HabitInfo: React.FC<{
   const [editHabitId, setEditHabitId] = useState<string>('');
   const [showLeftButton, setShowLeftButton] = useState<boolean>(true);
 
+  const [showConfirmPopup, setShowConfirmPopup] = useState<boolean>(false);
+  const [confirmPopupData, setConfirmPopupData] = useState<{
+    id: string;
+    day: number;
+    callback: () => void;
+  } | null>(null);
+
   const toggleButtons = () => {
     setShowLeftButton(!showLeftButton);
   };
 
+  const handleConfirm = (confirmed: boolean) => {
+    if (confirmed && confirmPopupData) {
+      confirmPopupData.callback();
+    }
+    setShowConfirmPopup(false);
+    setConfirmPopupData(null);
+  };
+
   const handleMarkCompleted = (id: string, day: number) => {
     const localDayIndex = normalizeDayIndex(new Date().getDay());
-    if (
-      localDayIndex !== day &&
-      !window.confirm(
-        'The chosen day is not today, are you sure you want to change the habit status?'
-      )
-    ) {
-      return;
-    }
 
-    const habitToEdit = habitsArr.find((habit) => habit.id === id)!!;
-    const editedHabit = {
-      ...habitToEdit,
-      days: habitToEdit.days.map((habitDay) =>
-        habitDay.dayOfWeek === day
-          ? {...habitDay, completed: !habitDay.completed}
-          : habitDay
-      ),
-    };
-    fetch(baseUrl + `/habits/${id}`, {
-      method: 'PUT',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify(editedHabit),
-    })
-      .then((res) => {
-        if (!res.ok) {
-          throw new Error('Network response was not ok');
-        }
-        return res.json();
+    const continueExecution = () => {
+      const habitToEdit = habitsArr.find((habit) => habit.id === id)!!;
+      const editedHabit = {
+        ...habitToEdit,
+        days: habitToEdit.days.map((habitDay) =>
+          habitDay.dayOfWeek === day
+            ? {...habitDay, completed: !habitDay.completed}
+            : habitDay
+        ),
+      };
+
+      fetch(baseUrl + `/habits/${id}`, {
+        method: 'PUT',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(editedHabit),
       })
-      .then((receivedHabit) => {
-        const updatedHabitsArr = habitsArr.map((habit) =>
-          habit.id === receivedHabit.id
-            ? {...habit, days: receivedHabit.days}
-            : habit
-        );
-        setHabitsArr(updatedHabitsArr);
-
-        if (todayIndex === day) {
-          const isTodaysHabitCompleted = receivedHabit.days.filter(
-            (habitDay: HabitDay) => habitDay.dayOfWeek === day
-          )[0].completed;
-          const updatedHabitsForTodayArr = habitsForTodayArr.map((habit) =>
+        .then((res) => {
+          if (!res.ok) {
+            throw new Error('Network response was not ok');
+          }
+          return res.json();
+        })
+        .then((receivedHabit) => {
+          const updatedHabitsArr = habitsArr.map((habit) =>
             habit.id === receivedHabit.id
-              ? {...habit, completed: isTodaysHabitCompleted}
+              ? {...habit, days: receivedHabit.days}
               : habit
           );
-          setHabitsForTodayArr(updatedHabitsForTodayArr);
-        }
-      })
-      .catch((error) => {
-        console.error('Error adding new habit: ', error);
-      });
+          setHabitsArr(updatedHabitsArr);
 
-    setEditHabitId('');
+          if (todayIndex === day) {
+            const isTodaysHabitCompleted = receivedHabit.days.filter(
+              (habitDay: HabitDay) => habitDay.dayOfWeek === day
+            )[0].completed;
+            const updatedHabitsForTodayArr = habitsForTodayArr.map((habit) =>
+              habit.id === receivedHabit.id
+                ? {...habit, completed: isTodaysHabitCompleted}
+                : habit
+            );
+            setHabitsForTodayArr(updatedHabitsForTodayArr);
+          }
+        })
+        .catch((error) => {
+          console.error('Error adding new habit: ', error);
+        });
+
+      setEditHabitId('');
+    };
+    if (localDayIndex !== day) {
+      setShowConfirmPopup(true);
+      setConfirmPopupData({id, day, callback: continueExecution});
+    } else {
+      continueExecution();
+    }
   };
 
   return (
     <div className='habit-info-wrapper'>
+      {showConfirmPopup && (
+        <>
+          <div className='overlay' onClick={() => handleConfirm(false)}></div>
+          <div className='confirm-popup'>
+            <p>
+              The chosen day is not today, are you sure you want to change the
+              habit status?
+            </p>
+            <button className='btn-confirm' onClick={() => handleConfirm(true)}>
+              Yes
+            </button>
+            <button
+              className='btn-confirm'
+              onClick={() => handleConfirm(false)}
+            >
+              No
+            </button>
+          </div>
+        </>
+      )}
+
       <div className='formatting-option'>
         <h3 className={`${showLeftButton ? '' : 'show'}`}>Show dates</h3>
         {showLeftButton ? (

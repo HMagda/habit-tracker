@@ -52,11 +52,8 @@ const HabitForm: React.FC<{
 
   const handleDayChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const day: number = Number(e.target.id);
-    console.log(e.target.id);
-    console.log('day: ' + day);
 
     setDays((days) => {
-      console.log('setDays' + days);
       if (days.includes(day)) {
         return days.filter((d) => d !== day);
       } else {
