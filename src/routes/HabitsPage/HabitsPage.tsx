@@ -1,6 +1,6 @@
 import React, {useEffect, useLayoutEffect, useRef, useState} from 'react';
 import {useLocation} from 'react-router-dom';
-import {FiPlus} from 'react-icons/fi';
+import {FiPlus, FiChevronRight} from 'react-icons/fi';
 import {baseUrl, Habit, HabitForToday} from '../../utils';
 import DatePickerComponent from '../../Components/DatePickerComponent/DatePickerComponent';
 import Heatmap from '../../Components/Heatmap/Heatmap';
@@ -20,15 +20,18 @@ const HabitsPage = () => {
   const {habits, habitsForToday, today} = location.state || {};
 
   const [habitsArr, setHabitsArr] = useState<Habit[]>(habits || []);
-  const [habitsForTodayArr, setHabitsForTodayArr] = useState<HabitForToday[]>(habitsForToday || []);
+  const [habitsForTodayArr, setHabitsForTodayArr] = useState<HabitForToday[]>(
+    habitsForToday || []
+  );
   const [todayIndex, setTodayIndex] = useState<number>(today || 0);
 
   const [showHabitForm, setShowHabitForm] = useState<boolean>(false);
-  const [openTodayHabits, setOpenTodayHabits] = useState<boolean>(false);
+  const [openTodayHabits, setOpenTodayHabits] = useState<boolean>(true);
   const [openWeekPlan, setOpenWeekPlan] = useState<boolean>(false);
   const [openStats, setOpenStats] = useState<boolean>(false);
 
-  const [todayHabitsContentHeight, setTodayHabitsContentHeight] = useState<number>(0);
+  const [todayHabitsContentHeight, setTodayHabitsContentHeight] =
+    useState<number>(0);
   const [weekPlanContentHeight, setWeekPlanContentHeight] = useState<number>(0);
   const [statsContentHeight, setStatsContentHeight] = useState<number>(0);
 
@@ -121,6 +124,9 @@ const HabitsPage = () => {
     <>
       <div className='habits-page'>
         <div className='headline'>
+          <div className={`arrow ${openTodayHabits ? 'down' : ''}`}>
+            <FiChevronRight />
+          </div>
           <h1
             onClick={() => toggleContent(openTodayHabits, setOpenTodayHabits)}
           >
@@ -153,12 +159,18 @@ const HabitsPage = () => {
         </div>
 
         <div className='headline'>
+          <div className={`arrow ${openWeekPlan ? 'down' : ''}`}>
+            <FiChevronRight />
+          </div>
           <h1 onClick={() => toggleContent(openWeekPlan, setOpenWeekPlan)}>
             My week plan
           </h1>
-          <button className='habit-form-toggle-btn' onClick={toggleHabitForm}>
-            <FiPlus />
-          </button>
+
+          {openWeekPlan && (
+            <button className='habit-form-toggle-btn' onClick={toggleHabitForm}>
+              <FiPlus />
+            </button>
+          )}
         </div>
 
         <div
@@ -193,6 +205,9 @@ const HabitsPage = () => {
         </div>
 
         <div className='headline'>
+          <div className={`arrow ${openStats ? 'down' : ''}`}>
+            <FiChevronRight />
+          </div>
           <h1 onClick={() => toggleContent(openStats, setOpenStats)}>
             Statistics
           </h1>
@@ -207,10 +222,16 @@ const HabitsPage = () => {
           }
         >
           <div ref={statsRef} className='content'>
-            <>
-              <Heatmap habitsArr={habitsArr} />
-              <DatePickerComponent />
-            </>
+            {habitsForTodayArr.length <= 0 && (
+              <h1>You do not have any statistics yet</h1>
+            )}
+
+            {habitsArr.length > 0 && (
+              <>
+                <Heatmap habitsArr={habitsArr} />
+                <DatePickerComponent />
+              </>
+            )}
           </div>
         </div>
       </div>
