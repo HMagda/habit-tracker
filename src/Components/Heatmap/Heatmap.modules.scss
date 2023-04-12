@@ -1,7 +1,9 @@
 @import '../../styles/global.scss';
 
 .heatmap {
+  min-height: 10rem;
   width: 20rem;
+  margin: 2rem;
   font-family: $font-family-secondary;
   text-align: center;
 

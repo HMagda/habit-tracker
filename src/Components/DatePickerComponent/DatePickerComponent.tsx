@@ -22,6 +22,7 @@ const DatePickerComponent = () => {
   return (
     <div className='date-picker'>
       <h1>Pick a day of a range of days</h1>
+
       <DatePicker
         selected={startDate}
         onSelect={handleDateSelect}

@@ -7,9 +7,6 @@ const HabitsForToday: React.FC<{
   habitsForTodayArr: HabitForToday[];
   setHabitsForTodayArr: React.Dispatch<React.SetStateAction<HabitForToday[]>>;
 }> = ({habitsForTodayArr, setHabitsForTodayArr}) => {
-  const today = new Date();
-  const formattedDate = today.toLocaleDateString('en-GB');
-
   const handleMarkCompleted = (id: string) => {
     const habitToEdit = habitsForTodayArr.find((habit) => habit.id === id)!!;
     const isDone: boolean = !habitToEdit.completed;
@@ -44,9 +41,6 @@ const HabitsForToday: React.FC<{
 
   return (
     <div className='habit-info-wrapper'>
-      <div className='headline'>
-        <h1>habits for today {formattedDate}</h1>
-      </div>
       <div className='habits-wrapper habits-today-wrapper'>
         {sortedHabitsForTodayArr.map((habit: HabitForToday, index: number) => (
           <div
@@ -58,7 +52,6 @@ const HabitsForToday: React.FC<{
             <h3 className={habit.completed ? 'strikethrough' : ''}>
               {habit.habitName}
             </h3>
-
             <button
               className='habit-completed-btn'
               onClick={() => handleMarkCompleted(habit.id)}

@@ -2,6 +2,7 @@ import React, {useState, useEffect} from 'react';
 import CalendarHeatmap from 'react-calendar-heatmap';
 import './Heatmap.modules.scss';
 import 'react-calendar-heatmap/dist/styles.css';
+import { Habit, baseUrl } from '../../utils';
 
 function getColor(score: number, maxScore: number): string {
   const percentage = (score / maxScore) * 100;
@@ -10,7 +11,8 @@ function getColor(score: number, maxScore: number): string {
          percentage > 60 ? 'color-scale-4' :
          percentage > 40 ? 'color-scale-3' :
          percentage > 20 ? 'color-scale-2' :
-                            'color-scale-1';
+         percentage > 0 ? 'color-scale-1' :
+                            'color-empty';
 }
 
 type DayData = {
@@ -22,14 +24,14 @@ type DayData = {
 type HeatmapData = {
   startDate: string;
   endDate: string;
-  days: DayData[];
+  metrics: DayData[];
 };
 
-const Heatmap = () => {
-  const [data, setData] = useState<HeatmapData[]>([]);
+const Heatmap: React.FC<{habitsArr: Habit[]}> = ({habitsArr}) => {
+  const [data, setData] = useState<HeatmapData>();
 
   useEffect(() => {
-    fetch('http://localhost:4000/heatmap', {
+    fetch(baseUrl + '/habits/completion-metrics', {
       headers: {
         'Content-Type': 'application/json',
       },
@@ -46,15 +48,15 @@ const Heatmap = () => {
       .catch((error) => {
         console.error('There was a problem with the fetch operation:', error);
       });
-  }, []);
+  }, [habitsArr]);
 
   return (
     <div className='heatmap'>
-      {data.length > 0 && (
+      {data && (
         <CalendarHeatmap
-          startDate={new Date(data[0].startDate)}
-          endDate={new Date(data[0].endDate)}
-          values={data[0].days}
+          startDate={data.startDate}
+          endDate={data.endDate}
+          values={data.metrics}
           classForValue={(value) => {
             if (!value) {
               return 'color-empty';

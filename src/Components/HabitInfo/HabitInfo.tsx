@@ -35,7 +35,6 @@ const HabitInfo: React.FC<{
 }) => {
   const [editHabitId, setEditHabitId] = useState<string>('');
   const [showLeftButton, setShowLeftButton] = useState<boolean>(true);
-
   const [showConfirmPopup, setShowConfirmPopup] = useState<boolean>(false);
   const [confirmPopupData, setConfirmPopupData] = useState<{
     id: string;
@@ -137,18 +136,20 @@ const HabitInfo: React.FC<{
         </>
       )}
 
-      <div className='formatting-option'>
-        <h3 className={`${showLeftButton ? '' : 'show'}`}>Show dates</h3>
-        {showLeftButton ? (
-          <button className='btn-left' onClick={toggleButtons}>
-            <FiToggleLeft />
-          </button>
-        ) : (
-          <button className='btn-right' onClick={toggleButtons}>
-            <FiToggleRight />
-          </button>
-        )}
-      </div>
+      {habitsArr.length > 0 && (
+        <div className='formatting-option'>
+          <h3 className={`${showLeftButton ? '' : 'show'}`}>Show dates</h3>
+          {showLeftButton ? (
+            <button className='btn-left' onClick={toggleButtons}>
+              <FiToggleLeft />
+            </button>
+          ) : (
+            <button className='btn-right' onClick={toggleButtons}>
+              <FiToggleRight />
+            </button>
+          )}
+        </div>
+      )}
 
       {showHabitForm && (
         <>
@@ -160,17 +161,19 @@ const HabitInfo: React.FC<{
                 const today: HabitDay = habit.days.find(
                   (day: HabitDay) => day.dayOfWeek === todayIndex
                 )!!;
-                const newHabitForToday: HabitForToday = {
-                  id: habit.id,
-                  day: todayIndex,
-                  habitName: habit.habitName,
-                  completed: today.completed,
-                };
 
-                setHabitsForTodayArr((prevHabitsForTodayArr) => [
-                  ...prevHabitsForTodayArr,
-                  newHabitForToday,
-                ]);
+                if (today !== undefined) {
+                  const newHabitForToday: HabitForToday = {
+                    id: habit.id,
+                    day: todayIndex,
+                    habitName: habit.habitName,
+                    completed: today.completed,
+                  };
+                  setHabitsForTodayArr((prevHabitsForTodayArr) => [
+                    ...prevHabitsForTodayArr,
+                    newHabitForToday,
+                  ]);
+                }
 
                 toggleHabitForm();
               }}

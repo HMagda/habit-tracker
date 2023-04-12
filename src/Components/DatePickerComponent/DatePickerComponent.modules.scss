@@ -1,7 +1,8 @@
 @import '../../styles/global.scss';
 
 .date-picker {
-  margin: 2rem 0;
+  min-height: 22rem;
+  margin: 2rem;
   width: 20rem;
 
   h1 {
@@ -10,6 +11,7 @@
 
   .react-datepicker__month-container {
     background-color: $color-light;
+
     font-size: 1rem;
     font-family: $font-family-secondary;
 

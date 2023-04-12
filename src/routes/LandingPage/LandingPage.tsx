@@ -22,7 +22,7 @@ const LandingPage: React.FC = () => {
           navigate('/habits', {
             state: {habitsForToday, today},
           });
-        }, 300);
+        }, 100);
       })
       .catch((error) => {
         console.error('There was a problem with the fetch operation:', error);

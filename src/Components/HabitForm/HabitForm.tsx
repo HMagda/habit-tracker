@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {baseUrl, daysOfWeek, Habit, HabitDay} from '../../utils';
+import {baseUrl, daysOfWeek, Habit} from '../../utils';
 import './HabitForm.modules.scss';
 import {FiX} from 'react-icons/fi';
 
