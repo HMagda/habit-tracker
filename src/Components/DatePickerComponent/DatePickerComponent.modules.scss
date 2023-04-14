@@ -3,32 +3,72 @@
 .date-picker {
   min-height: 22rem;
   margin: 2rem;
-  width: 20rem;
+  // width: 20rem;
 
   h1 {
     padding: 1rem;
+    margin-bottom: 1rem;
   }
 
-  .react-datepicker__month-container {
-    background-color: $color-light;
+  .date-picker-container {
+    margin-bottom: 2rem;
 
-    font-size: 1rem;
-    font-family: $font-family-secondary;
-
-    .react-datepicker__month {
+    .react-datepicker__month-container {
       background-color: $color-light;
-      padding: 1rem 0;
-
-      .react-datepicker__day--today {
-        border-radius: 0.3rem;
-        background-color: $color-important-secondary;
-        color: $color-light;
-      }
-
-      .react-datepicker__day--in-range {
-        background-color: $color-important-primary;
-        color: $color-light;
+  
+      font-size: 1rem;
+      font-family: $font-family-secondary;
+  
+      .react-datepicker__month {
+        background-color: $color-light;
+        padding: 1rem 0;
+  
+        .react-datepicker__day--today {
+          border-radius: 0.3rem;
+          background-color: $color-important-secondary;
+          color: $color-light;
+        }
+  
+        .react-datepicker__day--in-range {
+          background-color: $color-important-primary;
+          color: $color-light;
+        }
       }
     }
   }
+
+  .statistics-container {
+    // width: 20rem;
+    // max-width: 700px;
+    margin: 0 auto;
+  }
+  
+  .statistics {
+    width: 100%;
+    border-collapse: collapse;
+  
+    thead {
+      font-size: 1.1rem;
+      font-weight: bold;
+      color: #333;
+    }
+  
+    tr {
+      border-bottom: 1px solid #ddd;
+    }
+  
+    th,
+    td {
+      padding: 0.8rem 1rem;
+      text-align: left;
+    }
+  
+    tbody tr:nth-child(even) {
+      background-color: #f8f8f8;
+    }
+  }
 }
+
+
+
+

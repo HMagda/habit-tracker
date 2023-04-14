@@ -134,7 +134,7 @@ const HabitsCompletion: React.FC<{
                     ${
                       habitDay.completed
                         ? 'completed'
-                        : isUpcoming
+                        : (isUpcoming || habitDay.isBeforeCreationDate)
                         ? 'upcoming'
                         : 'uncompleted'
                     }`}
@@ -146,7 +146,7 @@ const HabitsCompletion: React.FC<{
 
                 {habitDay.completed ? (
                   <HiCheck className='check-icon' />
-                ) : isUpcoming ? (
+                ) : (isUpcoming || habitDay.isBeforeCreationDate) ? (
                   <FiCircle className='circle-icon' />
                 ) : (
                   <HiX className='x-icon' />

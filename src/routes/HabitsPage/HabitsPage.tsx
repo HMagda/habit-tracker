@@ -1,7 +1,7 @@
 import React, {useEffect, useLayoutEffect, useRef, useState} from 'react';
 import {useLocation} from 'react-router-dom';
 import {FiPlus, FiChevronRight} from 'react-icons/fi';
-import {baseUrl, Habit, HabitForToday} from '../../utils';
+import {baseUrl, Habit, HabitForToday, HabitData} from '../../utils';
 import DatePickerComponent from '../../Components/DatePickerComponent/DatePickerComponent';
 import Heatmap from '../../Components/Heatmap/Heatmap';
 import HabitInfo from '../../Components/HabitInfo/HabitInfo';
@@ -34,6 +34,8 @@ const HabitsPage = () => {
     useState<number>(0);
   const [weekPlanContentHeight, setWeekPlanContentHeight] = useState<number>(0);
   const [statsContentHeight, setStatsContentHeight] = useState<number>(0);
+
+  const [statistics, setStatistics] = useState<HabitData[]>([]);
 
   useEffect(() => {
     fetch(baseUrl + '/habits', {
@@ -84,6 +86,50 @@ const HabitsPage = () => {
       });
   }, []);
 
+  useEffect(() => {
+    const handleResize = debounce(() => {
+      if (
+        todayHabitsRef.current !== null &&
+        weekPlanRef.current !== null &&
+        statsRef.current !== null
+      ) {
+        if (openTodayHabits) {
+          setTodayHabitsContentHeight(todayHabitsRef.current.scrollHeight);
+        }
+        if (openWeekPlan) {
+          setWeekPlanContentHeight(weekPlanRef.current.scrollHeight);
+        }
+        if (openStats) {
+          setStatsContentHeight(statsRef.current.scrollHeight);
+        }
+      }
+    }, 100);
+
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, [openTodayHabits, openWeekPlan, openStats, habitsArr, statistics]);
+
+  useLayoutEffect(() => {
+    if (
+      todayHabitsRef.current !== null &&
+      weekPlanRef.current !== null &&
+      statsRef.current !== null
+    ) {
+      if (openTodayHabits) {
+        setTodayHabitsContentHeight(todayHabitsRef.current.scrollHeight);
+      }
+      if (openWeekPlan) {
+        setWeekPlanContentHeight(weekPlanRef.current.scrollHeight);
+      }
+      if (openStats) {
+        setStatsContentHeight(statsRef.current.scrollHeight);
+      }
+    }
+  }, [openTodayHabits, openWeekPlan, openStats, habitsArr, statistics]);
+
   const handleHabitDeleted = (habitId: string) => {
     setHabitsArr(habitsArr.filter((habit) => habit.id !== habitId));
     setHabitsForTodayArr(
@@ -102,23 +148,19 @@ const HabitsPage = () => {
     setState(!state);
   };
 
-  useLayoutEffect(() => {
-    if (
-      todayHabitsRef.current !== null &&
-      weekPlanRef.current !== null &&
-      statsRef.current !== null
-    ) {
-      if (openTodayHabits) {
-        setTodayHabitsContentHeight(todayHabitsRef.current.scrollHeight);
-      }
-      if (openWeekPlan) {
-        setWeekPlanContentHeight(weekPlanRef.current.scrollHeight);
-      }
-      if (openStats) {
-        setStatsContentHeight(statsRef.current.scrollHeight);
-      }
-    }
-  }, [openTodayHabits, openWeekPlan, openStats]);
+  // @ts-ignore
+  function debounce(fn, delay) {
+    // @ts-ignore
+    let timeout;
+    // @ts-ignore
+    return function (...args) {
+      // @ts-ignore
+      const context = this;
+      // @ts-ignore
+      clearTimeout(timeout);
+      timeout = setTimeout(() => fn.apply(context, args), delay);
+    };
+  }
 
   return (
     <>
@@ -229,7 +271,10 @@ const HabitsPage = () => {
             {habitsArr.length > 0 && (
               <>
                 <Heatmap habitsArr={habitsArr} />
-                <DatePickerComponent />
+                <DatePickerComponent
+                  statistics={statistics}
+                  setStatistics={setStatistics}
+                />
               </>
             )}
           </div>

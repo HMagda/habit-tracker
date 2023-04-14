@@ -1,5 +1,3 @@
-
-// export const baseUrl: string = 'http://localhost:8080';
 export const baseUrl: string = 'https://shrouded-plains-88631.herokuapp.com';
 
 export const daysOfWeek: string[] = [
@@ -12,7 +10,6 @@ export const daysOfWeek: string[] = [
   'Sunday',
 ];
 
-
 export interface Habit {
   id: string;
   habitName: string;
@@ -23,13 +20,20 @@ export interface HabitForToday {
   id: string;
   day: number;
   habitName: string;
-  completed: boolean
+  completed: boolean;
 }
 
 export interface HabitDay {
-  dayOfWeek: number,
-  dateOfWeek: string,
-  completed: boolean
+  dayOfWeek: number;
+  dateOfWeek: string;
+  completed: boolean;
+  isBeforeCreationDate?: boolean;
+}
+
+export interface HabitData {
+  habitName: string;
+  score: number;
+  maxScore: number;
 }
 
 export function normalizeDayIndex(usDayIndex: number) {
