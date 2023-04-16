@@ -2,7 +2,7 @@ import React from 'react';
 import {useNavigate} from 'react-router-dom';
 import './LandingPage.modules.scss';
 import Winner from '../../assets/winner.png';
-import Navbar from '../../Components/Navbar/Navbar';
+// import Navbar from '../../Components/Navbar/Navbar';
 import {baseUrl} from '../../utils';
 
 const LandingPage: React.FC = () => {
@@ -32,7 +32,7 @@ const LandingPage: React.FC = () => {
   return (
     <>
       <div className='landing-page'>
-        <Navbar />
+        {/* <Navbar /> */}
         <h1 className='app-name'>Habit Tracker</h1>
         <button className='cta-button' onClick={handleClick}>
           Get Started
