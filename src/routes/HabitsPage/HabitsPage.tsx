@@ -269,13 +269,13 @@ const HabitsPage = () => {
             )}
 
             {habitsArr.length > 0 && (
-              <>
+              <div className='statistics-section'>
                 <Heatmap habitsArr={habitsArr} />
                 <DatePickerComponent
                   statistics={statistics}
                   setStatistics={setStatistics}
                 />
-              </>
+              </div>
             )}
           </div>
         </div>

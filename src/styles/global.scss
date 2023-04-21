@@ -1,16 +1,12 @@
 @import './typography.scss';
 
 $color-light: #f6f4f5;
+$color-lighter: #fbf9fa;
 $color-dark: #1b1c1e;
 $color-important-primary: #154181;
 $color-important-secondary: #415081;
-// $color-error: #811541;
-// $color-warning: #b18a0b;
-// $color-primary: #4d7e3e;
-
 $color-primary: #4acb86;
 $color-error: #e86a7a;
-// $color-warning: #f0b83ed6;
 $color-warning: #70b5ff;
 
 $font-family-primary: 'Anton', sans-serif;
@@ -18,6 +14,24 @@ $font-family-secondary: 'Work Sans', sans-serif;
 
 $box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.2);
 $transition: 0.3s ease;
+
+@mixin respond-large {
+  @media (max-width: 1024px) {
+    @content;
+  }
+}
+
+@mixin respond-medium {
+  @media (max-width: 1023px) {
+    @content;
+  }
+}
+
+@mixin respond-small {
+  @media (max-width: 767px) {
+    @content;
+  }
+}
 
 @mixin popup-styles {
   .overlay {
@@ -65,8 +79,6 @@ $transition: 0.3s ease;
     }
   }
 }
-
-
 
 .login-btn,
 .logout-btn {
