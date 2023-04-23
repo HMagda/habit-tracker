@@ -1,29 +1,31 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {BrowserRouter as Router, Routes, Route} from 'react-router-dom';
 import LandingPage from './routes/LandingPage/LandingPage';
-import LoginPage from './routes/LoginPage/LoginPage';
 import HabitsPage from './routes/HabitsPage/HabitsPage';
-import PrivateRoute from './PrivateRoute';
 import Navbar from './Components/Navbar/Navbar';
+import ProtectedRoute from "./ProtectedRoute";
+import {baseUrl} from "./utils";
 
 const App: React.FC = () => {
-  return (
-    <>
-      <Router>
-      <Navbar />
-        <Routes>
-          <Route path='/' element={<LandingPage />} />
-          <Route path='/login' element={<LoginPage />} />
-          
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-<Route element={<PrivateRoute/>}>
-            <Route path="/habits" element={<HabitsPage/>} />
-              {/* Other Routes you want to protect */}
-          </Route>
-        </Routes>
-      </Router>
-    </>
-  );
+    useEffect(() => {
+        fetch(baseUrl + '/is-authenticated')
+            .then(response => response.json())
+            .then(data => setIsLoggedIn(data.authenticated));
+    }, []);
+
+    return (
+        <>
+            <Router>
+                <Navbar/>
+                <Routes>
+                    <Route path='/' element={<LandingPage/>}/>
+                    <ProtectedRoute path="/habits" element={<HabitsPage/>} isLoggedIn={isLoggedIn} />
+                </Routes>
+            </Router>
+        </>
+    );
 };
 
 export default App;
