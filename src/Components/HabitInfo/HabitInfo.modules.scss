@@ -52,8 +52,8 @@
     transform: translate(-50%, -50%);
     z-index: 10;
     background-color: $color-light;
-    padding: 20px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    padding: 2rem;
+    box-shadow: 0 0 .1rem rgba(0, 0, 0, 0.2);
     border-radius: 0.5rem;
   }
 
@@ -67,7 +67,7 @@
       font-size: 1.2rem;
       margin: 1rem;
       padding: 1.2rem;
-      background-color: $color-light;
+      background-color: $color-lighter;
       border-radius: 0.5rem;
       box-shadow: $box-shadow;
 
@@ -77,6 +77,15 @@
 
       .justify-space-between {
         justify-content: space-between;
+      }
+
+      &.habit-today {
+        width: 100%;
+
+        @include respond-medium {
+          width: 15rem;
+         
+        }
       }
     }
   }

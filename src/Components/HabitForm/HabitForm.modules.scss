@@ -39,6 +39,7 @@
   input {
     border: 1px solid $color-important-secondary;
     padding: 0.5rem;
+    background-color: $color-lighter;
   }
 
   .warning-text {
@@ -49,6 +50,7 @@
   select {
     border: 1px solid $color-important-secondary;
     padding: 0.5rem;
+    background-color: $color-lighter;
   }
 
   p {
@@ -108,5 +110,10 @@
     border-radius: 2rem;
     background-color: $color-primary;
     color: $color-light;
+  }
+
+  @include respond-medium {
+    width: 15rem;
+    margin: 1rem 0;
   }
 }

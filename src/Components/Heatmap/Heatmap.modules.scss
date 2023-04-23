@@ -1,11 +1,44 @@
 @import '../../styles/global.scss';
 
-.heatmap {
-  min-height: 10rem;
-  width: 20rem;
-  margin: 0 auto;
-  font-family: $font-family-secondary;
-  text-align: center;
+.heatmap-container {
+  display: flex;
+  align-items: center;
+
+  .heatmap {
+    width: 38rem;
+    padding-bottom: 4rem;
+    font-family: $font-family-secondary;
+    text-align: center;
+    margin: 2rem;
+
+    @include respond-medium {
+      width: 20rem;
+      padding-bottom: 0;
+      margin: 0;
+    }
+  }
+
+  .tooltip-container {
+    .tooltip {
+      padding: 1rem;
+
+      background-color: $color-light;
+      border: 1px solid #cccccc;
+      border-radius: 0.5rem;
+      box-shadow: 0 0 0.1rem rgba(0, 0, 0, 0.15);
+      pointer-events: none;
+      width: 15rem;
+
+      @include respond-medium {
+        width: max-content;
+        margin: 1rem;
+      }
+    }
+  }
+
+  @include respond-medium {
+    flex-direction: column;
+  }
 
   .color-empty {
     fill: #a9a9a9;

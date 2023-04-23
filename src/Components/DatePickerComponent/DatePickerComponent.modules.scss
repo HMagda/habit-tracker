@@ -1,34 +1,35 @@
 @import '../../styles/global.scss';
 
-.date-picker {
+.date-picker-wrapper {
+  display: flex;
   min-height: 22rem;
   margin: 2rem;
-  // width: 20rem;
-
-  h1 {
-    padding: 1rem;
-    margin-bottom: 1rem;
-  }
 
   .date-picker-container {
     margin-bottom: 2rem;
 
+    h1 {
+      font-size: 1.2rem;
+      font-weight: bold;
+      margin-bottom: 1rem;
+    }
+
     .react-datepicker__month-container {
-      background-color: $color-light;
-  
+      background-color: $color-lighter;
+
       font-size: 1rem;
       font-family: $font-family-secondary;
-  
+
       .react-datepicker__month {
-        background-color: $color-light;
+        background-color: $color-lighter;
         padding: 1rem 0;
-  
+
         .react-datepicker__day--today {
           border-radius: 0.3rem;
           background-color: $color-important-secondary;
           color: $color-light;
         }
-  
+
         .react-datepicker__day--in-range {
           background-color: $color-important-primary;
           color: $color-light;
@@ -37,38 +38,107 @@
     }
   }
 
-  .statistics-container {
-    // width: 20rem;
-    // max-width: 700px;
+  .statistics-table {
     margin: 0 auto;
+
+    h2 {
+      margin-bottom: 0.5rem;
+    }
+
+    h1 {
+      margin: 1rem;
+    }
+
+    .statistics {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 0 2rem;
+
+      thead {
+        font-size: 1.1rem;
+        font-weight: bold;
+        color: #333;
+      }
+
+      tr {
+        border-bottom: 1px solid #ddd;
+      }
+
+      th,
+      td {
+        padding: 0.8rem 1rem;
+
+        .label {
+          display: none;
+        }
+      }
+
+      th,
+      td:nth-child(1) {
+        text-align: left;
+      }
+
+      tbody tr:nth-child(odd) {
+        background-color: $color-lighter;
+      }
+
+      @include respond-medium {
+        thead {
+          display: none;
+        }
+
+        tr {
+          display: block;
+          padding: 1rem;
+          border: 1px solid #ddd;
+          margin-bottom: 1rem;
+          background-color: $color-lighter;
+
+          &:nth-child(odd) {
+            background-color: $color-lighter;
+          }
+        }
+
+        th,
+        td {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+
+          .label {
+            display: block;
+          }
+        }
+
+        td:nth-child(1) {
+          text-align: right;
+
+          .label {
+            text-align: left;
+            margin-right: 1rem;
+            width: 50%;
+          }
+
+          .habit_name {
+            overflow-wrap: anywhere;
+          }
+        }
+
+        td {
+          .label {
+            font-weight: bold;
+            margin-right: 1rem;
+          }
+        }
+      }
+
+      @include respond-medium {
+        margin: 0;
+      }
+    }
   }
-  
-  .statistics {
-    width: 100%;
-    border-collapse: collapse;
-  
-    thead {
-      font-size: 1.1rem;
-      font-weight: bold;
-      color: #333;
-    }
-  
-    tr {
-      border-bottom: 1px solid #ddd;
-    }
-  
-    th,
-    td {
-      padding: 0.8rem 1rem;
-      text-align: left;
-    }
-  
-    tbody tr:nth-child(even) {
-      background-color: #f8f8f8;
-    }
+
+  @include respond-medium {
+    flex-direction: column;
   }
 }
-
-
-
-
