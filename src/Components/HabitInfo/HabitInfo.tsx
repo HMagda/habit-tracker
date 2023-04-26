@@ -72,6 +72,7 @@ const HabitInfo: React.FC<{
         method: 'PUT',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify(editedHabit),
+        credentials: "include"
       })
         .then((res) => {
           if (!res.ok) {

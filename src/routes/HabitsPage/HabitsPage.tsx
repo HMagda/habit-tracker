@@ -42,6 +42,7 @@ const HabitsPage = () => {
       headers: {
         'Content-Type': 'application/json',
       },
+      credentials: "include"
     })
       .then((res) => {
         if (!res.ok) {
@@ -65,6 +66,7 @@ const HabitsPage = () => {
       headers: {
         'Content-Type': 'application/json',
       },
+      credentials: "include"
     })
       .then((res) => {
         if (!res.ok) {

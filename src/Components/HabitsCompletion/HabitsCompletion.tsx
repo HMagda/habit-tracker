@@ -46,6 +46,7 @@ const HabitsCompletion: React.FC<{
     if (confirmed) {
       fetch(baseUrl + `/habits/${habit.id}`, {
         method: 'DELETE',
+        credentials: "include"
       })
         .then(() => {
           console.log(`Habit with id ${habit.id} deleted successfully!`);

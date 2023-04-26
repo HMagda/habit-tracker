@@ -71,6 +71,7 @@ const HabitForm: React.FC<{
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify(habit),
+      credentials: "include"
     })
       .then((res) => {
         if (!res.ok) {
@@ -79,7 +80,7 @@ const HabitForm: React.FC<{
         return res.json();
       })
       .then((createdHabit: Habit) => {
-        addNewHabit(createdHabit);        
+        addNewHabit(createdHabit);
       })
       .catch((error) => {
         console.error('There was a problem with the fetch operation:', error);

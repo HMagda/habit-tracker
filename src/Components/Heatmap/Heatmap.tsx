@@ -62,6 +62,7 @@ const Heatmap: React.FC<{habitsArr: Habit[]}> = ({habitsArr}) => {
       headers: {
         'Content-Type': 'application/json',
       },
+      credentials: "include"
     })
       .then((res) => {
         if (!res.ok) {
