@@ -7,20 +7,20 @@ import ProtectedRoute from "./ProtectedRoute";
 import {baseUrl} from "./utils";
 
 const App: React.FC = () => {
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
-
-    useEffect(() => {
-        fetch(baseUrl + '/is-authenticated')
-            .then(response => response.json())
-            .then(data => setIsLoggedIn(data.authenticated));
-    }, []);
+    // const [isLoggedIn, setIsLoggedIn] = useState(false);
+    //
+    // useEffect(() => {
+    //     fetch(baseUrl + '/is-authenticated')
+    //         .then(response => response.json())
+    //         .then(data => setIsLoggedIn(data.authenticated));
+    // }, []);
 
     return (
         <>
             <Router>
                 <Routes>
                     <Route path='/' element={<LandingPage/>}/>
-                    <Route path='/habits' element={isLoggedIn ? <HabitsPage/> : <Navigate to="/login" replace />} />
+                    <Route path='/habits' element={<HabitsPage/>} />
                 </Routes>
             </Router>
         </>
