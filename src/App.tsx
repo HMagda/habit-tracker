@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {BrowserRouter as Router, Routes, Route} from 'react-router-dom';
+import {BrowserRouter as Router, Routes, Route, Navigate} from 'react-router-dom';
 import LandingPage from './routes/LandingPage/LandingPage';
 import HabitsPage from './routes/HabitsPage/HabitsPage';
 import Navbar from './Components/Navbar/Navbar';
@@ -18,10 +18,9 @@ const App: React.FC = () => {
     return (
         <>
             <Router>
-                <Navbar/>
                 <Routes>
                     <Route path='/' element={<LandingPage/>}/>
-                    <ProtectedRoute path="/habits" element={<HabitsPage/>} isLoggedIn={isLoggedIn} />
+                    <Route path='/habits' element={isLoggedIn ? <HabitsPage/> : <Navigate to="/login" replace />} />
                 </Routes>
             </Router>
         </>

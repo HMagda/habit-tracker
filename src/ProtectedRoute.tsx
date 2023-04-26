@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route, Navigate } from 'react-router-dom';
+import {Navigate, Route} from 'react-router-dom';
 
 interface ProtectedRouteProps {
     path: string;
@@ -8,7 +8,12 @@ interface ProtectedRouteProps {
 }
 
 const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ isLoggedIn, path, element }) => {
-    return isLoggedIn ? <Route path={path} element={element} /> : <Navigate to="/login" replace />;
+    return (
+        <Route
+            path={path}
+            element={isLoggedIn ? element : <Navigate to="/login" replace />}
+        />
+    );
 };
 
 export default ProtectedRoute;
