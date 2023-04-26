@@ -11,8 +11,9 @@ import HabitEditForm from '../HabitEditForm/HabitEditForm';
 import HabitsCompletion from '../HabitsCompletion/HabitsCompletion';
 import HabitForm from '../HabitForm/HabitForm';
 import {FiToggleLeft, FiToggleRight} from 'react-icons/fi';
+import {useAuthToken} from "../../hooks/useAuthToken";
 
-const HabitInfo: React.FC<{
+ const HabitInfo: React.FC<{
   habitsArr: Habit[];
   setHabitsArr: React.Dispatch<React.SetStateAction<Habit[]>>;
   habitsForTodayArr: HabitForToday[];
@@ -33,6 +34,7 @@ const HabitInfo: React.FC<{
   toggleHabitForm,
   todayIndex,
 }) => {
+  const getAuthToken = useAuthToken();
   const [editHabitId, setEditHabitId] = useState<string>('');
   const [showLeftButton, setShowLeftButton] = useState<boolean>(true);
   const [showConfirmPopup, setShowConfirmPopup] = useState<boolean>(false);
@@ -57,53 +59,56 @@ const HabitInfo: React.FC<{
   const handleMarkCompleted = (id: string, day: number) => {
     const localDayIndex = normalizeDayIndex(new Date().getDay());
 
-    const continueExecution = () => {
-      const habitToEdit = habitsArr.find((habit) => habit.id === id)!!;
-      const editedHabit = {
-        ...habitToEdit,
-        days: habitToEdit.days.map((habitDay) =>
-          habitDay.dayOfWeek === day
-            ? {...habitDay, completed: !habitDay.completed}
-            : habitDay
-        ),
-      };
+    const continueExecution = async () => {
+        const habitToEdit = habitsArr.find((habit) => habit.id === id)!!;
+        const editedHabit = {
+            ...habitToEdit,
+            days: habitToEdit.days.map((habitDay) =>
+                habitDay.dayOfWeek === day
+                    ? {...habitDay, completed: !habitDay.completed}
+                    : habitDay
+            ),
+        };
 
-      fetch(baseUrl + `/habits/${id}`, {
-        method: 'PUT',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify(editedHabit),
-      })
+        const token = await getAuthToken();
+
+        fetch(baseUrl + `/habits/${id}`, {
+            method: 'PUT',
+            headers: {Authorization: `Bearer ${token}`, 'Content-Type': 'application/json'},
+            body: JSON.stringify(editedHabit),
+            credentials: "include"
+        })
         .then((res) => {
-          if (!res.ok) {
-            throw new Error('Network response was not ok');
-          }
-          return res.json();
+            if (!res.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return res.json();
         })
         .then((receivedHabit) => {
-          const updatedHabitsArr = habitsArr.map((habit) =>
-            habit.id === receivedHabit.id
-              ? {...habit, days: receivedHabit.days}
-              : habit
-          );
-          setHabitsArr(updatedHabitsArr);
-
-          if (todayIndex === day) {
-            const isTodaysHabitCompleted = receivedHabit.days.filter(
-              (habitDay: HabitDay) => habitDay.dayOfWeek === day
-            )[0].completed;
-            const updatedHabitsForTodayArr = habitsForTodayArr.map((habit) =>
-              habit.id === receivedHabit.id
-                ? {...habit, completed: isTodaysHabitCompleted}
-                : habit
+            const updatedHabitsArr = habitsArr.map((habit) =>
+                habit.id === receivedHabit.id
+                    ? {...habit, days: receivedHabit.days}
+                    : habit
             );
-            setHabitsForTodayArr(updatedHabitsForTodayArr);
-          }
+            setHabitsArr(updatedHabitsArr);
+
+            if (todayIndex === day) {
+                const isTodaysHabitCompleted = receivedHabit.days.filter(
+                    (habitDay: HabitDay) => habitDay.dayOfWeek === day
+                )[0].completed;
+                const updatedHabitsForTodayArr = habitsForTodayArr.map((habit) =>
+                    habit.id === receivedHabit.id
+                        ? {...habit, completed: isTodaysHabitCompleted}
+                        : habit
+                );
+                setHabitsForTodayArr(updatedHabitsForTodayArr);
+            }
         })
         .catch((error) => {
-          console.error('Error adding new habit: ', error);
+            console.error('Error adding new habit: ', error);
         });
 
-      setEditHabitId('');
+        setEditHabitId('');
     };
     if (localDayIndex !== day) {
       setShowConfirmPopup(true);

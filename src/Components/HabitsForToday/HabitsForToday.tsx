@@ -14,6 +14,7 @@ const HabitsForToday: React.FC<{
     fetch(baseUrl + `/habits/today/${id}/complete/${isDone}`, {
       method: 'PUT',
       headers: {'Content-Type': 'application/json'},
+      credentials: "include"
     })
       .then((res) => {
         if (!res.ok) {

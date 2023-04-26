@@ -72,6 +72,7 @@ const HabitEditForm: React.FC<{
       method: 'PUT',
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify(habit),
+      credentials: "include"
     })
       .then(() => {
         console.log('habit edited');

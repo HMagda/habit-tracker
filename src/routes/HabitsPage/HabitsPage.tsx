@@ -7,11 +7,18 @@ import Heatmap from '../../Components/Heatmap/Heatmap';
 import HabitInfo from '../../Components/HabitInfo/HabitInfo';
 import HabitsForToday from '../../Components/HabitsForToday/HabitsForToday';
 import './HabitsPage.modules.scss';
+import {useAuthToken} from "../../hooks/useAuthToken";
+
+
 
 const today = new Date();
 const formattedDate = today.toLocaleDateString('en-GB');
 
 const HabitsPage = () => {
+  const [token, setToken] = useState<string | undefined>(undefined);
+  const getAuthToken = useAuthToken();
+
+
   const todayHabitsRef = useRef<HTMLDivElement | null>(null);
   const weekPlanRef = useRef<HTMLDivElement | null>(null);
   const statsRef = useRef<HTMLDivElement | null>(null);
@@ -21,7 +28,7 @@ const HabitsPage = () => {
 
   const [habitsArr, setHabitsArr] = useState<Habit[]>(habits || []);
   const [habitsForTodayArr, setHabitsForTodayArr] = useState<HabitForToday[]>(
-    habitsForToday || []
+      habitsForToday || []
   );
   const [todayIndex, setTodayIndex] = useState<number>(today || 0);
 
@@ -31,67 +38,92 @@ const HabitsPage = () => {
   const [openStats, setOpenStats] = useState<boolean>(false);
 
   const [todayHabitsContentHeight, setTodayHabitsContentHeight] =
-    useState<number>(0);
+      useState<number>(0);
   const [weekPlanContentHeight, setWeekPlanContentHeight] = useState<number>(0);
   const [statsContentHeight, setStatsContentHeight] = useState<number>(0);
 
   const [statistics, setStatistics] = useState<HabitData[]>([]);
 
-  useEffect(() => {
-    fetch(baseUrl + '/habits', {
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
-      .then((res) => {
-        if (!res.ok) {
-          throw new Error('Network response was not ok');
-        }
-        return res.json();
-      })
-      .then((data) => {
-        const fetchedHabitsArr = data.habits;
-        if (JSON.stringify(fetchedHabitsArr) !== JSON.stringify(habitsArr)) {
-          setHabitsArr(fetchedHabitsArr);
-        }
-      })
-      .catch((error) => {
-        console.error('There was a problem with the fetch operation:', error);
-      });
-  }, [habitsForTodayArr]);
+
 
   useEffect(() => {
-    fetch(baseUrl + '/habits/today', {
+    const fetchToken = async () => {
+      if(token === undefined) {
+        const fetchedToken = await getAuthToken();
+        setToken(fetchedToken);
+      }
+    };
+
+    fetchToken();
+
+    fetch(baseUrl + '/habits', {
       headers: {
+        Authorization: `Bearer ${token}`,
         'Content-Type': 'application/json',
       },
+      credentials: "include"
     })
-      .then((res) => {
-        if (!res.ok) {
-          throw new Error('Network response was not ok');
-        }
-        return res.json();
-      })
-      .then((data) => {
-        const fetchedHabitsForTodayArr = data.habits;
-        if (
-          JSON.stringify(fetchedHabitsForTodayArr) !==
-          JSON.stringify(habitsForTodayArr)
-        ) {
-          setHabitsForTodayArr(fetchedHabitsForTodayArr);
-        }
-      })
-      .catch((error) => {
-        console.error('There was a problem with the fetch operation:', error);
-      });
+        .then((res) => {
+          if (!res.ok) {
+            throw new Error('Network response was not ok');
+          }
+          return res.json();
+        })
+        .then((data) => {
+          const fetchedHabitsArr = data.habits;
+          if (JSON.stringify(fetchedHabitsArr) !== JSON.stringify(habitsArr)) {
+            setHabitsArr(fetchedHabitsArr);
+          }
+        })
+        .catch((error) => {
+          console.error('There was a problem with the fetch operation:', error);
+        });
+  }, [habitsForTodayArr, getAuthToken]);
+
+  useEffect(() => {
+
+    const fetchToken = async () => {
+      if(token === undefined) {
+        const fetchedToken = await getAuthToken();
+        setToken(fetchedToken);
+      }
+    };
+
+    fetchToken();
+
+    fetch(baseUrl + '/habits/today', {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+      credentials: "include"
+    })
+        .then((res) => {
+          if (!res.ok) {
+            throw new Error('Network response was not ok');
+          }
+          return res.json();
+        })
+        .then((data) => {
+          const fetchedHabitsForTodayArr = data.habits;
+          if (
+              JSON.stringify(fetchedHabitsForTodayArr) !==
+              JSON.stringify(habitsForTodayArr)
+          ) {
+            setHabitsForTodayArr(fetchedHabitsForTodayArr);
+          }
+        })
+        .catch((error) => {
+          console.error('There was a problem with the fetch operation:', error);
+        });
   }, []);
 
   useEffect(() => {
     const handleResize = debounce(() => {
       if (
-        todayHabitsRef.current !== null &&
-        weekPlanRef.current !== null &&
-        statsRef.current !== null
+          todayHabitsRef.current !== null &&
+          weekPlanRef.current !== null &&
+          statsRef.current !== null
       ) {
         if (openTodayHabits) {
           setTodayHabitsContentHeight(todayHabitsRef.current.scrollHeight);
@@ -114,9 +146,9 @@ const HabitsPage = () => {
 
   useLayoutEffect(() => {
     if (
-      todayHabitsRef.current !== null &&
-      weekPlanRef.current !== null &&
-      statsRef.current !== null
+        todayHabitsRef.current !== null &&
+        weekPlanRef.current !== null &&
+        statsRef.current !== null
     ) {
       if (openTodayHabits) {
         setTodayHabitsContentHeight(todayHabitsRef.current.scrollHeight);
@@ -133,7 +165,7 @@ const HabitsPage = () => {
   const handleHabitDeleted = (habitId: string) => {
     setHabitsArr(habitsArr.filter((habit) => habit.id !== habitId));
     setHabitsForTodayArr(
-      habitsForTodayArr.filter((habit) => habit.id !== habitId)
+        habitsForTodayArr.filter((habit) => habit.id !== habitId)
     );
   };
 
@@ -142,8 +174,8 @@ const HabitsPage = () => {
   };
 
   const toggleContent = (
-    state: boolean,
-    setState: React.Dispatch<React.SetStateAction<boolean>>
+      state: boolean,
+      setState: React.Dispatch<React.SetStateAction<boolean>>
   ) => {
     setState(!state);
   };
@@ -163,124 +195,124 @@ const HabitsPage = () => {
   }
 
   return (
-    <>
-      <div className='habits-page'>
-        <div className='headline'>
-          <div className={`arrow ${openTodayHabits ? 'down' : ''}`}>
-            <FiChevronRight />
+      <>
+        <div className='habits-page'>
+          <div className='headline'>
+            <div className={`arrow ${openTodayHabits ? 'down' : ''}`}>
+              <FiChevronRight/>
+            </div>
+            <h1
+                onClick={() => toggleContent(openTodayHabits, setOpenTodayHabits)}
+            >
+              habits for today {formattedDate}
+            </h1>
           </div>
-          <h1
-            onClick={() => toggleContent(openTodayHabits, setOpenTodayHabits)}
+
+          <div
+              className='content-parent'
+              style={
+                openTodayHabits
+                    ? {maxHeight: todayHabitsContentHeight + 'px'}
+                    : {maxHeight: '0px'}
+              }
           >
-            habits for today {formattedDate}
-          </h1>
-        </div>
+            <div ref={todayHabitsRef} className='content'>
+              <>
+                {habitsForTodayArr.length <= 0 && (
+                    <h1>You do not have any habits for today</h1>
+                )}
 
-        <div
-          className='content-parent'
-          style={
-            openTodayHabits
-              ? {maxHeight: todayHabitsContentHeight + 'px'}
-              : {maxHeight: '0px'}
-          }
-        >
-          <div ref={todayHabitsRef} className='content'>
-            <>
-              {habitsForTodayArr.length <= 0 && (
-                <h1>You do not have any habits for today</h1>
-              )}
-
-              {habitsForTodayArr.length > 0 && (
-                <HabitsForToday
-                  habitsForTodayArr={habitsForTodayArr}
-                  setHabitsForTodayArr={setHabitsForTodayArr}
-                />
-              )}
-            </>
+                {habitsForTodayArr.length > 0 && (
+                    <HabitsForToday
+                        habitsForTodayArr={habitsForTodayArr}
+                        setHabitsForTodayArr={setHabitsForTodayArr}
+                    />
+                )}
+              </>
+            </div>
           </div>
-        </div>
 
-        <div className='headline'>
-          <div className={`arrow ${openWeekPlan ? 'down' : ''}`}>
-            <FiChevronRight />
-          </div>
-          <h1 onClick={() => toggleContent(openWeekPlan, setOpenWeekPlan)}>
-            My week plan
-          </h1>
+          <div className='headline'>
+            <div className={`arrow ${openWeekPlan ? 'down' : ''}`}>
+              <FiChevronRight/>
+            </div>
+            <h1 onClick={() => toggleContent(openWeekPlan, setOpenWeekPlan)}>
+              My week plan
+            </h1>
 
-          {openWeekPlan && (
-            <button className='habit-form-toggle-btn' onClick={toggleHabitForm}>
-              <FiPlus />
-            </button>
-          )}
-        </div>
-
-        <div
-          className='content-parent'
-          style={
-            openWeekPlan
-              ? {maxHeight: weekPlanContentHeight + 'px'}
-              : {maxHeight: '0px'}
-          }
-        >
-          <div ref={weekPlanRef} className='content'>
-            <>
-              {habitsForTodayArr.length <= 0 && (
-                <h1>You do not have any habits for this week</h1>
-              )}
-
-              {habitsArr && (
-                <HabitInfo
-                  habitsArr={habitsArr}
-                  setHabitsArr={setHabitsArr}
-                  habitsForTodayArr={habitsForTodayArr}
-                  setHabitsForTodayArr={setHabitsForTodayArr}
-                  deleteHabit={handleHabitDeleted}
-                  setShowHabitForm={setShowHabitForm}
-                  showHabitForm={showHabitForm}
-                  toggleHabitForm={toggleHabitForm}
-                  todayIndex={todayIndex}
-                />
-              )}
-            </>
-          </div>
-        </div>
-
-        <div className='headline'>
-          <div className={`arrow ${openStats ? 'down' : ''}`}>
-            <FiChevronRight />
-          </div>
-          <h1 onClick={() => toggleContent(openStats, setOpenStats)}>
-            Statistics
-          </h1>
-        </div>
-
-        <div
-          className='content-parent'
-          style={
-            openStats
-              ? {maxHeight: statsContentHeight + 'px'}
-              : {maxHeight: '0px'}
-          }
-        >
-          <div ref={statsRef} className='content'>
-            {habitsForTodayArr.length <= 0 && (
-              <h1>You do not have any statistics yet</h1>
-            )}
-
-            {habitsArr.length > 0 && (
-              <div className='statistics-section'>
-                <Heatmap habitsArr={habitsArr} />
-                <DatePickerComponent
-                  statistics={statistics}
-                  setStatistics={setStatistics}
-                />
-              </div>
+            {openWeekPlan && (
+                <button className='habit-form-toggle-btn' onClick={toggleHabitForm}>
+                  <FiPlus/>
+                </button>
             )}
           </div>
+
+          <div
+              className='content-parent'
+              style={
+                openWeekPlan
+                    ? {maxHeight: weekPlanContentHeight + 'px'}
+                    : {maxHeight: '0px'}
+              }
+          >
+            <div ref={weekPlanRef} className='content'>
+              <>
+                {habitsForTodayArr.length <= 0 && (
+                    <h1>You do not have any habits for this week</h1>
+                )}
+
+                {habitsArr && (
+                    <HabitInfo
+                        habitsArr={habitsArr}
+                        setHabitsArr={setHabitsArr}
+                        habitsForTodayArr={habitsForTodayArr}
+                        setHabitsForTodayArr={setHabitsForTodayArr}
+                        deleteHabit={handleHabitDeleted}
+                        setShowHabitForm={setShowHabitForm}
+                        showHabitForm={showHabitForm}
+                        toggleHabitForm={toggleHabitForm}
+                        todayIndex={todayIndex}
+                    />
+                )}
+              </>
+            </div>
+          </div>
+
+          <div className='headline'>
+            <div className={`arrow ${openStats ? 'down' : ''}`}>
+              <FiChevronRight/>
+            </div>
+            <h1 onClick={() => toggleContent(openStats, setOpenStats)}>
+              Statistics
+            </h1>
+          </div>
+
+          <div
+              className='content-parent'
+              style={
+                openStats
+                    ? {maxHeight: statsContentHeight + 'px'}
+                    : {maxHeight: '0px'}
+              }
+          >
+            <div ref={statsRef} className='content'>
+              {habitsForTodayArr.length <= 0 && (
+                  <h1>You do not have any statistics yet</h1>
+              )}
+
+              {habitsArr.length > 0 && (
+                  <div className='statistics-section'>
+                    <Heatmap habitsArr={habitsArr}/>
+                    <DatePickerComponent
+                        statistics={statistics}
+                        setStatistics={setStatistics}
+                    />
+                  </div>
+              )}
+            </div>
+          </div>
         </div>
-      </div>
-    </>
+      </>
   );
 };
 

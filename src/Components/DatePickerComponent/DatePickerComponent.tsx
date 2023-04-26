@@ -27,6 +27,7 @@ const DatePickerComponent: React.FC<{
           startDate: formattedStartDate,
           endDate: formattedEndDate,
         }),
+        credentials: "include"
       })
         .then((res) => {
           if (!res.ok) {
