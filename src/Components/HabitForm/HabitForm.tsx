@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {baseUrl, daysOfWeek, Habit} from '../../utils';
 import './HabitForm.modules.scss';
 import {FiX} from 'react-icons/fi';
+import {useAuth0} from "@auth0/auth0-react";
 
 const HabitForm: React.FC<{
   addNewHabit: (habit: Habit) => void;
@@ -62,34 +63,36 @@ const HabitForm: React.FC<{
     });
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+     e.preventDefault();
 
-    const habit = {habitName, days};
+     const habit = {habitName, days};
+     const {getAccessTokenSilently} = useAuth0();
+     const token = await getAccessTokenSilently();
 
-    fetch(baseUrl + '/habits', {
-      method: 'POST',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify(habit),
-      credentials: "include"
-    })
-      .then((res) => {
-        if (!res.ok) {
-          throw new Error('Network response was not ok');
-        }
-        return res.json();
-      })
-      .then((createdHabit: Habit) => {
-        addNewHabit(createdHabit);
-      })
-      .catch((error) => {
-        console.error('There was a problem with the fetch operation:', error);
-      });
+     fetch(baseUrl + '/habits', {
+       method: 'POST',
+       headers: {Authorization: `Bearer ${token}`, 'Content-Type': 'application/json'},
+       body: JSON.stringify(habit),
+       credentials: "include"
+     })
+         .then((res) => {
+           if (!res.ok) {
+             throw new Error('Network response was not ok');
+           }
+           return res.json();
+         })
+         .then((createdHabit: Habit) => {
+           addNewHabit(createdHabit);
+         })
+         .catch((error) => {
+           console.error('There was a problem with the fetch operation:', error);
+         });
 
-    setHabitName('');
-    setFrequency('daily');
-    setDays([]);
-  };
+     setHabitName('');
+     setFrequency('daily');
+     setDays([]);
+   };
 
   return (
     <>
