@@ -11,9 +11,10 @@ const root = ReactDOM.createRoot(
 
 
 console.log(process.env.REACT_APP_AUTH0_DOMAIN);
-const domain: string = process.env.REACT_APP_AUTH0_DOMAIN as string;
+const domain: string = process.env.AUTH0_DOMAIN as string;
 console.log(domain);
 const clientId = process.env.REACT_APP_AUTH0_CLIENT_ID as string;
+
 
 root.render(
 
