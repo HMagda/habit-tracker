@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {baseUrl, daysOfWeek, Habit} from '../../utils';
 import './HabitForm.modules.scss';
 import {FiX} from 'react-icons/fi';
-import {useAuth0} from "@auth0/auth0-react";
+import {useAuthToken} from "../../hooks/useAuthToken";
 
 const HabitForm: React.FC<{
   addNewHabit: (habit: Habit) => void;
@@ -67,8 +67,8 @@ const HabitForm: React.FC<{
      e.preventDefault();
 
      const habit = {habitName, days};
-     const {getAccessTokenSilently} = useAuth0();
-     const token = await getAccessTokenSilently();
+     const getAuthToken = useAuthToken();
+     const token = await getAuthToken();
 
      fetch(baseUrl + '/habits', {
        method: 'POST',

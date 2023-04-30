@@ -11,9 +11,7 @@ import HabitEditForm from '../HabitEditForm/HabitEditForm';
 import HabitsCompletion from '../HabitsCompletion/HabitsCompletion';
 import HabitForm from '../HabitForm/HabitForm';
 import {FiToggleLeft, FiToggleRight} from 'react-icons/fi';
-import {useAuth0} from "@auth0/auth0-react";
-
-
+import {useAuthToken} from "../../hooks/useAuthToken";
 
  const HabitInfo: React.FC<{
   habitsArr: Habit[];
@@ -71,8 +69,8 @@ import {useAuth0} from "@auth0/auth0-react";
             ),
         };
 
-        const {getAccessTokenSilently} = useAuth0();
-        const token = await getAccessTokenSilently();
+        const getAuthToken = useAuthToken();
+        const token = await getAuthToken();
 
         fetch(baseUrl + `/habits/${id}`, {
             method: 'PUT',

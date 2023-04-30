@@ -8,6 +8,9 @@ import HabitInfo from '../../Components/HabitInfo/HabitInfo';
 import HabitsForToday from '../../Components/HabitsForToday/HabitsForToday';
 import './HabitsPage.modules.scss';
 import {useAuth0} from "@auth0/auth0-react";
+import {useAuthToken} from "../../hooks/useAuthToken";
+
+
 
 const today = new Date();
 const formattedDate = today.toLocaleDateString('en-GB');
@@ -38,8 +41,8 @@ const HabitsPage = async () => {
 
   const [statistics, setStatistics] = useState<HabitData[]>([]);
 
-  const {getAccessTokenSilently} = useAuth0();
-  const token = await getAccessTokenSilently();
+  const getAuthToken = useAuthToken();
+  const token = await getAuthToken();
 
   useEffect(() => {
     fetch(baseUrl + '/habits', {

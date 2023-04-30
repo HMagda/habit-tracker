@@ -5,8 +5,6 @@ import PrivateRoute from "./PrivateRoute";
 
 const App: React.FC = () => {
 
-
-
     return (
         <>
             <Router>
