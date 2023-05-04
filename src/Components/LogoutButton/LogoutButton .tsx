@@ -1,14 +1,14 @@
 import React from 'react';
 import '../../styles/global.scss'
-import {baseUrl} from "../../utils";
+import { useAuth0 } from '@auth0/auth0-react';
 
 const LogoutButton = () => {
-  const handleLogout = () => {
-    window.location.href = baseUrl + '/logout'; // Redirect to your Ktor /logout route
-  };
+  const { logout } = useAuth0();
+
 
   return (
-      <button className='logout-btn' onClick={handleLogout}>
+    // TODO add redirect uri to logout
+      <button className='logout-btn' onClick={() => logout()}> 
         Log Out
       </button>
   );

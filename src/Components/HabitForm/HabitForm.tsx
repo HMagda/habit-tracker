@@ -76,6 +76,7 @@ const HabitForm: React.FC<{
        body: JSON.stringify(habit),
        credentials: "include"
      })
+     .then((res) => {console.log("HabitForm res /habits: ", res); return res})
          .then((res) => {
            if (!res.ok) {
              throw new Error('Network response was not ok');

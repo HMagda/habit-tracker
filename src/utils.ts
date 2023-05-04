@@ -1,3 +1,5 @@
+
+
 export const baseUrl: string = 'https://shrouded-plains-88631.herokuapp.com';
 
 export const daysOfWeek: string[] = [
@@ -39,3 +41,4 @@ export interface HabitData {
 export function normalizeDayIndex(usDayIndex: number) {
   return usDayIndex === 0 ? 6 : usDayIndex - 1;
 }
+
