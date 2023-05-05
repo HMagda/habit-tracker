@@ -12,6 +12,7 @@ const HabitEditForm: React.FC<{
   setEditHabitId: React.Dispatch<React.SetStateAction<string>>;
   editHabitName: string;
   editHabitDays: HabitDay[];
+  setShowEditForm: React.Dispatch<React.SetStateAction<boolean>>;
 }> = ({
   habitsArr,
   setHabitsArr,
@@ -22,6 +23,7 @@ const HabitEditForm: React.FC<{
   setEditHabitId,
   editHabitName,
   editHabitDays,
+  setShowEditForm,
 }) => {
   const [habitName, setHabitName] = useState<string>(editHabitName);
   const [days, setDays] = useState<HabitDay[]>(editHabitDays);
@@ -40,6 +42,7 @@ const HabitEditForm: React.FC<{
           dayOfWeek: day,
           dateOfWeek: '',
           completed: false,
+          isBeforeCreationDate: false,
         };
 
         return [...days, newDay];
@@ -72,7 +75,7 @@ const HabitEditForm: React.FC<{
       method: 'PUT',
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify(habit),
-      credentials: "include"
+      credentials: 'include',
     })
       .then(() => {
         console.log('habit edited');
@@ -81,27 +84,42 @@ const HabitEditForm: React.FC<{
         );
         setHabitsArr(updatedHabitsArr);
 
-        if(!days.map((day) => day.dayOfWeek).includes(todayIndex)
-              && habitsForTodayArr.map((todayHabit: HabitForToday) => todayHabit.id).includes(editHabitId)
-        ){
+        if (
+          !days.map((day) => day.dayOfWeek).includes(todayIndex) &&
+          habitsForTodayArr
+            .map((todayHabit: HabitForToday) => todayHabit.id)
+            .includes(editHabitId)
+        ) {
           //this means that the habit edit removed today's habit
-            console.log('habit edit removed today habit')
-          setHabitsForTodayArr(habitsForTodayArr.filter((habit: HabitForToday) => habit.id !== editHabitId))
-        } else if(habitsForTodayArr.map((todayHabit: HabitForToday) => todayHabit.id).includes(editHabitId)) {
-             console.log('habit edit updated today habit')
-            const updatedHabitsForTodayArr = habitsForTodayArr.map((habit) =>
-              habit.id === editHabitId ? {...habit, habitName} : habit
-            );
-            setHabitsForTodayArr(updatedHabitsForTodayArr);
+          console.log('habit edit removed today habit');
+          setHabitsForTodayArr(
+            habitsForTodayArr.filter(
+              (habit: HabitForToday) => habit.id !== editHabitId
+            )
+          );
+        } else if (
+          habitsForTodayArr
+            .map((todayHabit: HabitForToday) => todayHabit.id)
+            .includes(editHabitId)
+        ) {
+          //this means that the habit edit added/updated today's habit
+          console.log('habit edit updated today habit');
+          const updatedHabitsForTodayArr = habitsForTodayArr.map((habit) =>
+            habit.id === editHabitId ? {...habit, habitName} : habit
+          );
+          setHabitsForTodayArr(updatedHabitsForTodayArr);
         } else {
-            console.log('habit edit added today habit')
-            setHabitsForTodayArr([...habitsForTodayArr, {
-                id: editHabitId,
-                day: todayIndex,
-                habitName: habitName,
-                completed: false
-            }])
-
+          //this means that the habit edit does not concern any of today's habit
+          console.log('habit edit added today habit');
+          setHabitsForTodayArr([
+            ...habitsForTodayArr,
+            {
+              id: editHabitId,
+              day: todayIndex,
+              habitName: habitName,
+              completed: false,
+            },
+          ]);
         }
       })
       .catch((error) => {
@@ -109,11 +127,14 @@ const HabitEditForm: React.FC<{
       });
 
     setEditHabitId('');
+    setShowEditForm(false);
   };
 
   return (
     <form onSubmit={handleEdit} className='habit-edit-form'>
-      <label htmlFor='habitName'>Habit Name:</label>
+      <div className='label-container'>
+        <label htmlFor='habitName'>Habit Name:</label>
+      </div>
       <input
         type='text'
         id='habitName'
@@ -124,7 +145,11 @@ const HabitEditForm: React.FC<{
       {warning && (
         <p className='warning-text'>This habit name already exists</p>
       )}
-      <label htmlFor='frequency'>Frequency:</label>
+
+      <div className='label-container'>
+        <label htmlFor='frequency'>Frequency:</label>
+      </div>
+
       <div className='days-label-container'>
         {daysOfWeek.map((day, i) => (
           <label key={day} htmlFor={i.toString()} className='days-label'>

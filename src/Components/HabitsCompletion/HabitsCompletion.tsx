@@ -18,6 +18,7 @@ const HabitsCompletion: React.FC<{
   setEditHabitId: React.Dispatch<React.SetStateAction<string>>;
   handleMarkCompleted: (id: string, day: number) => void;
   showLeftButton: boolean;
+  setShowEditForm: React.Dispatch<React.SetStateAction<boolean>>;
 }> = ({
   habit,
   index,
@@ -26,6 +27,7 @@ const HabitsCompletion: React.FC<{
   setEditHabitId,
   handleMarkCompleted,
   showLeftButton,
+  setShowEditForm
 }) => {
   const [showConfirmPopup, setShowConfirmPopup] = useState(false);
 
@@ -41,6 +43,13 @@ const HabitsCompletion: React.FC<{
 
     setShowConfirmPopup(true);
   };
+
+  const handleEditHabit = (habitId: string) => {
+    setEditHabitId(habit.id ?? null);
+
+    setShowEditForm(true);
+  };
+
 
   const handleConfirm = (confirmed: boolean) => {
     if (confirmed) {
@@ -109,9 +118,10 @@ const HabitsCompletion: React.FC<{
         <div className='option-icons'>
           <FiEdit3
             className='edit-icon'
-            onClick={() => {
-              setEditHabitId(habit.id ?? null);
-            }}
+            // onClick={() => {
+            //   setEditHabitId(habit.id ?? null);
+            // }}
+            onClick={() => handleEditHabit(habit.id)}
           />
           <FiTrash
             onClick={() => handleDeleteHabit(habit.id)}

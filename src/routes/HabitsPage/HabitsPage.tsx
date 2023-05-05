@@ -5,7 +5,6 @@ import React, {
   useRef,
   useState,
 } from 'react';
-import {useLocation} from 'react-router-dom';
 import {FiPlus, FiChevronRight} from 'react-icons/fi';
 import {baseUrl, Habit, HabitForToday, HabitData} from '../../utils';
 import DatePickerComponent from '../../Components/DatePickerComponent/DatePickerComponent';
@@ -13,7 +12,6 @@ import Heatmap from '../../Components/Heatmap/Heatmap';
 import HabitInfo from '../../Components/HabitInfo/HabitInfo';
 import HabitsForToday from '../../Components/HabitsForToday/HabitsForToday';
 import './HabitsPage.modules.scss';
-// import {useAuthToken} from '../../hooks/useAuthToken';
 import TokenContext from '../../TokenContext';
 import Navbar from '../../Components/Navbar/Navbar';
 
@@ -21,79 +19,59 @@ const today = new Date();
 const formattedDate = today.toLocaleDateString('en-GB');
 
 const HabitsPage = () => {
-  // const [token, setToken] = useState<string | undefined>(undefined);
-  // const getAuthToken = useAuthToken();
   const {token, setToken} = useContext(TokenContext);
 
   const todayHabitsRef = useRef<HTMLDivElement | null>(null);
   const weekPlanRef = useRef<HTMLDivElement | null>(null);
   const statsRef = useRef<HTMLDivElement | null>(null);
 
-  // const location = useLocation();
-  // const {habits, habitsForToday, today} = location.state || {};
-  // const [habitsArr, setHabitsArr] = useState<Habit[]>(habits || []);
-  // const [habitsForTodayArr, setHabitsForTodayArr] = useState<HabitForToday[]>(
-  //   habitsForToday || []
-  // );
-  // const [todayIndex, setTodayIndex] = useState<number>(today || 0);
-
   const [habitsArr, setHabitsArr] = useState<Habit[]>([]);
-  const [habitsForTodayArr, setHabitsForTodayArr] = useState<HabitForToday[]>(
-    []
-  );
-  const [todayIndex, setTodayIndex] = useState<number>(0);
+  const [statistics, setStatistics] = useState<HabitData[]>([]);
+  const [habitsForTodayArr, setHabitsForTodayArr] = useState<HabitForToday[]>([]);
 
   const [showHabitForm, setShowHabitForm] = useState<boolean>(false);
   const [openTodayHabits, setOpenTodayHabits] = useState<boolean>(true);
   const [openWeekPlan, setOpenWeekPlan] = useState<boolean>(false);
   const [openStats, setOpenStats] = useState<boolean>(false);
+  const [showEditForm, setShowEditForm] = useState<boolean>(false);
 
-  const [todayHabitsContentHeight, setTodayHabitsContentHeight] =
-    useState<number>(0);
+  const [todayHabitsContentHeight, setTodayHabitsContentHeight] = useState<number>(0);
   const [weekPlanContentHeight, setWeekPlanContentHeight] = useState<number>(0);
   const [statsContentHeight, setStatsContentHeight] = useState<number>(0);
-
-  const [statistics, setStatistics] = useState<HabitData[]>([]);
+  const [todayIndex, setTodayIndex] = useState<number>(0);
 
   const fetchAll = () => {
-    // const fetchToken = async () => {
-    //   if (token === undefined) {
-    //     const fetchedToken = await getAuthToken();
-    //     setToken(fetchedToken);
-    //     return fetchedToken;
-    //   }
-    // };
-    
-
     if (token !== undefined) {
-    fetch(baseUrl + '/habits/today', {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/json',
-      },
-      credentials: 'include',
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        const habitsForToday = data.habits;
-
-        setHabitsForTodayArr(habitsForToday);
-        const today = data.todayIndex;
-        setTodayIndex(today);
-
-        // setTimeout(() => {
-        //   navigate('/habits', {
-        //     state: {habitsForToday, today},
-        //   });
-        // }, 100);
+      fetch(baseUrl + '/habits/today', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include',
       })
+        .then((res) => {
+          if (!res.ok) {
+            throw new Error('Network response was not ok');
+          }
+          return res.json();
+        })
+        .then((data) => {
+          const fetchedHabitsForTodayArr = data.habits;
+          if (
+            JSON.stringify(fetchedHabitsForTodayArr) !==
+            JSON.stringify(habitsForTodayArr)
+          ) {
+            setHabitsForTodayArr(fetchedHabitsForTodayArr);
+          }
+          const today = data.todayIndex;
+          setTodayIndex(today);
+        })
 
-      .catch((error) => {
-        console.error('There was a problem with the fetch operation:', error);
-      });
-    }
-    else {
-      console.log('token is undefined')
+        .catch((error) => {
+          console.error('There was a problem with the fetch operation:', error);
+        });
+    } else {
+      console.log('token is undefined');
     }
   };
 
@@ -102,19 +80,7 @@ const HabitsPage = () => {
   }, []);
 
   useEffect(() => {
-    // const fetchToken = async () => {
-    //   if (token === undefined) {
-    //     const fetchedToken = await getAuthToken();
-
-    //     setToken(fetchedToken);
-
-    //     return fetchedToken;
-    //   }
-    // };
-
     if (token !== undefined) {
-      console.log('fetchToken /habits ftoken w HabitsPage.tsx: ', token);
-
       fetch(baseUrl + '/habits', {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -138,50 +104,6 @@ const HabitsPage = () => {
           console.error('There was a problem with the fetch operation:', error);
         });
     }
-  }, [habitsForTodayArr]);
-
-  useEffect(() => {
-    // const fetchToken = async () => {
-    //   if (token === undefined) {
-    //     const fetchedToken = await getAuthToken();
-    //     setToken(fetchedToken);
-    //     return fetchedToken;
-    //   }
-    // };
-
-    // fetchToken().then((ftoken) => {
-
-    if (token !== undefined) {
-      console.log('fetchToken /habits/today ftoken w HabitsPage.tsx: ', token);
-
-      fetch(baseUrl + '/habits/today', {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
-        credentials: 'include',
-      })
-        .then((res) => {
-          if (!res.ok) {
-            throw new Error('Network response was not ok');
-          }
-          return res.json();
-        })
-        .then((data) => {
-          const fetchedHabitsForTodayArr = data.habits;
-          if (
-            JSON.stringify(fetchedHabitsForTodayArr) !==
-            JSON.stringify(habitsForTodayArr)
-          ) {
-            setHabitsForTodayArr(fetchedHabitsForTodayArr);
-          }
-        })
-        .catch((error) => {
-          console.error('There was a problem with the fetch operation:', error);
-        });
-
-      // });
-    }
   }, []);
 
   useEffect(() => {
@@ -194,7 +116,7 @@ const HabitsPage = () => {
         if (openTodayHabits) {
           setTodayHabitsContentHeight(todayHabitsRef.current.scrollHeight);
         }
-        if (openWeekPlan) {
+        if (openWeekPlan || showEditForm) {
           setWeekPlanContentHeight(weekPlanRef.current.scrollHeight);
         }
         if (openStats) {
@@ -208,7 +130,15 @@ const HabitsPage = () => {
     return () => {
       window.removeEventListener('resize', handleResize);
     };
-  }, [openTodayHabits, openWeekPlan, openStats, habitsArr, statistics]);
+  }, [
+    openTodayHabits,
+    openWeekPlan,
+    openStats,
+    habitsArr,
+    habitsForTodayArr,
+    statistics,
+    showEditForm,
+  ]);
 
   useLayoutEffect(() => {
     if (
@@ -219,14 +149,21 @@ const HabitsPage = () => {
       if (openTodayHabits) {
         setTodayHabitsContentHeight(todayHabitsRef.current.scrollHeight);
       }
-      if (openWeekPlan) {
+      if (openWeekPlan || showEditForm) {
         setWeekPlanContentHeight(weekPlanRef.current.scrollHeight);
       }
       if (openStats) {
         setStatsContentHeight(statsRef.current.scrollHeight);
       }
     }
-  }, [openTodayHabits, openWeekPlan, openStats, habitsArr, statistics]);
+  }, [
+    openTodayHabits,
+    openWeekPlan,
+    openStats,
+    habitsArr,
+    statistics,
+    showEditForm,
+  ]);
 
   const handleHabitDeleted = (habitId: string) => {
     setHabitsArr(habitsArr.filter((habit) => habit.id !== habitId));
@@ -339,6 +276,7 @@ const HabitsPage = () => {
                   showHabitForm={showHabitForm}
                   toggleHabitForm={toggleHabitForm}
                   todayIndex={todayIndex}
+                  setShowEditForm={setShowEditForm}
                 />
               )}
             </>
@@ -369,7 +307,10 @@ const HabitsPage = () => {
 
             {habitsArr.length > 0 && (
               <div className='statistics-section'>
-                <Heatmap habitsArr={habitsArr} />
+                <Heatmap
+                  habitsArr={habitsArr}
+                  habitsForTodayArr={habitsForTodayArr}
+                />
                 <DatePickerComponent
                   statistics={statistics}
                   setStatistics={setStatistics}
@@ -384,6 +325,3 @@ const HabitsPage = () => {
 };
 
 export default HabitsPage;
-function getAuthToken() {
-  throw new Error('Function not implemented.');
-}

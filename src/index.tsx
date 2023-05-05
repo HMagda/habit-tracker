@@ -9,8 +9,10 @@ const root = ReactDOM.createRoot(
 );
 
 root.render(
-  // <React.StrictMode>
+  <React.StrictMode>
     <Auth0Provider
+      cacheLocation='localstorage'
+      useRefreshTokens={true}
       domain={process.env.REACT_APP_AUTH0_DOMAIN as string}
       clientId={process.env.REACT_APP_AUTH0_CLIENT_ID as string}
       authorizationParams={{
@@ -20,5 +22,5 @@ root.render(
     >
       <App />
     </Auth0Provider>
-  // </React.StrictMode>
+  </React.StrictMode>
 );

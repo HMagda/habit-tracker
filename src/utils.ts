@@ -29,7 +29,7 @@ export interface HabitDay {
   dayOfWeek: number;
   dateOfWeek: string;
   completed: boolean;
-  isBeforeCreationDate?: boolean;
+  isBeforeCreationDate: boolean;
 }
 
 export interface HabitData {

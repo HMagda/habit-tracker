@@ -1,19 +1,19 @@
-import {Outlet, useNavigate} from 'react-router-dom';
-import React, {useContext, useEffect} from 'react';
+import {Outlet} from 'react-router-dom';
+import React, {useContext, useEffect, useState} from 'react';
 import {GetTokenSilentlyOptions, useAuth0} from '@auth0/auth0-react';
 import TokenContext from './TokenContext';
 
 const PrivateRoute = () => {
-    const { token, setToken } = useContext(TokenContext);
+  const {token, setToken} = useContext(TokenContext);
 
+  const {
+    isAuthenticated,
+    loginWithRedirect,
+    getAccessTokenSilently,
+    isLoading,
+  } = useAuth0();
 
-    const navigate = useNavigate();
-    const {
-      isAuthenticated,
-      loginWithRedirect,
-      getAccessTokenSilently,
-      isLoading,
-    } = useAuth0();
+  const [authState, setAuthState] = useState(isAuthenticated);
 
   const getAccessTokenWithAudience = async () => {
     try {
@@ -30,32 +30,34 @@ const PrivateRoute = () => {
   };
 
   useEffect(() => {
-    if (!isAuthenticated && !isLoading) {
-      console.log('Logging in...');
-      const returnTo = window.location.pathname; 
-      loginWithRedirect({
-        appState: { returnTo }, 
-      });
-    }
-  }, [isAuthenticated, isLoading]);
-
-  useEffect(() => {
-    if (isAuthenticated && (token === undefined)) {
-        (async () => {
-            const fetchedToken = await getAccessTokenWithAudience();
-            console.log('fetchedToken: ', fetchedToken)
-            setToken(fetchedToken);
-          })();
-    }
+    setAuthState(isAuthenticated);
   }, [isAuthenticated]);
 
+  useEffect(() => {
+    const handleAuthentication = async () => {
+      if (isAuthenticated) {
+        if (token === undefined) {
+          const fetchedToken = await getAccessTokenWithAudience();
+          setToken(fetchedToken);
+        }
+      } else if (!isLoading) {
+        console.log('Logging in...');
+        const returnTo = window.location.pathname;
+        loginWithRedirect({
+          appState: {returnTo},
+        });
+      }
+    };
+
+    handleAuthentication();
+  }, [isAuthenticated, isLoading, token]);
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <div>Loading...</div>; // styling to be changed
   } else if (isAuthenticated) {
     return <Outlet />;
   } else {
-    return null; // Or some loading placeholder
+    return null;
   }
 };
 

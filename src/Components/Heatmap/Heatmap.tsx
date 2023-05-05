@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react';
 import CalendarHeatmap from 'react-calendar-heatmap';
 import './Heatmap.modules.scss';
 import 'react-calendar-heatmap/dist/styles.css';
-import {Habit, baseUrl} from '../../utils';
+import {Habit, HabitForToday, baseUrl} from '../../utils';
 
 function getColor(score: number, maxScore: number): string {
   const percentage = (score / maxScore) * 100;
@@ -50,9 +50,11 @@ type HeatmapData = {
   metrics: DayData[];
 };
 
-const Heatmap: React.FC<{habitsArr: Habit[]}> = ({habitsArr}) => {
+const Heatmap: React.FC<{
+  habitsArr: Habit[];
+  habitsForTodayArr: HabitForToday[];
+}> = ({habitsArr, habitsForTodayArr}) => {
   const [data, setData] = useState<HeatmapData>();
-
   const [tooltipDate, setTooltipDate] = useState<string>('');
   const [tooltipScore, setTooltipScore] = useState<number>(0);
   const [tooltipMaxScore, setTooltipMaxScore] = useState<number>(0);
@@ -62,7 +64,7 @@ const Heatmap: React.FC<{habitsArr: Habit[]}> = ({habitsArr}) => {
       headers: {
         'Content-Type': 'application/json',
       },
-      credentials: "include"
+      credentials: 'include',
     })
       .then((res) => {
         if (!res.ok) {
@@ -76,7 +78,7 @@ const Heatmap: React.FC<{habitsArr: Habit[]}> = ({habitsArr}) => {
       .catch((error) => {
         console.error('There was a problem with the fetch operation:', error);
       });
-  }, [habitsArr]);
+  }, [habitsArr, habitsForTodayArr]);
 
   function handleMouseOver(e: React.MouseEvent, value: DayData) {
     if (value !== null) {
