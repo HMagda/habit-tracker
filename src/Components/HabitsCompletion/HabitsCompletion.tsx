@@ -27,7 +27,7 @@ const HabitsCompletion: React.FC<{
   setEditHabitId,
   handleMarkCompleted,
   showLeftButton,
-  setShowEditForm
+  setShowEditForm,
 }) => {
   const [showConfirmPopup, setShowConfirmPopup] = useState(false);
 
@@ -50,12 +50,11 @@ const HabitsCompletion: React.FC<{
     setShowEditForm(true);
   };
 
-
   const handleConfirm = (confirmed: boolean) => {
     if (confirmed) {
       fetch(baseUrl + `/habits/${habit.id}`, {
         method: 'DELETE',
-        credentials: "include"
+        credentials: 'include',
       })
         .then(() => {
           console.log(`Habit with id ${habit.id} deleted successfully!`);
@@ -118,9 +117,6 @@ const HabitsCompletion: React.FC<{
         <div className='option-icons'>
           <FiEdit3
             className='edit-icon'
-            // onClick={() => {
-            //   setEditHabitId(habit.id ?? null);
-            // }}
             onClick={() => handleEditHabit(habit.id)}
           />
           <FiTrash
@@ -145,7 +141,7 @@ const HabitsCompletion: React.FC<{
                     ${
                       habitDay.completed
                         ? 'completed'
-                        : (isUpcoming || habitDay.isBeforeCreationDate)
+                        : isUpcoming || habitDay.isBeforeCreationDate
                         ? 'upcoming'
                         : 'uncompleted'
                     }`}
@@ -157,7 +153,7 @@ const HabitsCompletion: React.FC<{
 
                 {habitDay.completed ? (
                   <HiCheck className='check-icon' />
-                ) : (isUpcoming || habitDay.isBeforeCreationDate) ? (
+                ) : isUpcoming || habitDay.isBeforeCreationDate ? (
                   <FiCircle className='circle-icon' />
                 ) : (
                   <HiX className='x-icon' />

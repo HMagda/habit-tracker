@@ -4,10 +4,21 @@
   .label-container {
     display: flex;
     align-items: center;
+    justify-content: space-between;
 
     label {
       font-weight: bold;
       margin: 0.5rem;
+    }
+
+    .x-icon {
+      margin-left: 0.8rem;
+      transition: $transition;
+
+      &:hover {
+        cursor: pointer;
+        color: $color-warning;
+      }
     }
   }
 

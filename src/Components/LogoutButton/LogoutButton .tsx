@@ -5,7 +5,6 @@ const LogoutButton = () => {
   const {logout} = useAuth0();
 
   return (
-    // TODO add redirect uri to logout
     <button className='logout-btn' onClick={() => logout()}>
       Log Out
     </button>

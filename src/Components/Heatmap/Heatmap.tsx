@@ -1,8 +1,9 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import CalendarHeatmap from 'react-calendar-heatmap';
 import './Heatmap.modules.scss';
 import 'react-calendar-heatmap/dist/styles.css';
 import {Habit, HabitForToday, baseUrl} from '../../utils';
+import TokenContext from '../../TokenContext';
 
 function getColor(score: number, maxScore: number): string {
   const percentage = (score / maxScore) * 100;
@@ -54,6 +55,8 @@ const Heatmap: React.FC<{
   habitsArr: Habit[];
   habitsForTodayArr: HabitForToday[];
 }> = ({habitsArr, habitsForTodayArr}) => {
+  const {token} = useContext(TokenContext);
+
   const [data, setData] = useState<HeatmapData>();
   const [tooltipDate, setTooltipDate] = useState<string>('');
   const [tooltipScore, setTooltipScore] = useState<number>(0);
@@ -62,6 +65,7 @@ const Heatmap: React.FC<{
   useEffect(() => {
     fetch(baseUrl + '/habits/completion-metrics', {
       headers: {
+        Authorization: `Bearer ${token}`,
         'Content-Type': 'application/json',
       },
       credentials: 'include',

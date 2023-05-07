@@ -105,3 +105,11 @@ $transition: 0.3s ease;
 .logout-btn {
   margin-left: 1rem;
 }
+
+.loading-message {
+  font-family: $font-family-secondary;
+  font-size: 1.5rem;
+  color: $color-important-secondary;
+  text-align: center;
+  margin-top: 3rem;
+}

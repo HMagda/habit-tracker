@@ -1,6 +1,8 @@
-import React, {useState} from 'react';
+import React, {useContext, useState} from 'react';
 import {baseUrl, daysOfWeek, Habit, HabitDay, HabitForToday} from '../../utils';
 import './HabitEditForm.modules.scss';
+import {HiX} from 'react-icons/hi';
+import TokenContext from '../../TokenContext';
 
 const HabitEditForm: React.FC<{
   habitsArr: Habit[];
@@ -25,6 +27,8 @@ const HabitEditForm: React.FC<{
   editHabitDays,
   setShowEditForm,
 }) => {
+  const {token} = useContext(TokenContext);
+
   const [habitName, setHabitName] = useState<string>(editHabitName);
   const [days, setDays] = useState<HabitDay[]>(editHabitDays);
   const [warning, setWarning] = useState<boolean>(false);
@@ -73,7 +77,10 @@ const HabitEditForm: React.FC<{
 
     fetch(baseUrl + `/habits/${editHabitId}`, {
       method: 'PUT',
-      headers: {'Content-Type': 'application/json'},
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
       body: JSON.stringify(habit),
       credentials: 'include',
     })
@@ -130,10 +137,19 @@ const HabitEditForm: React.FC<{
     setShowEditForm(false);
   };
 
+  const handleCancelChanges = () => {
+    setHabitName(editHabitName);
+    setDays(editHabitDays);
+    setWarning(false);
+    setEditHabitId('');
+    setShowEditForm(false);
+  };
+
   return (
     <form onSubmit={handleEdit} className='habit-edit-form'>
       <div className='label-container'>
         <label htmlFor='habitName'>Habit Name:</label>
+        <HiX className='x-icon' onClick={() => handleCancelChanges()} />
       </div>
       <input
         type='text'

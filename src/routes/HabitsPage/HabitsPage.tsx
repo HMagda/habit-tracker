@@ -19,7 +19,7 @@ const today = new Date();
 const formattedDate = today.toLocaleDateString('en-GB');
 
 const HabitsPage = () => {
-  const {token, setToken} = useContext(TokenContext);
+  const {token} = useContext(TokenContext);
 
   const todayHabitsRef = useRef<HTMLDivElement | null>(null);
   const weekPlanRef = useRef<HTMLDivElement | null>(null);
@@ -27,7 +27,9 @@ const HabitsPage = () => {
 
   const [habitsArr, setHabitsArr] = useState<Habit[]>([]);
   const [statistics, setStatistics] = useState<HabitData[]>([]);
-  const [habitsForTodayArr, setHabitsForTodayArr] = useState<HabitForToday[]>([]);
+  const [habitsForTodayArr, setHabitsForTodayArr] = useState<HabitForToday[]>(
+    []
+  );
 
   const [showHabitForm, setShowHabitForm] = useState<boolean>(false);
   const [openTodayHabits, setOpenTodayHabits] = useState<boolean>(true);
@@ -35,7 +37,8 @@ const HabitsPage = () => {
   const [openStats, setOpenStats] = useState<boolean>(false);
   const [showEditForm, setShowEditForm] = useState<boolean>(false);
 
-  const [todayHabitsContentHeight, setTodayHabitsContentHeight] = useState<number>(0);
+  const [todayHabitsContentHeight, setTodayHabitsContentHeight] =
+    useState<number>(0);
   const [weekPlanContentHeight, setWeekPlanContentHeight] = useState<number>(0);
   const [statsContentHeight, setStatsContentHeight] = useState<number>(0);
   const [todayIndex, setTodayIndex] = useState<number>(0);
@@ -138,6 +141,7 @@ const HabitsPage = () => {
     habitsForTodayArr,
     statistics,
     showEditForm,
+    setShowEditForm,
   ]);
 
   useLayoutEffect(() => {

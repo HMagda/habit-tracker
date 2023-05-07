@@ -36,10 +36,8 @@ const PrivateRoute = () => {
   useEffect(() => {
     const handleAuthentication = async () => {
       if (isAuthenticated) {
-        if (token === undefined) {
-          const fetchedToken = await getAccessTokenWithAudience();
-          setToken(fetchedToken);
-        }
+        const fetchedToken = await getAccessTokenWithAudience();
+        setToken(fetchedToken);
       } else if (!isLoading) {
         console.log('Logging in...');
         const returnTo = window.location.pathname;
@@ -53,7 +51,7 @@ const PrivateRoute = () => {
   }, [isAuthenticated, isLoading, token]);
 
   if (isLoading) {
-    return <div>Loading...</div>; // styling to be changed
+    return <div className='loading-message'>Loading...</div>;
   } else if (isAuthenticated) {
     return <Outlet />;
   } else {

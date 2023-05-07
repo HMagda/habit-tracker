@@ -1,15 +1,18 @@
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import DatePicker from 'react-datepicker';
 import enGB from 'date-fns/locale/en-GB';
 import {format} from 'date-fns';
 import 'react-datepicker/dist/react-datepicker.css';
 import './DatePickerComponent.modules.scss';
 import {baseUrl, HabitData} from '../../utils';
+import TokenContext from '../../TokenContext';
 
 const DatePickerComponent: React.FC<{
   statistics: HabitData[];
   setStatistics: React.Dispatch<React.SetStateAction<HabitData[]>>;
 }> = ({statistics, setStatistics}) => {
+  const {token} = useContext(TokenContext);
+
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
 
@@ -21,13 +24,14 @@ const DatePickerComponent: React.FC<{
       fetch(baseUrl + '/habits/stats', {
         method: 'POST',
         headers: {
+          Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
           startDate: formattedStartDate,
           endDate: formattedEndDate,
         }),
-        credentials: "include"
+        credentials: 'include',
       })
         .then((res) => {
           if (!res.ok) {
