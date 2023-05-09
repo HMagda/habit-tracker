@@ -1,9 +1,9 @@
-import React, {useState, useEffect, useContext} from 'react';
+import React, {useState, useEffect} from 'react';
 import CalendarHeatmap from 'react-calendar-heatmap';
 import './Heatmap.modules.scss';
 import 'react-calendar-heatmap/dist/styles.css';
-import {Habit, HabitForToday, baseUrl} from '../../utils';
-import TokenContext from '../../TokenContext';
+import {Habit, HabitForToday, baseUrl, getToken} from '../../utils';
+import {useAuth0} from "@auth0/auth0-react";
 
 function getColor(score: number, maxScore: number): string {
   const percentage = (score / maxScore) * 100;
@@ -55,33 +55,35 @@ const Heatmap: React.FC<{
   habitsArr: Habit[];
   habitsForTodayArr: HabitForToday[];
 }> = ({habitsArr, habitsForTodayArr}) => {
-  const {token} = useContext(TokenContext);
 
+  const { getAccessTokenSilently } = useAuth0();
   const [data, setData] = useState<HeatmapData>();
   const [tooltipDate, setTooltipDate] = useState<string>('');
   const [tooltipScore, setTooltipScore] = useState<number>(0);
   const [tooltipMaxScore, setTooltipMaxScore] = useState<number>(0);
 
   useEffect(() => {
-    fetch(baseUrl + '/habits/completion-metrics', {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/json',
-      },
-      credentials: 'include',
-    })
-      .then((res) => {
-        if (!res.ok) {
-          throw new Error('Network response was not ok');
-        }
-        return res.json();
+    getToken(getAccessTokenSilently).then((token) => {
+      fetch(baseUrl + '/habits/completion-metrics', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include',
       })
-      .then((data) => {
-        setData(data);
-      })
-      .catch((error) => {
-        console.error('There was a problem with the fetch operation:', error);
-      });
+          .then((res) => {
+            if (!res.ok) {
+              throw new Error('Network response was not ok');
+            }
+            return res.json();
+          })
+          .then((data) => {
+            setData(data);
+          })
+          .catch((error) => {
+            console.error('There was a problem with the fetch operation:', error);
+          });
+    });
   }, [habitsArr, habitsForTodayArr]);
 
   function handleMouseOver(e: React.MouseEvent, value: DayData) {
@@ -109,9 +111,9 @@ const Heatmap: React.FC<{
   const renderTooltip = () => {
     if (tooltipDate && tooltipScore !== null && tooltipMaxScore !== null) {
       return (
-        <div className='tooltip'>
-          {formatDate(tooltipDate)}, {tooltipScore}/{tooltipMaxScore}
-        </div>
+          <div className='tooltip'>
+            {formatDate(tooltipDate)}, {tooltipScore}/{tooltipMaxScore}
+          </div>
       );
     } else {
       return <div className='tooltip'>Click on the day to see the score</div>;
@@ -119,32 +121,32 @@ const Heatmap: React.FC<{
   };
 
   return (
-    <>
-      <div className='heatmap-container'>
-        {data && (
-          <div className='heatmap' onMouseLeave={handleMouseOut}>
-            <CalendarHeatmap
-              startDate={data.startDate}
-              endDate={data.endDate}
-              values={data.metrics}
-              classForValue={(value) => {
-                if (!value) {
-                  return 'color-empty';
-                }
-                return getColor(value.score, value.maxScore);
-              }}
-              // horizontal={false}
-              gutterSize={5}
-              onMouseOver={(e, value) => handleMouseOver(e, value as DayData)}
-              onClick={(value) => handleClick(value as DayData)}
-              showWeekdayLabels={true}
-            />
-          </div>
-        )}
+      <>
+        <div className='heatmap-container'>
+          {data && (
+              <div className='heatmap' onMouseLeave={handleMouseOut}>
+                <CalendarHeatmap
+                    startDate={data.startDate}
+                    endDate={data.endDate}
+                    values={data.metrics}
+                    classForValue={(value) => {
+                      if (!value) {
+                        return 'color-empty';
+                      }
+                      return getColor(value.score, value.maxScore);
+                    }}
+                    // horizontal={false}
+                    gutterSize={5}
+                    onMouseOver={(e, value) => handleMouseOver(e, value as DayData)}
+                    onClick={(value) => handleClick(value as DayData)}
+                    showWeekdayLabels={true}
+                />
+              </div>
+          )}
 
-        <div className='tooltip-container'>{renderTooltip()}</div>
-      </div>
-    </>
+          <div className='tooltip-container'>{renderTooltip()}</div>
+        </div>
+      </>
   );
 };
 

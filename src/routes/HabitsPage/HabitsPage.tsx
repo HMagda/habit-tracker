@@ -1,26 +1,24 @@
 import React, {
-  useContext,
   useEffect,
   useLayoutEffect,
   useRef,
   useState,
 } from 'react';
 import {FiPlus, FiChevronRight} from 'react-icons/fi';
-import {baseUrl, Habit, HabitForToday, HabitData} from '../../utils';
+import {baseUrl, Habit, HabitForToday, HabitData, getToken} from '../../utils';
 import DatePickerComponent from '../../Components/DatePickerComponent/DatePickerComponent';
 import Heatmap from '../../Components/Heatmap/Heatmap';
 import HabitInfo from '../../Components/HabitInfo/HabitInfo';
 import HabitsForToday from '../../Components/HabitsForToday/HabitsForToday';
 import './HabitsPage.modules.scss';
-import TokenContext from '../../TokenContext';
 import Navbar from '../../Components/Navbar/Navbar';
+import {useAuth0} from "@auth0/auth0-react";
 
 const today = new Date();
 const formattedDate = today.toLocaleDateString('en-GB');
 
 const HabitsPage = () => {
-  const {token} = useContext(TokenContext);
-
+  const { getAccessTokenSilently } = useAuth0();
   const todayHabitsRef = useRef<HTMLDivElement | null>(null);
   const weekPlanRef = useRef<HTMLDivElement | null>(null);
   const statsRef = useRef<HTMLDivElement | null>(null);
@@ -44,7 +42,7 @@ const HabitsPage = () => {
   const [todayIndex, setTodayIndex] = useState<number>(0);
 
   const fetchAll = () => {
-    if (token !== undefined) {
+    getToken(getAccessTokenSilently).then((token) => {
       fetch(baseUrl + '/habits/today', {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -52,30 +50,28 @@ const HabitsPage = () => {
         },
         credentials: 'include',
       })
-        .then((res) => {
-          if (!res.ok) {
-            throw new Error('Network response was not ok');
-          }
-          return res.json();
-        })
-        .then((data) => {
-          const fetchedHabitsForTodayArr = data.habits;
-          if (
-            JSON.stringify(fetchedHabitsForTodayArr) !==
-            JSON.stringify(habitsForTodayArr)
-          ) {
-            setHabitsForTodayArr(fetchedHabitsForTodayArr);
-          }
-          const today = data.todayIndex;
-          setTodayIndex(today);
-        })
+          .then((res) => {
+            if (!res.ok) {
+              throw new Error('Network response was not ok');
+            }
+            return res.json();
+          })
+          .then((data) => {
+            const fetchedHabitsForTodayArr = data.habits;
+            if (
+                JSON.stringify(fetchedHabitsForTodayArr) !==
+                JSON.stringify(habitsForTodayArr)
+            ) {
+              setHabitsForTodayArr(fetchedHabitsForTodayArr);
+            }
+            const today = data.todayIndex;
+            setTodayIndex(today);
+          })
 
-        .catch((error) => {
-          console.error('There was a problem with the fetch operation:', error);
-        });
-    } else {
-      console.log('token is undefined');
-    }
+          .catch((error) => {
+            console.error('There was a problem with the fetch operation:', error);
+          });
+    });
   };
 
   useEffect(() => {
@@ -83,7 +79,7 @@ const HabitsPage = () => {
   }, []);
 
   useEffect(() => {
-    if (token !== undefined) {
+    getToken(getAccessTokenSilently).then((token) => {
       fetch(baseUrl + '/habits', {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -91,22 +87,22 @@ const HabitsPage = () => {
         },
         credentials: 'include',
       })
-        .then((res) => {
-          if (!res.ok) {
-            throw new Error('Network response was not ok');
-          }
-          return res.json();
-        })
-        .then((data) => {
-          const fetchedHabitsArr = data.habits;
-          if (JSON.stringify(fetchedHabitsArr) !== JSON.stringify(habitsArr)) {
-            setHabitsArr(fetchedHabitsArr);
-          }
-        })
-        .catch((error) => {
-          console.error('There was a problem with the fetch operation:', error);
-        });
-    }
+          .then((res) => {
+            if (!res.ok) {
+              throw new Error('Network response was not ok');
+            }
+            return res.json();
+          })
+          .then((data) => {
+            const fetchedHabitsArr = data.habits;
+            if (JSON.stringify(fetchedHabitsArr) !== JSON.stringify(habitsArr)) {
+              setHabitsArr(fetchedHabitsArr);
+            }
+          })
+          .catch((error) => {
+            console.error('There was a problem with the fetch operation:', error);
+          });
+    });
   }, []);
 
   useEffect(() => {
@@ -234,6 +230,8 @@ const HabitsPage = () => {
                 <HabitsForToday
                   habitsForTodayArr={habitsForTodayArr}
                   setHabitsForTodayArr={setHabitsForTodayArr}
+                  habitsArr={habitsArr}
+                  setHabitsArr={setHabitsArr}
                 />
               )}
             </>

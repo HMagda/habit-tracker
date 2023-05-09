@@ -1,20 +1,20 @@
 import React, {useEffect, useState} from 'react';
-import {baseUrl, daysOfWeek, Habit} from '../../utils';
+import {baseUrl, daysOfWeek, getToken, Habit} from '../../utils';
 import './HabitForm.modules.scss';
 import {FiX} from 'react-icons/fi';
-import {useAuthToken} from "../../hooks/useAuthToken";
+import {useAuth0} from "@auth0/auth0-react";
 
 const HabitForm: React.FC<{
   addNewHabit: (habit: Habit) => void;
   habitsArr: Habit[];
   setShowHabitForm: React.Dispatch<React.SetStateAction<boolean>>;
 }> = ({addNewHabit, habitsArr, setShowHabitForm}) => {
-  const getAuthToken = useAuthToken();
   const [habitName, setHabitName] = useState<string>('');
   const [frequency, setFrequency] = useState<string>('daily');
   const [days, setDays] = useState<number[]>([]);
   const [warning, setWarning] = useState<boolean>(false);
   const [warningChooseDay, setWarningChooseDay] = useState<boolean>(false);
+  const { getAccessTokenSilently } = useAuth0();
 
   useEffect(() => {
     if (frequency === 'daily') {
@@ -68,27 +68,31 @@ const HabitForm: React.FC<{
      e.preventDefault();
 
      const habit = {habitName, days};
-     const token = await getAuthToken();
 
-     fetch(baseUrl + '/habits', {
-       method: 'POST',
-       headers: {Authorization: `Bearer ${token}`, 'Content-Type': 'application/json'},
-       body: JSON.stringify(habit),
-       credentials: "include"
-     })
-     .then((res) => {console.log("HabitForm res /habits: ", res); return res})
-         .then((res) => {
-           if (!res.ok) {
-             throw new Error('Network response was not ok');
-           }
-           return res.json();
-         })
-         .then((createdHabit: Habit) => {
-           addNewHabit(createdHabit);
-         })
-         .catch((error) => {
-           console.error('There was a problem with the fetch operation:', error);
-         });
+     getToken(getAccessTokenSilently).then((token) => {
+       fetch(baseUrl + '/habits', {
+         method: 'POST',
+         headers: {Authorization: `Bearer ${token}`, 'Content-Type': 'application/json'},
+         body: JSON.stringify(habit),
+         credentials: "include"
+       })
+           .then((res) => {
+             console.log("HabitForm res /habits: ", res);
+             return res
+           })
+           .then((res) => {
+             if (!res.ok) {
+               throw new Error('Network response was not ok');
+             }
+             return res.json();
+           })
+           .then((createdHabit: Habit) => {
+             addNewHabit(createdHabit);
+           })
+           .catch((error) => {
+             console.error('There was a problem with the fetch operation:', error);
+           });
+     });
 
      setHabitName('');
      setFrequency('daily');

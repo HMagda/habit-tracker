@@ -1,33 +1,15 @@
 import {Outlet} from 'react-router-dom';
-import React, {useContext, useEffect, useState} from 'react';
-import {GetTokenSilentlyOptions, useAuth0} from '@auth0/auth0-react';
-import TokenContext from './TokenContext';
+import React, {useEffect, useState} from 'react';
+import {useAuth0} from '@auth0/auth0-react';
 
 const PrivateRoute = () => {
-  const {token, setToken} = useContext(TokenContext);
-
   const {
     isAuthenticated,
     loginWithRedirect,
-    getAccessTokenSilently,
     isLoading,
   } = useAuth0();
 
-  const [authState, setAuthState] = useState(isAuthenticated);
-
-  const getAccessTokenWithAudience = async () => {
-    try {
-      const options: GetTokenSilentlyOptions = {
-        authorizationParams: {
-          audience: process.env.REACT_APP_AUTH0_AUDIENCE,
-        },
-      };
-
-      return await getAccessTokenSilently(options);
-    } catch (error) {
-      console.error('Error getting access token:', error);
-    }
-  };
+  const [_, setAuthState] = useState(isAuthenticated);
 
   useEffect(() => {
     setAuthState(isAuthenticated);
@@ -35,10 +17,7 @@ const PrivateRoute = () => {
 
   useEffect(() => {
     const handleAuthentication = async () => {
-      if (isAuthenticated) {
-        const fetchedToken = await getAccessTokenWithAudience();
-        setToken(fetchedToken);
-      } else if (!isLoading) {
+       if (!isAuthenticated && !isLoading) {
         console.log('Logging in...');
         const returnTo = window.location.pathname;
         loginWithRedirect({
@@ -48,7 +27,7 @@ const PrivateRoute = () => {
     };
 
     handleAuthentication();
-  }, [isAuthenticated, isLoading, token]);
+  }, [isAuthenticated, isLoading]);
 
   if (isLoading) {
     return <div className='loading-message'>Loading...</div>;

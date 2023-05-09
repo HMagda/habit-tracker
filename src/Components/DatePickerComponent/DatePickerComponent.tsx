@@ -4,47 +4,49 @@ import enGB from 'date-fns/locale/en-GB';
 import {format} from 'date-fns';
 import 'react-datepicker/dist/react-datepicker.css';
 import './DatePickerComponent.modules.scss';
-import {baseUrl, HabitData} from '../../utils';
-import TokenContext from '../../TokenContext';
+import {baseUrl, getToken, HabitData} from '../../utils';
+import {useAuth0} from "@auth0/auth0-react";
 
 const DatePickerComponent: React.FC<{
   statistics: HabitData[];
   setStatistics: React.Dispatch<React.SetStateAction<HabitData[]>>;
 }> = ({statistics, setStatistics}) => {
-  const {token} = useContext(TokenContext);
 
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
+  const { getAccessTokenSilently } = useAuth0();
 
   useEffect(() => {
     if (startDate && endDate) {
       const formattedStartDate = format(startDate, 'yyyy-MM-dd');
       const formattedEndDate = format(endDate, 'yyyy-MM-dd');
 
-      fetch(baseUrl + '/habits/stats', {
-        method: 'POST',
-        headers: {
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          startDate: formattedStartDate,
-          endDate: formattedEndDate,
-        }),
-        credentials: 'include',
-      })
-        .then((res) => {
-          if (!res.ok) {
-            throw new Error('Network response was not ok');
-          }
-          return res.json();
+      getToken(getAccessTokenSilently).then((token) => {
+        fetch(baseUrl + '/habits/stats', {
+          method: 'POST',
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            startDate: formattedStartDate,
+            endDate: formattedEndDate,
+          }),
+          credentials: 'include',
         })
-        .then((data) => {
-          setStatistics(data.habits);
-        })
-        .catch((error) => {
-          console.error('There was a problem with the fetch operation:', error);
-        });
+            .then((res) => {
+              if (!res.ok) {
+                throw new Error('Network response was not ok');
+              }
+              return res.json();
+            })
+            .then((data) => {
+              setStatistics(data.habits);
+            })
+            .catch((error) => {
+              console.error('There was a problem with the fetch operation:', error);
+            });
+      });
     }
   }, [startDate, endDate]);
 

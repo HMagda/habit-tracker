@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import './HabitInfo.modules.scss';
 import {
   baseUrl,
+  getToken,
   Habit,
   HabitDay,
   HabitForToday,
@@ -11,7 +12,7 @@ import HabitEditForm from '../HabitEditForm/HabitEditForm';
 import HabitsCompletion from '../HabitsCompletion/HabitsCompletion';
 import HabitForm from '../HabitForm/HabitForm';
 import {FiToggleLeft, FiToggleRight} from 'react-icons/fi';
-import {useAuthToken} from '../../hooks/useAuthToken';
+import {useAuth0} from "@auth0/auth0-react";
 
 const HabitInfo: React.FC<{
   habitsArr: Habit[];
@@ -36,7 +37,7 @@ const HabitInfo: React.FC<{
   todayIndex,
   setShowEditForm,
 }) => {
-  const getAuthToken = useAuthToken();
+  const { getAccessTokenSilently } = useAuth0();
   const [editHabitId, setEditHabitId] = useState<string>('');
   const [showLeftButton, setShowLeftButton] = useState<boolean>(true);
   const [showConfirmPopup, setShowConfirmPopup] = useState<boolean>(false);
@@ -72,48 +73,48 @@ const HabitInfo: React.FC<{
         ),
       };
 
-      const token = await getAuthToken();
-
-      fetch(baseUrl + `/habits/${id}`, {
-        method: 'PUT',
-        headers: {
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(editedHabit),
-        credentials: 'include',
-      })
-        .then((res) => {
-          if (!res.ok) {
-            throw new Error('Network response was not ok');
-          }
-          return res.json();
+      getToken(getAccessTokenSilently).then((token) => {
+        fetch(baseUrl + `/habits/${id}`, {
+          method: 'PUT',
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(editedHabit),
+          credentials: 'include',
         })
-        .then((receivedHabit) => {
-          const updatedHabitsArr = habitsArr.map((habit) =>
-            habit.id === receivedHabit.id
-              ? {...habit, days: receivedHabit.days}
-              : habit
-          );
-          setHabitsArr(updatedHabitsArr);
+            .then((res) => {
+              if (!res.ok) {
+                throw new Error('Network response was not ok');
+              }
+              return res.json();
+            })
+            .then((receivedHabit) => {
+              const updatedHabitsArr = habitsArr.map((habit) =>
+                  habit.id === receivedHabit.id
+                      ? {...habit, days: receivedHabit.days}
+                      : habit
+              );
+              setHabitsArr(updatedHabitsArr);
 
-          if (todayIndex === day) {
-            const isTodaysHabitCompleted = receivedHabit.days.filter(
-              (habitDay: HabitDay) => habitDay.dayOfWeek === day
-            )[0].completed;
-            const updatedHabitsForTodayArr = habitsForTodayArr.map((habit) =>
-              habit.id === receivedHabit.id
-                ? {...habit, completed: isTodaysHabitCompleted}
-                : habit
-            );
-            setHabitsForTodayArr(updatedHabitsForTodayArr);
-          }
-        })
-        .catch((error) => {
-          console.error('Error adding new habit: ', error);
-        });
+              if (todayIndex === day) {
+                const isTodaysHabitCompleted = receivedHabit.days.filter(
+                    (habitDay: HabitDay) => habitDay.dayOfWeek === day
+                )[0].completed;
+                const updatedHabitsForTodayArr = habitsForTodayArr.map((habit) =>
+                    habit.id === receivedHabit.id
+                        ? {...habit, completed: isTodaysHabitCompleted}
+                        : habit
+                );
+                setHabitsForTodayArr(updatedHabitsForTodayArr);
+              }
+            })
+            .catch((error) => {
+              console.error('Error adding new habit: ', error);
+            });
 
-      setEditHabitId('');
+        setEditHabitId('');
+      });
     };
     if (localDayIndex !== day) {
       setShowConfirmPopup(true);
