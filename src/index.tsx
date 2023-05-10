@@ -8,6 +8,12 @@ const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', function() {
+        navigator.serviceWorker.register('/service-worker.js');
+    });
+}
+
 root.render(
   <React.StrictMode>
     <Auth0Provider
