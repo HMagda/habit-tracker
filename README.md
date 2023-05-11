@@ -1,5 +1,7 @@
 # Habit Tracker
 
+https://www.dailyhabitsmaster.com/
+
 Habit Tracker is the ultimate tool to help you build and maintain healthy habits for a better, more balanced lifestyle. With an intuitive interface, this app is designed to make tracking your habits effortless and engaging. Developed using React JS, this app is designed to offer a seamless experience on both mobile and desktop devices, ensuring you can stay on top of your habits no matter where you are. Stay motivated and visualize your progress, as you take control over your daily, weekly, and monthly goals.
 
 # Key Features:
