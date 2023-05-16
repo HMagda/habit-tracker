@@ -18,7 +18,6 @@ const PrivateRoute = () => {
   useEffect(() => {
     const handleAuthentication = async () => {
        if (!isAuthenticated && !isLoading) {
-        console.log('Logging in...');
         const returnTo = window.location.pathname;
         loginWithRedirect({
           appState: {returnTo},

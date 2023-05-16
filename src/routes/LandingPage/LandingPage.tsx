@@ -5,7 +5,6 @@ import Navbar from '../../Components/Navbar/Navbar';
 
 const LandingPage: React.FC = () => {
   const handleClick = () => {
-    console.log('get started clicked');
     window.location.href = '/habits';
   };
 

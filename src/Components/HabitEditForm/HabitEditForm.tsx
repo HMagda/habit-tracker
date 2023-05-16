@@ -85,7 +85,6 @@ const HabitEditForm: React.FC<{
         credentials: 'include',
       })
           .then(() => {
-            console.log('habit edited');
             const updatedHabitsArr = habitsArr.map((habit) =>
                 habit.id === editHabitId ? {...habit, habitName, days} : habit
             );
@@ -98,7 +97,6 @@ const HabitEditForm: React.FC<{
                     .includes(editHabitId)
             ) {
               //this means that the habit edit removed today's habit
-              console.log('habit edit removed today habit');
               setHabitsForTodayArr(
                   habitsForTodayArr.filter(
                       (habit: HabitForToday) => habit.id !== editHabitId
@@ -110,14 +108,12 @@ const HabitEditForm: React.FC<{
                     .includes(editHabitId)
             ) {
               //this means that the habit edit added/updated today's habit
-              console.log('habit edit updated today habit');
               const updatedHabitsForTodayArr = habitsForTodayArr.map((habit) =>
                   habit.id === editHabitId ? {...habit, habitName} : habit
               );
               setHabitsForTodayArr(updatedHabitsForTodayArr);
             } else {
               //this means that the habit edit does not concern any of today's habit
-              console.log('habit edit added today habit');
               setHabitsForTodayArr([
                 ...habitsForTodayArr,
                 {

@@ -77,7 +77,6 @@ const HabitForm: React.FC<{
          credentials: "include"
        })
            .then((res) => {
-             console.log("HabitForm res /habits: ", res);
              return res
            })
            .then((res) => {

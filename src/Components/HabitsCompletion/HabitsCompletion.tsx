@@ -57,11 +57,10 @@ const HabitsCompletion: React.FC<{
         credentials: 'include',
       })
         .then(() => {
-          console.log(`Habit with id ${habit.id} deleted successfully!`);
           habit.id && deleteHabit(habit.id);
         })
         .catch((error) => {
-          console.log(`Failed to delete habit with id ${habit.id}: `, error);
+          console.error(`Failed to delete habit with id ${habit.id}: `, error);
         });
     }
 
