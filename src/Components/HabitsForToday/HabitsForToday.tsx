@@ -61,7 +61,6 @@ const HabitsForToday: React.FC<{
 
   return (
     <div className='habit-info-wrapper'>
-        <div>Magdaaaaaaaaaaaaaa</div>
       <div className='habits-wrapper habits-today-wrapper'>
         {sortedHabitsForTodayArr.map((habit: HabitForToday, index: number) => (
           <div
