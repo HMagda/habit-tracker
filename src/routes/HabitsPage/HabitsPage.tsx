@@ -263,7 +263,7 @@ const HabitsPage = () => {
         >
           <div ref={weekPlanRef} className='content'>
             <>
-              {habitsForTodayArr.length <= 0 && (
+              {habitsArr.length <= 0 && (
                 <h1>You do not have any habits for this week</h1>
               )}
 

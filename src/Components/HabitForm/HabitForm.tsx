@@ -12,7 +12,8 @@ const HabitForm: React.FC<{
   const [habitName, setHabitName] = useState<string>('');
   const [frequency, setFrequency] = useState<string>('daily');
   const [days, setDays] = useState<number[]>([]);
-  const [warning, setWarning] = useState<boolean>(false);
+  const [warningHabitNameEmpty, setWarningHabitNameEmpty] = useState<boolean>(false);
+  const [warningHabitNameExists, setWarningHabitNameExists] = useState<boolean>(false);
   const [warningChooseDay, setWarningChooseDay] = useState<boolean>(false);
   const { getAccessTokenSilently } = useAuth0();
 
@@ -22,7 +23,7 @@ const HabitForm: React.FC<{
     } else {
       setDays([]);
     }
-  }, [frequency, habitName]);
+  }, [frequency]);
 
   useEffect(() => {
     if (frequency === 'weekly' && days.length === 0) {
@@ -31,6 +32,14 @@ const HabitForm: React.FC<{
       setWarningChooseDay(false);
     }
   }, [frequency, days]);
+
+  useEffect(() => {
+    if (habitName === '') {
+      setWarningHabitNameEmpty(true);
+    } else {
+      setWarningHabitNameEmpty(false);
+    }
+  }, [habitName]);
 
   const toggleHabitForm = () => {
     setShowHabitForm(false);
@@ -42,10 +51,10 @@ const HabitForm: React.FC<{
     );
 
     habitExists.includes(e.target.value.toLowerCase())
-      ? setWarning(true)
-      : setWarning(false);
+      ? setWarningHabitNameExists(true)
+      : setWarningHabitNameExists(false);
 
-    setHabitName(e.target.value);
+      setHabitName(e.target.value);
   };
 
   const handleFrequencyChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -93,6 +102,10 @@ const HabitForm: React.FC<{
            });
      });
 
+     return (
+         <form className='habit-form'>PLEASE WAIT</form>
+     )
+
      setHabitName('');
      setFrequency('daily');
      setDays([]);
@@ -112,9 +125,15 @@ const HabitForm: React.FC<{
           onChange={handleNameChange}
           required
         />
-        {warning && (
+
+        {warningHabitNameExists && (
           <p className='warning-text'>This habit name already exists</p>
         )}
+
+        {warningHabitNameEmpty && (
+            <p className='warning-text'>You haven't named your habit</p>
+        )}
+
         <label htmlFor='frequency'>Frequency:</label>
         <select
           id='frequency'
@@ -147,7 +166,7 @@ const HabitForm: React.FC<{
           <p className='warning-text'>You haven't chosen any day yet</p>
         )}
 
-        <button type='submit' disabled={warning || warningChooseDay}>
+        <button type='submit' disabled={warningHabitNameEmpty || warningHabitNameExists || warningChooseDay}>
           Add Habit
         </button>
       </form>

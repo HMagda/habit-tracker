@@ -1,4 +1,4 @@
-import React, {useContext, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {baseUrl, daysOfWeek, getToken, Habit, HabitDay, HabitForToday} from '../../utils';
 import './HabitEditForm.modules.scss';
 import {HiX} from 'react-icons/hi';
@@ -29,9 +29,26 @@ const HabitEditForm: React.FC<{
 }) => {
   const [habitName, setHabitName] = useState<string>(editHabitName);
   const [days, setDays] = useState<HabitDay[]>(editHabitDays);
-  const [warning, setWarning] = useState<boolean>(false);
+  const [warningHabitNameEmpty, setWarningHabitNameEmpty] = useState<boolean>(false);
+  const [warningHabitNameExists, setWarningHabitNameExists] = useState<boolean>(false);
+  const [warningChooseDay, setWarningChooseDay] = useState<boolean>(false);
   const { getAccessTokenSilently } = useAuth0();
 
+  useEffect(() => {
+    if (habitName === '') {
+      setWarningHabitNameEmpty(true);
+    } else {
+      setWarningHabitNameEmpty(false);
+    }
+  }, [habitName]);
+
+  useEffect(() => {
+    if (days.length === 0) {
+      setWarningChooseDay(true);
+    } else {
+      setWarningChooseDay(false);
+    }
+  }, [days]);
   const handleDayChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const day = Number(e.target.id);
 
@@ -61,9 +78,9 @@ const HabitEditForm: React.FC<{
         .filter((habit) => habit.id !== editHabitId)
         .map((habit) => habit.habitName.toLowerCase());
 
-      setWarning(habitExists.includes(newHabitName.toLowerCase()));
+      setWarningHabitNameExists(habitExists.includes(newHabitName.toLowerCase()));
     } else {
-      setWarning(false);
+      setWarningHabitNameExists(false);
     }
 
     setHabitName(newHabitName);
@@ -137,7 +154,7 @@ const HabitEditForm: React.FC<{
   const handleCancelChanges = () => {
     setHabitName(editHabitName);
     setDays(editHabitDays);
-    setWarning(false);
+    setWarningHabitNameExists(false);
     setEditHabitId('');
     setShowEditForm(false);
   };
@@ -155,8 +172,11 @@ const HabitEditForm: React.FC<{
         onChange={handleNameChange}
         required
       />
-      {warning && (
+      {warningHabitNameExists && (
         <p className='warning-text'>This habit name already exists</p>
+      )}
+      {warningHabitNameEmpty && (
+          <p className='warning-text'>You haven't named your habit</p>
       )}
 
       <div className='label-container'>
@@ -178,7 +198,12 @@ const HabitEditForm: React.FC<{
           </label>
         ))}
       </div>
-      <button type='submit' disabled={warning}>
+
+      {warningChooseDay && (
+          <p className='warning-text'>You haven't chosen any day yet</p>
+      )}
+
+      <button type='submit' disabled={warningHabitNameExists || warningChooseDay}>
         Edit Habit
       </button>
     </form>

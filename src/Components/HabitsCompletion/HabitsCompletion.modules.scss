@@ -1,7 +1,7 @@
 @import '../../styles/global.scss';
 
 .habit-completion-wrapper {
-  
+
   @include popup-styles;
 
   .habit-header {
@@ -44,7 +44,7 @@
     }
   }
 
-  .btns-container {
+  .btn-container {
     display: flex;
     flex-direction: column;
 
@@ -65,10 +65,6 @@
         background-color: $color-error;
         box-shadow: $box-shadow;
         transition: $transition;
-
-        &:hover {
-          cursor: pointer;
-        }
       }
 
       .completed {
@@ -96,6 +92,10 @@
 
       .circle-icon {
         color: $color-warning;
+      }
+
+      &:hover {
+        cursor: pointer;
       }
     }
   }

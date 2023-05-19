@@ -124,17 +124,16 @@ const HabitsCompletion: React.FC<{
           />
         </div>
       </div>
-      <div className='btns-container'>
+      <div className='btn-container'>
         {sortArrayByProperty(habit.days, 'dayOfWeek').map(
           (habitDay: HabitDay) => {
             const day = habitDay.dayOfWeek;
             const isUpcoming = day >= todayIndex;
 
             return (
-              <div className='single-btn-container' key={day}>
+              <div className='single-btn-container' key={day}  onClick={() => handleMarkCompleted(habit.id, day)}>
                 <button
                   key={day}
-                  onClick={() => handleMarkCompleted(habit.id, day)}
                   className={`
                     day-btn
                     ${
