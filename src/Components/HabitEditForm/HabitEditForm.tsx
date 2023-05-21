@@ -101,9 +101,17 @@ const HabitEditForm: React.FC<{
         body: JSON.stringify(habit),
         credentials: 'include',
       })
-          .then(() => {
+          .then((res) => {
+            if (!res.ok) {
+              throw new Error('Network response was not ok');
+            }
+            return res.json();
+          })
+          .then((receivedHabit) => {
             const updatedHabitsArr = habitsArr.map((habit) =>
-                habit.id === editHabitId ? {...habit, habitName, days} : habit
+                habit.id === receivedHabit.id
+                    ? {...habit, days: receivedHabit.days}
+                    : habit
             );
             setHabitsArr(updatedHabitsArr);
 
