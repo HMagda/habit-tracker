@@ -17,7 +17,11 @@ import {useAuth0} from "@auth0/auth0-react";
 const today = new Date();
 const formattedDate = today.toLocaleDateString('en-GB');
 
-const HabitsPage = () => {
+interface HabitsPageProps {
+  openTour: () => void;
+}
+
+const HabitsPage: React.FC<HabitsPageProps> = ({ openTour }) => {
   const { getAccessTokenSilently } = useAuth0();
   const todayHabitsRef = useRef<HTMLDivElement | null>(null);
   const weekPlanRef = useRef<HTMLDivElement | null>(null);
@@ -201,7 +205,8 @@ const HabitsPage = () => {
     <>
       <Navbar></Navbar>
       <div className='habits-page'>
-        <div className='headline'>
+      <button onClick={openTour}>See Tutorial</button>
+        <div className='headline headline_today_habits'>
           <div className={`arrow ${openTodayHabits ? 'down' : ''}`}>
             <FiChevronRight />
           </div>
@@ -238,7 +243,7 @@ const HabitsPage = () => {
           </div>
         </div>
 
-        <div className='headline'>
+        <div className='headline headline_week_plan'>
           <div className={`arrow ${openWeekPlan ? 'down' : ''}`}>
             <FiChevronRight />
           </div>
@@ -285,7 +290,7 @@ const HabitsPage = () => {
           </div>
         </div>
 
-        <div className='headline'>
+        <div className='headline headline_statistics'>
           <div className={`arrow ${openStats ? 'down' : ''}`}>
             <FiChevronRight />
           </div>
