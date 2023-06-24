@@ -9,6 +9,29 @@
   text-align: center;
   background-color: $color-light;
 
+  .fixed-btn-container {
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    margin: 1rem;
+
+    .habit-form-toggle-btn,
+    .tutorial-btn {
+      background-color: $color-important-secondary;
+      color: $color-light;
+      border: none;
+      font-size: 1.5rem;
+      padding: 0.5rem;
+      margin: 1rem;
+      border-radius: 50%;
+      cursor: pointer;
+      box-shadow: $box-shadow;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+  }
+
   .headline {
     display: flex;
     align-items: center;
@@ -26,21 +49,6 @@
       }
     }
 
-    .habit-form-toggle-btn {
-      background-color: $color-important-secondary;
-      color: $color-light;
-      border: none;
-      font-size: 1.5rem;
-      padding: 0.5rem;
-      margin: 1rem;
-      border-radius: 50%;
-      cursor: pointer;
-      box-shadow: $box-shadow;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-
     .arrow {
       display: flex;
       align-items: center;
@@ -54,6 +62,10 @@
         transform: rotate(90deg);
       }
     }
+  }
+
+  .headline_week_plan {
+    margin-bottom: 1rem;
   }
 
   .content-parent {

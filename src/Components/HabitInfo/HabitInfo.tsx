@@ -12,7 +12,7 @@ import HabitEditForm from '../HabitEditForm/HabitEditForm';
 import HabitsCompletion from '../HabitsCompletion/HabitsCompletion';
 import HabitForm from '../HabitForm/HabitForm';
 import {FiToggleLeft, FiToggleRight} from 'react-icons/fi';
-import {useAuth0} from "@auth0/auth0-react";
+import {useAuth0} from '@auth0/auth0-react';
 
 const HabitInfo: React.FC<{
   habitsArr: Habit[];
@@ -37,7 +37,7 @@ const HabitInfo: React.FC<{
   todayIndex,
   setShowEditForm,
 }) => {
-  const { getAccessTokenSilently } = useAuth0();
+  const {getAccessTokenSilently} = useAuth0();
   const [editHabitId, setEditHabitId] = useState<string>('');
   const [showLeftButton, setShowLeftButton] = useState<boolean>(true);
   const [showConfirmPopup, setShowConfirmPopup] = useState<boolean>(false);
@@ -83,35 +83,35 @@ const HabitInfo: React.FC<{
           body: JSON.stringify(editedHabit),
           credentials: 'include',
         })
-            .then((res) => {
-              if (!res.ok) {
-                throw new Error('Network response was not ok');
-              }
-              return res.json();
-            })
-            .then((receivedHabit) => {
-              const updatedHabitsArr = habitsArr.map((habit) =>
-                  habit.id === receivedHabit.id
-                      ? {...habit, days: receivedHabit.days}
-                      : habit
-              );
-              setHabitsArr(updatedHabitsArr);
+          .then((res) => {
+            if (!res.ok) {
+              throw new Error('Network response was not ok');
+            }
+            return res.json();
+          })
+          .then((receivedHabit) => {
+            const updatedHabitsArr = habitsArr.map((habit) =>
+              habit.id === receivedHabit.id
+                ? {...habit, days: receivedHabit.days}
+                : habit
+            );
+            setHabitsArr(updatedHabitsArr);
 
-              if (todayIndex === day) {
-                const isTodaysHabitCompleted = receivedHabit.days.filter(
-                    (habitDay: HabitDay) => habitDay.dayOfWeek === day
-                )[0].completed;
-                const updatedHabitsForTodayArr = habitsForTodayArr.map((habit) =>
-                    habit.id === receivedHabit.id
-                        ? {...habit, completed: isTodaysHabitCompleted}
-                        : habit
-                );
-                setHabitsForTodayArr(updatedHabitsForTodayArr);
-              }
-            })
-            .catch((error) => {
-              console.error('Error adding new habit: ', error);
-            });
+            if (todayIndex === day) {
+              const isTodaysHabitCompleted = receivedHabit.days.filter(
+                (habitDay: HabitDay) => habitDay.dayOfWeek === day
+              )[0].completed;
+              const updatedHabitsForTodayArr = habitsForTodayArr.map((habit) =>
+                habit.id === receivedHabit.id
+                  ? {...habit, completed: isTodaysHabitCompleted}
+                  : habit
+              );
+              setHabitsForTodayArr(updatedHabitsForTodayArr);
+            }
+          })
+          .catch((error) => {
+            console.error('Error adding new habit: ', error);
+          });
 
         setEditHabitId('');
       });
@@ -149,7 +149,12 @@ const HabitInfo: React.FC<{
 
       {habitsArr.length > 0 && (
         <div className='formatting-option'>
-          <h3 className={`${showLeftButton ? '' : 'show'}`}>Show dates</h3>
+          <h3
+            className={`${showLeftButton ? '' : 'show'}`}
+            onClick={toggleButtons}
+          >
+            Show dates
+          </h3>
           {showLeftButton ? (
             <button className='btn-left' onClick={toggleButtons}>
               <FiToggleLeft />
@@ -165,6 +170,7 @@ const HabitInfo: React.FC<{
       {showHabitForm && (
         <>
           <div className='overlay' onClick={toggleHabitForm}></div>
+
           <div className='habit-form-popup'>
             <HabitForm
               addNewHabit={(habit: Habit) => {

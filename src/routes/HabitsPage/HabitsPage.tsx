@@ -1,10 +1,6 @@
-import React, {
-  useEffect,
-  useLayoutEffect,
-  useRef,
-  useState,
-} from 'react';
+import React, {useEffect, useLayoutEffect, useRef, useState} from 'react';
 import {FiPlus, FiChevronRight} from 'react-icons/fi';
+import {BsQuestion} from 'react-icons/bs';
 import {baseUrl, Habit, HabitForToday, HabitData, getToken} from '../../utils';
 import DatePickerComponent from '../../Components/DatePickerComponent/DatePickerComponent';
 import Heatmap from '../../Components/Heatmap/Heatmap';
@@ -12,7 +8,7 @@ import HabitInfo from '../../Components/HabitInfo/HabitInfo';
 import HabitsForToday from '../../Components/HabitsForToday/HabitsForToday';
 import './HabitsPage.modules.scss';
 import Navbar from '../../Components/Navbar/Navbar';
-import {useAuth0} from "@auth0/auth0-react";
+import {useAuth0} from '@auth0/auth0-react';
 
 const today = new Date();
 const formattedDate = today.toLocaleDateString('en-GB');
@@ -21,8 +17,8 @@ interface HabitsPageProps {
   openTour: () => void;
 }
 
-const HabitsPage: React.FC<HabitsPageProps> = ({ openTour }) => {
-  const { getAccessTokenSilently } = useAuth0();
+const HabitsPage: React.FC<HabitsPageProps> = ({openTour}) => {
+  const {getAccessTokenSilently} = useAuth0();
   const todayHabitsRef = useRef<HTMLDivElement | null>(null);
   const weekPlanRef = useRef<HTMLDivElement | null>(null);
   const statsRef = useRef<HTMLDivElement | null>(null);
@@ -54,27 +50,27 @@ const HabitsPage: React.FC<HabitsPageProps> = ({ openTour }) => {
         },
         credentials: 'include',
       })
-          .then((res) => {
-            if (!res.ok) {
-              throw new Error('Network response was not ok');
-            }
-            return res.json();
-          })
-          .then((data) => {
-            const fetchedHabitsForTodayArr = data.habits;
-            if (
-                JSON.stringify(fetchedHabitsForTodayArr) !==
-                JSON.stringify(habitsForTodayArr)
-            ) {
-              setHabitsForTodayArr(fetchedHabitsForTodayArr);
-            }
-            const today = data.todayIndex;
-            setTodayIndex(today);
-          })
+        .then((res) => {
+          if (!res.ok) {
+            throw new Error('Network response was not ok');
+          }
+          return res.json();
+        })
+        .then((data) => {
+          const fetchedHabitsForTodayArr = data.habits;
+          if (
+            JSON.stringify(fetchedHabitsForTodayArr) !==
+            JSON.stringify(habitsForTodayArr)
+          ) {
+            setHabitsForTodayArr(fetchedHabitsForTodayArr);
+          }
+          const today = data.todayIndex;
+          setTodayIndex(today);
+        })
 
-          .catch((error) => {
-            console.error('There was a problem with the fetch operation:', error);
-          });
+        .catch((error) => {
+          console.error('There was a problem with the fetch operation:', error);
+        });
     });
   };
 
@@ -91,21 +87,21 @@ const HabitsPage: React.FC<HabitsPageProps> = ({ openTour }) => {
         },
         credentials: 'include',
       })
-          .then((res) => {
-            if (!res.ok) {
-              throw new Error('Network response was not ok');
-            }
-            return res.json();
-          })
-          .then((data) => {
-            const fetchedHabitsArr = data.habits;
-            if (JSON.stringify(fetchedHabitsArr) !== JSON.stringify(habitsArr)) {
-              setHabitsArr(fetchedHabitsArr);
-            }
-          })
-          .catch((error) => {
-            console.error('There was a problem with the fetch operation:', error);
-          });
+        .then((res) => {
+          if (!res.ok) {
+            throw new Error('Network response was not ok');
+          }
+          return res.json();
+        })
+        .then((data) => {
+          const fetchedHabitsArr = data.habits;
+          if (JSON.stringify(fetchedHabitsArr) !== JSON.stringify(habitsArr)) {
+            setHabitsArr(fetchedHabitsArr);
+          }
+        })
+        .catch((error) => {
+          console.error('There was a problem with the fetch operation:', error);
+        });
     });
   }, []);
 
@@ -169,6 +165,14 @@ const HabitsPage: React.FC<HabitsPageProps> = ({ openTour }) => {
     showEditForm,
   ]);
 
+  const showTour = () => {
+    setContentTrue(openTodayHabits, setOpenTodayHabits);
+    setContentTrue(openWeekPlan, setOpenWeekPlan);
+    setContentTrue(openStats, setOpenStats);
+
+    openTour();
+  };
+
   const handleHabitDeleted = (habitId: string) => {
     setHabitsArr(habitsArr.filter((habit) => habit.id !== habitId));
     setHabitsForTodayArr(
@@ -185,6 +189,13 @@ const HabitsPage: React.FC<HabitsPageProps> = ({ openTour }) => {
     setState: React.Dispatch<React.SetStateAction<boolean>>
   ) => {
     setState(!state);
+  };
+
+  const setContentTrue = (
+    state: boolean,
+    setState: React.Dispatch<React.SetStateAction<boolean>>
+  ) => {
+    setState(true);
   };
 
   // @ts-ignore
@@ -205,41 +216,51 @@ const HabitsPage: React.FC<HabitsPageProps> = ({ openTour }) => {
     <>
       <Navbar></Navbar>
       <div className='habits-page'>
-      <button onClick={openTour}>See Tutorial</button>
-        <div className='headline headline_today_habits'>
-          <div className={`arrow ${openTodayHabits ? 'down' : ''}`}>
-            <FiChevronRight />
-          </div>
-          <h1
-            onClick={() => toggleContent(openTodayHabits, setOpenTodayHabits)}
-          >
-            habits for today {formattedDate}
-          </h1>
+        <div className='fixed-btn-container'>
+          <button onClick={showTour} className='tutorial-btn'>
+            <BsQuestion />
+          </button>
+          <button className='habit-form-toggle-btn' onClick={toggleHabitForm}>
+            <FiPlus />
+          </button>
         </div>
 
-        <div
-          className='content-parent'
-          style={
-            openTodayHabits
-              ? {maxHeight: todayHabitsContentHeight + 'px'}
-              : {maxHeight: '0px'}
-          }
-        >
-          <div ref={todayHabitsRef} className='content'>
-            <>
-              {habitsForTodayArr.length <= 0 && (
-                <h1>You do not have any habits for today</h1>
-              )}
+        <div className='habits_today'>
+          <div className='headline headline_today_habits'>
+            <div className={`arrow ${openTodayHabits ? 'down' : ''}`}>
+              <FiChevronRight />
+            </div>
+            <h1
+              onClick={() => toggleContent(openTodayHabits, setOpenTodayHabits)}
+            >
+              habits for today {formattedDate}
+            </h1>
+          </div>
 
-              {habitsForTodayArr.length > 0 && (
-                <HabitsForToday
-                  habitsForTodayArr={habitsForTodayArr}
-                  setHabitsForTodayArr={setHabitsForTodayArr}
-                  habitsArr={habitsArr}
-                  setHabitsArr={setHabitsArr}
-                />
-              )}
-            </>
+          <div
+            className='content-parent'
+            style={
+              openTodayHabits
+                ? {maxHeight: todayHabitsContentHeight + 'px'}
+                : {maxHeight: '0px'}
+            }
+          >
+            <div ref={todayHabitsRef} className='content'>
+              <>
+                {habitsForTodayArr.length <= 0 && (
+                  <h1>You do not have any habits for today</h1>
+                )}
+
+                {habitsForTodayArr.length > 0 && (
+                  <HabitsForToday
+                    habitsForTodayArr={habitsForTodayArr}
+                    setHabitsForTodayArr={setHabitsForTodayArr}
+                    habitsArr={habitsArr}
+                    setHabitsArr={setHabitsArr}
+                  />
+                )}
+              </>
+            </div>
           </div>
         </div>
 
@@ -250,12 +271,6 @@ const HabitsPage: React.FC<HabitsPageProps> = ({ openTour }) => {
           <h1 onClick={() => toggleContent(openWeekPlan, setOpenWeekPlan)}>
             My week plan
           </h1>
-
-          {openWeekPlan && (
-            <button className='habit-form-toggle-btn' onClick={toggleHabitForm}>
-              <FiPlus />
-            </button>
-          )}
         </div>
 
         <div

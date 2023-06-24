@@ -12,6 +12,11 @@
     h3 {
       font-size: 1.2rem;
       color: $color-important-secondary;
+      padding: 0.3rem;
+
+      &:hover {
+        cursor: pointer;
+      }
     }
 
     .show {
@@ -22,7 +27,8 @@
     button {
       display: flex;
       align-items: center;
-      margin-left: 1rem;
+      padding: 0.3rem;
+      padding-left: 0.5rem;
       font-size: 1.5rem;
     }
 
@@ -53,7 +59,7 @@
     z-index: 10;
     background-color: $color-light;
     padding: 2rem;
-    box-shadow: 0 0 .1rem rgba(0, 0, 0, 0.2);
+    box-shadow: 0 0 0.1rem rgba(0, 0, 0, 0.2);
     border-radius: 0.5rem;
   }
 
@@ -84,7 +90,6 @@
 
         @include respond-medium {
           width: 15rem;
-         
         }
       }
     }

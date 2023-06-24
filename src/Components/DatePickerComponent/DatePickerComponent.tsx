@@ -1,20 +1,19 @@
-import React, {useContext, useEffect, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import DatePicker from 'react-datepicker';
 import enGB from 'date-fns/locale/en-GB';
 import {format} from 'date-fns';
 import 'react-datepicker/dist/react-datepicker.css';
 import './DatePickerComponent.modules.scss';
 import {baseUrl, getToken, HabitData} from '../../utils';
-import {useAuth0} from "@auth0/auth0-react";
+import {useAuth0} from '@auth0/auth0-react';
 
 const DatePickerComponent: React.FC<{
   statistics: HabitData[];
   setStatistics: React.Dispatch<React.SetStateAction<HabitData[]>>;
 }> = ({statistics, setStatistics}) => {
-
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
-  const { getAccessTokenSilently } = useAuth0();
+  const {getAccessTokenSilently} = useAuth0();
 
   useEffect(() => {
     if (startDate && endDate) {
@@ -34,18 +33,21 @@ const DatePickerComponent: React.FC<{
           }),
           credentials: 'include',
         })
-            .then((res) => {
-              if (!res.ok) {
-                throw new Error('Network response was not ok');
-              }
-              return res.json();
-            })
-            .then((data) => {
-              setStatistics(data.habits);
-            })
-            .catch((error) => {
-              console.error('There was a problem with the fetch operation:', error);
-            });
+          .then((res) => {
+            if (!res.ok) {
+              throw new Error('Network response was not ok');
+            }
+            return res.json();
+          })
+          .then((data) => {
+            setStatistics(data.habits);
+          })
+          .catch((error) => {
+            console.error(
+              'There was a problem with the fetch operation:',
+              error
+            );
+          });
       });
     }
   }, [startDate, endDate]);
