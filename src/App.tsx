@@ -1,3 +1,8 @@
+// Reactour (https://github.com/elrumordelaluz/reactour)
+// MIT License
+// Copyright (c) 2022 Lionel Tzatzkin
+// [MIT License Text](https://github.com/elrumordelaluz/reactour/blob/master/LICENSE and in the root of my project in 'THIRD-PARTY-LICENCES')
+
 import React, {useCallback, useState} from 'react';
 import Tour from 'reactour';
 import {BrowserRouter as Router, Routes, Route} from 'react-router-dom';
