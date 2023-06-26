@@ -1,0 +1,13 @@
+@import './styles/global.scss';
+
+.reactour__helper {
+  &.reactour__helper--is-open {
+    font-family: $font-family-secondary;
+
+    .reactour__close {
+      top: 0;
+      right: 0;
+      margin: 1rem;
+    }
+  }
+}

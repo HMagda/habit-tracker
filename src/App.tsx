@@ -9,6 +9,7 @@ import {BrowserRouter as Router, Routes, Route} from 'react-router-dom';
 import LandingPage from './routes/LandingPage/LandingPage';
 import HabitsPage from './routes/HabitsPage/HabitsPage';
 import PrivateRoute from './PrivateRoute';
+import './Tour.modules.scss';
 
 const App: React.FC = () => {
   const [isTourOpen, setIsTourOpen] = useState(false);
