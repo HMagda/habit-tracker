@@ -21,7 +21,6 @@
   .tooltip-container {
     .tooltip {
       padding: 1rem;
-
       background-color: $color-light;
       border: 1px solid #cccccc;
       border-radius: 0.5rem;
@@ -31,8 +30,13 @@
 
       @include respond-medium {
         width: max-content;
-        margin: 1rem;
+        margin: 0 1rem;
+        font-size: 0.8rem;
       }
+    }
+
+    @include respond-medium {
+      margin-bottom: 2rem;
     }
   }
 

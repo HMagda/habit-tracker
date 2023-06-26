@@ -23,7 +23,7 @@ const App: React.FC = () => {
 
   const steps = [
     {
-      selector: '.habits_today',
+      selector: '.habits-today',
       content: 'Here you can see your habits for today!',
       stepInteraction: false,
       action: (node: HTMLElement) => {
@@ -39,13 +39,11 @@ const App: React.FC = () => {
       },
     },
     {
-      selector: '.headline_week_plan',
-      content: 'Click here to see your week plan!',
+      selector: '.habits-week',
+      content: 'Here you can see your week plan!',
       stepInteraction: false,
       action: (node: HTMLElement) => {
-        if (node) {
-          node.addEventListener('click', nextStep);
-        }
+        node.addEventListener('click', nextStep);
       },
     },
     {
@@ -53,9 +51,7 @@ const App: React.FC = () => {
       content: 'Click here to see the exact dates.',
       stepInteraction: false,
       action: (node: HTMLElement) => {
-        if (node) {
-          node.addEventListener('click', nextStep);
-        }
+        node.addEventListener('click', nextStep);
       },
     },
     {
@@ -63,9 +59,7 @@ const App: React.FC = () => {
       content: 'Click here to edit your habit.',
       stepInteraction: false,
       action: (node: HTMLElement) => {
-        if (node) {
-          node.addEventListener('click', nextStep);
-        }
+        node.addEventListener('click', nextStep);
       },
     },
     {
@@ -73,9 +67,7 @@ const App: React.FC = () => {
       content: 'Click here to delete your habit.',
       stepInteraction: false,
       action: (node: HTMLElement) => {
-        if (node) {
-          node.addEventListener('click', nextStep);
-        }
+        node.addEventListener('click', nextStep);
       },
     },
     {
@@ -83,14 +75,12 @@ const App: React.FC = () => {
       content: 'Click here to change the habit completion status.',
       stepInteraction: false,
       action: (node: HTMLElement) => {
-        if (node) {
-          node.addEventListener('click', nextStep);
-        }
+        node.addEventListener('click', nextStep);
       },
     },
     {
       selector: '.headline_statistics',
-      content: 'Click here to see your statistics!',
+      content: 'Under this headline you can see your statistics!',
       stepInteraction: false,
       action: (node: HTMLElement) => {
         node.addEventListener('click', nextStep);
@@ -98,7 +88,16 @@ const App: React.FC = () => {
     },
     {
       selector: '.react-datepicker__month',
-      content: 'You can choose the range of days to view completion.',
+      content:
+        'You can choose the range of days to view the habits completion.',
+      stepInteraction: false,
+      action: (node: HTMLElement) => {
+        node.addEventListener('click', nextStep);
+      },
+    },
+    {
+      selector: '.heatmap',
+      content: 'Click on the day to see the score',
       stepInteraction: false,
       action: (node: HTMLElement) => {
         node.addEventListener('click', nextStep);

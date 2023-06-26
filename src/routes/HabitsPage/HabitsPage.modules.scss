@@ -10,6 +10,7 @@
   background-color: $color-light;
 
   .fixed-btn-container {
+    z-index: 1;
     position: fixed;
     bottom: 0;
     right: 0;
@@ -46,6 +47,10 @@
 
       &:hover {
         cursor: pointer;
+      }
+
+      @include respond-medium {
+        font-size: 1.5rem;
       }
     }
 

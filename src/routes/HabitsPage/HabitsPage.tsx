@@ -225,7 +225,7 @@ const HabitsPage: React.FC<HabitsPageProps> = ({openTour}) => {
           </button>
         </div>
 
-        <div className='habits_today'>
+        <div className='habits-today'>
           <div className='headline headline_today_habits'>
             <div className={`arrow ${openTodayHabits ? 'down' : ''}`}>
               <FiChevronRight />
@@ -264,6 +264,7 @@ const HabitsPage: React.FC<HabitsPageProps> = ({openTour}) => {
           </div>
         </div>
 
+      <div className='habits-week'>
         <div className='headline headline_week_plan'>
           <div className={`arrow ${openWeekPlan ? 'down' : ''}`}>
             <FiChevronRight />
@@ -303,6 +304,7 @@ const HabitsPage: React.FC<HabitsPageProps> = ({openTour}) => {
               )}
             </>
           </div>
+        </div>
         </div>
 
         <div className='headline headline_statistics'>
