@@ -226,7 +226,7 @@ const HabitsPage: React.FC<HabitsPageProps> = ({openTour}) => {
         </div>
 
         <div className='habits-today'>
-          <div className='headline headline_today_habits'>
+          <div className='headline'>
             <div className={`arrow ${openTodayHabits ? 'down' : ''}`}>
               <FiChevronRight />
             </div>
@@ -236,7 +236,6 @@ const HabitsPage: React.FC<HabitsPageProps> = ({openTour}) => {
               habits for today {formattedDate}
             </h1>
           </div>
-
           <div
             className='content-parent'
             style={
@@ -264,47 +263,46 @@ const HabitsPage: React.FC<HabitsPageProps> = ({openTour}) => {
           </div>
         </div>
 
-      <div className='habits-week'>
-        <div className='headline headline_week_plan'>
-          <div className={`arrow ${openWeekPlan ? 'down' : ''}`}>
-            <FiChevronRight />
+        <div className='habits-week'>
+          <div className='headline headline_week_plan'>
+            <div className={`arrow ${openWeekPlan ? 'down' : ''}`}>
+              <FiChevronRight />
+            </div>
+            <h1 onClick={() => toggleContent(openWeekPlan, setOpenWeekPlan)}>
+              My week plan
+            </h1>
           </div>
-          <h1 onClick={() => toggleContent(openWeekPlan, setOpenWeekPlan)}>
-            My week plan
-          </h1>
-        </div>
+          <div
+            className='content-parent'
+            style={
+              openWeekPlan
+                ? {maxHeight: weekPlanContentHeight + 'px'}
+                : {maxHeight: '0px'}
+            }
+          >
+            <div ref={weekPlanRef} className='content'>
+              <>
+                {habitsArr.length <= 0 && (
+                  <h1>You do not have any habits for this week</h1>
+                )}
 
-        <div
-          className='content-parent'
-          style={
-            openWeekPlan
-              ? {maxHeight: weekPlanContentHeight + 'px'}
-              : {maxHeight: '0px'}
-          }
-        >
-          <div ref={weekPlanRef} className='content'>
-            <>
-              {habitsArr.length <= 0 && (
-                <h1>You do not have any habits for this week</h1>
-              )}
-
-              {habitsArr && (
-                <HabitInfo
-                  habitsArr={habitsArr}
-                  setHabitsArr={setHabitsArr}
-                  habitsForTodayArr={habitsForTodayArr}
-                  setHabitsForTodayArr={setHabitsForTodayArr}
-                  deleteHabit={handleHabitDeleted}
-                  setShowHabitForm={setShowHabitForm}
-                  showHabitForm={showHabitForm}
-                  toggleHabitForm={toggleHabitForm}
-                  todayIndex={todayIndex}
-                  setShowEditForm={setShowEditForm}
-                />
-              )}
-            </>
+                {habitsArr && (
+                  <HabitInfo
+                    habitsArr={habitsArr}
+                    setHabitsArr={setHabitsArr}
+                    habitsForTodayArr={habitsForTodayArr}
+                    setHabitsForTodayArr={setHabitsForTodayArr}
+                    deleteHabit={handleHabitDeleted}
+                    setShowHabitForm={setShowHabitForm}
+                    showHabitForm={showHabitForm}
+                    toggleHabitForm={toggleHabitForm}
+                    todayIndex={todayIndex}
+                    setShowEditForm={setShowEditForm}
+                  />
+                )}
+              </>
+            </div>
           </div>
-        </div>
         </div>
 
         <div className='headline headline_statistics'>
@@ -315,7 +313,6 @@ const HabitsPage: React.FC<HabitsPageProps> = ({openTour}) => {
             Statistics
           </h1>
         </div>
-
         <div
           className='content-parent'
           style={
