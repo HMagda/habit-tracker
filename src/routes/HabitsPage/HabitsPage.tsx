@@ -18,6 +18,7 @@ interface HabitsPageProps {
 }
 
 const HabitsPage: React.FC<HabitsPageProps> = ({openTour}) => {
+
   const {getAccessTokenSilently} = useAuth0();
   const todayHabitsRef = useRef<HTMLDivElement | null>(null);
   const weekPlanRef = useRef<HTMLDivElement | null>(null);
@@ -69,7 +70,7 @@ const HabitsPage: React.FC<HabitsPageProps> = ({openTour}) => {
         })
 
         .catch((error) => {
-          console.error('There was a problem with the fetch operation:', error);
+          console.error('Fetch operation error:', error);
         });
     });
   };
@@ -100,7 +101,7 @@ const HabitsPage: React.FC<HabitsPageProps> = ({openTour}) => {
           }
         })
         .catch((error) => {
-          console.error('There was a problem with the fetch operation:', error);
+          console.error('Fetch operation error:', error);
         });
     });
   }, []);

@@ -61,11 +61,10 @@ const HabitEditForm: React.FC<{
   const handleDayChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const day = Number(e.target.id);
 
-    setDays((days) => {
-      const dayIndex = days.findIndex((d) => d.dayOfWeek === day);
-
+    setDays((currentDays) => {
+      const dayIndex = currentDays.findIndex((d) => d.dayOfWeek === day);
       if (dayIndex !== -1) {
-        return days.filter((d) => d.dayOfWeek !== day);
+        return currentDays.filter((d) => d.dayOfWeek !== day);
       } else {
         const newDay: HabitDay = {
           dayOfWeek: day,
@@ -73,10 +72,10 @@ const HabitEditForm: React.FC<{
           completed: false,
           isBeforeCreationDate: false,
         };
-
-        return [...days, newDay];
+        return [...currentDays, newDay];
       }
     });
+
   };
 
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -121,7 +120,7 @@ const HabitEditForm: React.FC<{
         .then((receivedHabit) => {
           const updatedHabitsArr = habitsArr.map((habit) =>
             habit.id === receivedHabit.id
-              ? {...habit, days: receivedHabit.days}
+              ? {...habit, habitName: receivedHabit.habitName, days: receivedHabit.days}
               : habit
           );
           setHabitsArr(updatedHabitsArr);
